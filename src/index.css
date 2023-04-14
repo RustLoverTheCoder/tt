@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.full-height {
+  @apply h-screen sm:h-full;
+}
+
+.is-auth {
+  background: var(--color-background);
+}

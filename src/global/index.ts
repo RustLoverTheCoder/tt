@@ -1,7 +1,17 @@
 import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
 import type { TabState, GlobalState } from "./types";
-import { AnimationLevel, NewChatMembersProgress } from "../types";
+import {
+  AnimationLevel,
+  ApiPrivacyKey,
+  ApiPrivacySettings,
+  ISettings,
+  IThemeSettings,
+  LangCode,
+  NewChatMembersProgress,
+  NotifyException,
+  ThemeKey,
+} from "../types";
 
 import {
   ANIMATION_LEVEL_DEFAULT,
@@ -33,7 +43,9 @@ export const configAtom = atom<ApiConfig | null>(null);
 export const appConfigAtom = atom<ApiAppConfig | null>(null);
 export const hasWebAuthTokenFailedAtom = atom<boolean>(false);
 export const hasWebAuthTokenPasswordRequiredAtom = atom<boolean>(true);
-export const connectionStateAtom = atom<ApiUpdateConnectionStateType | null>(null);
+export const connectionStateAtom = atom<ApiUpdateConnectionStateType | null>(
+  null
+);
 export const currentUserId = atom<string | null>(null);
 export const isSyncingAtom = atom<boolean>(false);
 export const isUpdateAvailableAtom = atom<boolean>(false);
@@ -171,3 +183,69 @@ export const recentEmojisAtom = atom<string[]>([]);
 export const recentCustomEmojisAtom = atom<string[]>([]);
 
 export const animationLevelAtom = atom<AnimationLevel>(0);
+
+export const settingsAtom = atom<ISettings>({
+  theme: "light",
+  shouldUseSystemTheme: true,
+  messageTextSize: IS_IOS
+    ? IOS_DEFAULT_MESSAGE_TEXT_SIZE_PX
+    : IS_MAC_OS
+    ? MACOS_DEFAULT_MESSAGE_TEXT_SIZE_PX
+    : DEFAULT_MESSAGE_TEXT_SIZE_PX,
+  animationLevel: ANIMATION_LEVEL_DEFAULT,
+  messageSendKeyCombo: "enter",
+  canAutoLoadPhotoFromContacts: true,
+  canAutoLoadPhotoInPrivateChats: true,
+  canAutoLoadPhotoInGroups: true,
+  canAutoLoadPhotoInChannels: true,
+  canAutoLoadVideoFromContacts: true,
+  canAutoLoadVideoInPrivateChats: true,
+  canAutoLoadVideoInGroups: true,
+  canAutoLoadVideoInChannels: true,
+  canAutoLoadFileFromContacts: false,
+  canAutoLoadFileInPrivateChats: false,
+  canAutoLoadFileInGroups: false,
+  canAutoLoadFileInChannels: false,
+  autoLoadFileMaxSizeMb: 10,
+  hasWebNotifications: true,
+  hasPushNotifications: true,
+  notificationSoundVolume: 5,
+  canAutoPlayGifs: true,
+  canAutoPlayVideos: true,
+  shouldSuggestStickers: true,
+  shouldSuggestCustomEmoji: true,
+  shouldLoopStickers: true,
+  language: "en",
+  timeFormat: "24h",
+  wasTimeFormatSetManually: false,
+  isConnectionStatusMinimized: true,
+  shouldArchiveAndMuteNewNonContact: false,
+  canTranslate: false,
+  canTranslateChats: true,
+  doNotTranslate: [],
+  canDisplayChatInTitle: true,
+});
+
+export const languageAtom = atom(
+  (get) => get(settingsAtom).language,
+  (get, set, language: LangCode) => {
+    set(settingsAtom, { ...get(settingsAtom), language });
+  }
+);
+
+export const themesAtom = atom<Partial<Record<ThemeKey, IThemeSettings>>>({
+  light: {
+    isBlurred: true,
+    patternColor: DEFAULT_PATTERN_COLOR,
+  },
+  dark: {
+    isBlurred: true,
+    patternColor: DARK_THEME_PATTERN_COLOR,
+  },
+});
+
+export const privacyAtom = atom<
+  Partial<Record<ApiPrivacyKey, ApiPrivacySettings>>
+>({});
+
+export const notifyExceptionsAtom = atom<Record<number, NotifyException>>({});

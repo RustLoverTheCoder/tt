@@ -13,6 +13,7 @@ specifiers:
   postcss: ^8.4.21
   react: ^18.2.0
   react-dom: ^18.2.0
+  script-loader: ^0.7.2
   tailwindcss: ^3.3.1
   typescript: ^4.9.3
   vite: ^4.2.0
@@ -32,6 +33,7 @@ devDependencies:
   '@vitejs/plugin-react-swc': 3.3.0_vite@4.2.1
   autoprefixer: 10.4.14_postcss@8.4.21
   postcss: 8.4.21
+  script-loader: registry.npmmirror.com/script-loader/0.7.2
   tailwindcss: 3.3.1
   typescript: 4.9.5
   vite: 4.2.1
@@ -1225,8 +1227,22 @@ packages:
     version: 2.1.0
     dev: false
 
+  registry.npmmirror.com/raw-loader/0.5.1:
+    resolution: {integrity: sha512-sf7oGoLuaYAScB4VGr0tzetsYlS8EJH6qnTCfQ/WVEa89hALQ4RQfCKt5xCyPQKPDUbVUAIP1QsxAwfAjlDp7Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/raw-loader/-/raw-loader-0.5.1.tgz}
+    name: raw-loader
+    version: 0.5.1
+    dev: true
+
   registry.npmmirror.com/safari-14-idb-fix/3.0.0:
     resolution: {integrity: sha512-eBNFLob4PMq8JA1dGyFn6G97q3/WzNtFK4RnzT1fnLq+9RyrGknzYiM/9B12MnKAxuj1IXr7UKYtTNtjyKMBog==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/safari-14-idb-fix/-/safari-14-idb-fix-3.0.0.tgz}
     name: safari-14-idb-fix
     version: 3.0.0
     dev: false
+
+  registry.npmmirror.com/script-loader/0.7.2:
+    resolution: {integrity: sha512-UMNLEvgOAQuzK8ji8qIscM3GIrRCWN6MmMXGD4SD5l6cSycgGsCo0tX5xRnfQcoghqct0tjHjcykgI1PyBE2aA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/script-loader/-/script-loader-0.7.2.tgz}
+    name: script-loader
+    version: 0.7.2
+    dependencies:
+      raw-loader: registry.npmmirror.com/raw-loader/0.5.1
+    dev: true

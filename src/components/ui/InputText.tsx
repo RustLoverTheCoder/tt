@@ -5,7 +5,7 @@ import clsx from "clsx";
 import useLang from "../../hooks/useLang";
 
 type OwnProps = {
-  ref?: RefObject<HTMLInputElement>;
+  inputRef?: RefObject<HTMLInputElement>;
   id?: string;
   className?: string;
   value?: string;
@@ -37,7 +37,7 @@ type OwnProps = {
 };
 
 const InputText: FC<OwnProps> = ({
-  ref,
+  inputRef,
   id,
   className,
   value,
@@ -74,7 +74,7 @@ const InputText: FC<OwnProps> = ({
   return (
     <div className={fullClassName} dir={lang.isRtl ? "rtl" : undefined}>
       <input
-        ref={ref}
+        ref={inputRef}
         className="form-control"
         type="text"
         id={id}
@@ -94,7 +94,6 @@ const InputText: FC<OwnProps> = ({
         onBlur={onBlur}
         onPaste={onPaste}
         aria-label={labelText}
-        teactExperimentControlled={teactExperimentControlled}
       />
       {labelText && <label htmlFor={id}>{labelText}</label>}
     </div>

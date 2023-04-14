@@ -27,7 +27,7 @@ import {
   returnToAuthPhoneNumber,
   setAuthCode,
 } from "../../global/actions";
-import TrackingMonkey from "../common/TrackingMonkey";
+// import TrackingMonkey from "../common/TrackingMonkey";
 import InputText from "../ui/InputText";
 import Loading from "../ui/Loading";
 
@@ -104,12 +104,12 @@ const AuthQrCode = () => {
   return (
     <div id="auth-code-form" className="custom-scroll">
       <div className="auth-form">
-        <TrackingMonkey
+        {/* <TrackingMonkey
           code={code}
           codeLength={CODE_LENGTH}
           isTracking={isTracking}
           trackingDirection={trackingDirection}
-        />
+        /> */}
         <h1>
           {authPhoneNumber}
           <div
@@ -129,7 +129,7 @@ const AuthQrCode = () => {
           )}
         </p>
         <InputText
-          ref={inputRef}
+          inputRef={inputRef}
           id="sign-in-code"
           label={lang("Code")}
           onInput={onCodeChange}

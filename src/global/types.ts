@@ -87,8 +87,8 @@ import type {
   ShippingOption,
   ThemeKey,
 } from "../types";
-import type { P2pMessage } from "../lib/secret-sauce";
-import type { ApiCredentials } from "../components/payment/PaymentModal";
+// import type { P2pMessage } from "../lib/secret-sauce";
+// import type { ApiCredentials } from "../components/payment/PaymentModal";
 
 export type MessageListType = "thread" | "pinned" | "scheduled";
 
@@ -1370,7 +1370,7 @@ export interface ActionPayloads {
     messageId: number;
   } & WithTabId;
   sendCredentialsInfo: {
-    credentials: ApiCredentials;
+    // credentials: ApiCredentials;
   } & WithTabId;
   clearPaymentError: WithTabId | undefined;
   clearReceipt: WithTabId | undefined;
@@ -2293,7 +2293,7 @@ export interface ActionPayloads {
     userId: string;
     isVideo?: boolean;
   } & WithTabId;
-  sendSignalingData: P2pMessage;
+  // sendSignalingData: P2pMessage;
   hangUp: WithTabId | undefined;
   acceptCall: undefined;
   setCallRating: {

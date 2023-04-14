@@ -15,7 +15,8 @@
     "jotai": "^2.0.4",
     "pako": "^2.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "qr-code-styling": "github:zubiden/qr-code-styling#dbbfed0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

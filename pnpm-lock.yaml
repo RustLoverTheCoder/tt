@@ -11,6 +11,7 @@ specifiers:
   jotai: ^2.0.4
   pako: ^2.1.0
   postcss: ^8.4.21
+  qr-code-styling: github:zubiden/qr-code-styling#dbbfed0
   react: ^18.2.0
   react-dom: ^18.2.0
   script-loader: ^0.7.2
@@ -24,6 +25,7 @@ dependencies:
   idb-keyval: registry.npmmirror.com/idb-keyval/6.2.0
   jotai: 2.0.4_react@18.2.0
   pako: registry.npmmirror.com/pako/2.1.0
+  qr-code-styling: github.com/zubiden/qr-code-styling/dbbfed0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
 
@@ -840,6 +842,14 @@ packages:
     version: 0.4.1
     dev: false
 
+  github.com/zubiden/qr-code-styling/dbbfed0:
+    resolution: {tarball: https://codeload.github.com/zubiden/qr-code-styling/tar.gz/dbbfed0}
+    name: qr-code-styling
+    version: 1.5.1
+    dependencies:
+      qrcode-generator: registry.npmmirror.com/qrcode-generator/1.4.4
+    dev: false
+
   registry.npmmirror.com/@esbuild/android-arm/0.17.16:
     resolution: {integrity: sha512-baLqRpLe4JnKrUXLJChoTN0iXZH7El/mu58GE3WIA6/H834k0XWvLRmGLG8y8arTRS9hJJibPnF0tiGhmWeZgw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@esbuild/android-arm/-/android-arm-0.17.16.tgz}
     name: '@esbuild/android-arm'
@@ -1225,6 +1235,12 @@ packages:
     resolution: {integrity: sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pako/-/pako-2.1.0.tgz}
     name: pako
     version: 2.1.0
+    dev: false
+
+  registry.npmmirror.com/qrcode-generator/1.4.4:
+    resolution: {integrity: sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/qrcode-generator/-/qrcode-generator-1.4.4.tgz}
+    name: qrcode-generator
+    version: 1.4.4
     dev: false
 
   registry.npmmirror.com/raw-loader/0.5.1:

@@ -1,9 +1,9 @@
-import type {
-  GroupCallParticipant,
-  GroupCallConnectionState,
-  ApiPhoneCallConnection,
-  ApiCallProtocol, VideoState, VideoRotation,
-} from '../../lib/secret-sauce';
+// import type {
+//   GroupCallParticipant,
+//   GroupCallConnectionState,
+//   ApiPhoneCallConnection,
+//   ApiCallProtocol, VideoState, VideoRotation,
+// } from '../../lib/secret-sauce';
 
 export interface ApiGroupCall {
   chatId?: string;
@@ -25,8 +25,8 @@ export interface ApiGroupCall {
   inviteHash?: string;
 
   nextOffset?: string;
-  participants: Record<string, GroupCallParticipant>;
-  connectionState: GroupCallConnectionState;
+  // participants: Record<string, GroupCallParticipant>;
+  // connectionState: GroupCallConnectionState;
   isSpeakerDisabled?: boolean;
 }
 
@@ -49,8 +49,8 @@ export interface ApiPhoneCall {
   startDate?: number;
   receiveDate?: number;
   p2pAllowed?: boolean;
-  connections?: ApiPhoneCallConnection[];
-  protocol?: ApiCallProtocol;
+  // connections?: ApiPhoneCallConnection[];
+  // protocol?: ApiCallProtocol;
   needRating?: boolean;
   needDebug?: boolean;
   reason?: 'missed' | 'disconnect' | 'hangup' | 'busy';
@@ -66,8 +66,8 @@ export interface ApiPhoneCall {
   keyFingerprint?: string;
 
   isMuted?: boolean;
-  videoState?: VideoState;
-  videoRotation?: VideoRotation;
-  screencastState?: VideoState;
+  // videoState?: VideoState;
+  // videoRotation?: VideoRotation;
+  // screencastState?: VideoState;
   isBatteryLow?: boolean;
 }

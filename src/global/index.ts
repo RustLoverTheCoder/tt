@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
 import type { TabState, GlobalState } from "./types";
-import { NewChatMembersProgress } from "../types";
+import { AnimationLevel, NewChatMembersProgress } from "../types";
 
 import {
   ANIMATION_LEVEL_DEFAULT,
@@ -29,20 +29,20 @@ import { ApiChat, ApiChatFolder } from "../api/types/chats";
 import { ApiMessage } from "../api/types/messages";
 import { ApiGroupCall, ApiPhoneCall } from "../api/types/calls";
 
-const configAtom = atom<ApiConfig | null>(null);
-const appConfigAtom = atom<ApiAppConfig | null>(null);
-const hasWebAuthTokenFailedAtom = atom<boolean>(false);
-const hasWebAuthTokenPasswordRequiredAtom = atom<boolean>(true);
-const connectionStateAtom = atom<ApiUpdateConnectionStateType | null>(null);
-const currentUserId = atom<string | null>(null);
-const isSyncingAtom = atom<boolean>(false);
-const isUpdateAvailableAtom = atom<boolean>(false);
-const lastSyncTimeAtom = atom<number>(0);
-const leftColumnWidthAtom = atom<number>(0);
-const lastIsChatInfoShownAtom = atom<boolean>(false);
-const initialUnreadNotificationsAtom = atom<number>(0);
-const shouldShowContextMenuHintAtom = atom<boolean>(true);
-const audioPlayerAtom = atom<{
+export const configAtom = atom<ApiConfig | null>(null);
+export const appConfigAtom = atom<ApiAppConfig | null>(null);
+export const hasWebAuthTokenFailedAtom = atom<boolean>(false);
+export const hasWebAuthTokenPasswordRequiredAtom = atom<boolean>(true);
+export const connectionStateAtom = atom<ApiUpdateConnectionStateType | null>(null);
+export const currentUserId = atom<string | null>(null);
+export const isSyncingAtom = atom<boolean>(false);
+export const isUpdateAvailableAtom = atom<boolean>(false);
+export const lastSyncTimeAtom = atom<number>(0);
+export const leftColumnWidthAtom = atom<number>(0);
+export const lastIsChatInfoShownAtom = atom<boolean>(false);
+export const initialUnreadNotificationsAtom = atom<number>(0);
+export const shouldShowContextMenuHintAtom = atom<boolean>(true);
+export const audioPlayerAtom = atom<{
   lastPlaybackRate: number;
   isLastPlaybackRateActive?: boolean;
 }>({
@@ -50,13 +50,13 @@ const audioPlayerAtom = atom<{
   isLastPlaybackRateActive: false,
 });
 
-const mediaViewerAtom = atom<{ lastPlaybackRate: number }>({
+export const mediaViewerAtom = atom<{ lastPlaybackRate: number }>({
   lastPlaybackRate: DEFAULT_PLAYBACK_RATE,
 });
 
-const recentlyFoundChatIdsAtom = atom<string[]>([]);
+export const recentlyFoundChatIdsAtom = atom<string[]>([]);
 
-const twoFaSettingsAtom = atom<{
+export const twoFaSettingsAtom = atom<{
   hint?: string;
   isLoading?: boolean;
   error?: string;
@@ -68,7 +68,7 @@ const twoFaSettingsAtom = atom<{
   waitingEmailCodeLength: undefined,
 });
 
-const attachmentSettingsAtom = atom<{
+export const attachmentSettingsAtom = atom<{
   shouldCompress: boolean;
   shouldSendGrouped: boolean;
 }>({
@@ -76,7 +76,7 @@ const attachmentSettingsAtom = atom<{
   shouldSendGrouped: true,
 });
 
-const attachMenuAtom = atom<{
+export const attachMenuAtom = atom<{
   hash?: string;
   bots: Record<string, ApiAttachBot>;
 }>({
@@ -84,7 +84,7 @@ const attachMenuAtom = atom<{
   bots: {},
 });
 
-const passcodeAtom = atom<{
+export const passcodeAtom = atom<{
   isScreenLocked?: boolean;
   hasPasscode?: boolean;
   error?: string;
@@ -102,70 +102,72 @@ const passcodeAtom = atom<{
   isLoading: false,
 });
 
-const authStateAtom = atom<ApiUpdateAuthorizationStateType | null>(null);
-const authPhoneNumberAtom = atom<string | null>(null);
-const authIsLoadingAtom = atom<boolean>(false);
-const authIsLoadingQrCodeAtom = atom<boolean>(false);
-const authErrorAtom = atom<string | null>(null);
-const authRememberMeAtom = atom<boolean>(false);
-const authNearestCountryAtom = atom<string | null>(null);
-const authIsCodeViaAppAtom = atom<boolean>(false);
-const authHintAtom = atom<string | null>(null);
-const authQrCodeAtom = atom<{
+export const authStateAtom = atom<ApiUpdateAuthorizationStateType | null>(null);
+export const authPhoneNumberAtom = atom<string | null>(null);
+export const authIsLoadingAtom = atom<boolean>(false);
+export const authIsLoadingQrCodeAtom = atom<boolean>(false);
+export const authErrorAtom = atom<string | null>(null);
+export const authRememberMeAtom = atom<boolean>(false);
+export const authNearestCountryAtom = atom<string | null>(null);
+export const authIsCodeViaAppAtom = atom<boolean>(false);
+export const authHintAtom = atom<string | null>(null);
+export const authQrCodeAtom = atom<{
   token: string;
   expires: number;
 } | null>(null);
 
-const countryListAtom = atom<{
+export const countryListAtom = atom<{
   phoneCodes: ApiCountryCode[];
   general: ApiCountry[];
 } | null>(null);
 
-const contactListAtom = atom<{
+export const contactListAtom = atom<{
   userIds: string[];
 } | null>(null);
 
-const blockedAtom = atom<{
+export const blockedAtom = atom<{
   ids: string[];
   totalCount: number;
 } | null>(null);
 
-const userFamily = atomFamily(
+export const userFamily = atomFamily(
   (user: ApiUser) => atom(user),
   (a, b) => a.id === b.id
 );
 
-const chatFamily = atomFamily(
+export const chatFamily = atomFamily(
   (chat: ApiChat) => atom(chat),
   (a, b) => a.id === b.id
 );
 
-const messageFamily = atomFamily(
+export const messageFamily = atomFamily(
   (message: ApiMessage) => atom(message),
   (a, b) => a.id === b.id
 );
 
-const groupCallFamily = atomFamily(
+export const groupCallFamily = atomFamily(
   (groupCall: ApiGroupCall) => atom(groupCall),
   (a, b) => a.id === b.id
 );
 
-const scheduledMessageFamily = atomFamily(
+export const scheduledMessageFamily = atomFamily(
   (message: ApiMessage) => atom(message),
   (a, b) => a.id === b.id
 );
 
-const chatFolderFamily = atomFamily(
+export const chatFolderFamily = atomFamily(
   (folder: ApiChatFolder) => atom(folder),
   (a, b) => a.id === b.id
 );
 
-const phoneCallAtom = atom<ApiPhoneCall | null>(null);
+export const phoneCallAtom = atom<ApiPhoneCall | null>(null);
 
-const fileUploadFamily = atomFamily(
+export const fileUploadFamily = atomFamily(
   (fileUpload: { id: string; progress: number }) => atom(fileUpload),
   (a, b) => a.id === b.id
 );
 
-const recentEmojisAtom = atom<string[]>([]);
-const recentCustomEmojisAtom = atom<string[]>([]);
+export const recentEmojisAtom = atom<string[]>([]);
+export const recentCustomEmojisAtom = atom<string[]>([]);
+
+export const animationLevelAtom = atom<AnimationLevel>(0);

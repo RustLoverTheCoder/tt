@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 
 import type { OwnProps as AnimatedStickerProps } from "./AnimatedSticker";
 

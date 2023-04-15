@@ -13,6 +13,7 @@
     "emoji-data-ios": "git+https://github.com/korenskoy/emoji-data-ios#3c401da02c6792cea0b6c758795da406377bf667",
     "idb-keyval": "^6.2.0",
     "jotai": "^2.0.4",
+    "lowlight": "^2.8.1",
     "pako": "^2.1.0",
     "qr-code-styling": "github:zubiden/qr-code-styling#dbbfed0",
     "react": "^18.2.0",
@@ -20,12 +21,12 @@
     "sass": "^1.62.0"
   },
   "devDependencies": {
+    "@types/hast": "^2.3.4",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
-    "script-loader": "^0.7.2",
     "tailwindcss": "^3.3.1",
     "typescript": "^4.9.3",
     "vite": "^4.2.0"

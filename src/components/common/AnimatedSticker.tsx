@@ -1,4 +1,4 @@
-import React, {
+import {
   useEffect,
   useRef,
   memo,
@@ -11,7 +11,6 @@ import React, {
 
 import { fastRaf } from "../../util/schedulers";
 import clsx from "clsx";
-import buildStyle from "../../util/buildStyle";
 import generateIdFor from "../../util/generateIdFor";
 
 import useHeavyAnimationCheck from "../../hooks/useHeavyAnimationCheck";

@@ -27,3 +27,27 @@ export const clearAuthError = (params: any) => {
 export const setAuthCode = (params: any) => {
   console.log("params", params);
 };
+
+export const openChatByInvite = (params: any) => {};
+
+export const openChatByPhoneNumber = (params: any) => {};
+
+export const openStickerSet = (params: any) => {};
+
+export const focusMessage = (params: any) => {};
+
+export const joinVoiceChatByLink = (params: any) => {};
+
+export const openInvoice = (params: any) => {};
+
+export const processAttachBotParameters = (params: any) => {};
+
+export const openChatWithDraft = (params: any) => {};
+
+export const showDialog = (params: any) => {};
+
+export const interactWithAnimatedEmoji = (params: any) => {};
+
+export const sendWatchingEmojiInteraction = (params: any) => {};
+
+export const sendEmojiInteraction = (params: any) => {}

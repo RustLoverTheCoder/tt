@@ -4,14 +4,26 @@ export const returnToAuthPhoneNumber = () => {};
 
 export const goToAuthQrCode = () => {};
 
-export const setSettingOption = () => {}
+export const setSettingOption = (params: any) => {
+  console.log("params", params);
+};
 
-export const openChat = () => {}
+export const openChat = (params: any) => {
+  console.log("params", params);
+};
 
-export const openChatByUsername = () => {}
+export const openChatByUsername = (params: any) => {
+  console.log("params", params);
+};
 
-export const openUrl = () => {}
+export const openUrl = (params: any) => {
+  console.log("params", params);
+};
 
-export const clearAuthError = () => {}
+export const clearAuthError = (params: any) => {
+  console.log("params", params);
+};
 
-export const setAuthCode = () => {}
+export const setAuthCode = (params: any) => {
+  console.log("params", params);
+};

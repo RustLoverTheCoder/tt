@@ -1,10 +1,14 @@
-import usePrevious from './usePrevious';
+import { useEffect, useRef } from 'react';
 
-const useSyncEffect = <const T extends readonly any[]>(cb: (args: T | readonly []) => void, dependencies: T) => {
-  const prevDeps = usePrevious<T>(dependencies);
-  if (!prevDeps || dependencies.some((d, i) => d !== prevDeps[i])) {
-    cb(prevDeps || []);
-  }
+const useSyncEffect = <T extends readonly any[]>(cb: (args: T | readonly []) => void, dependencies: T) => {
+  const prevDepsRef = useRef<T | undefined>(undefined);
+
+  useEffect(() => {
+    if (!prevDepsRef.current || dependencies.some((d, i) => d !== prevDepsRef.current?.[i])) {
+      cb(prevDepsRef.current || []);
+    }
+    prevDepsRef.current = dependencies;
+  }, dependencies);
 };
 
 export default useSyncEffect;

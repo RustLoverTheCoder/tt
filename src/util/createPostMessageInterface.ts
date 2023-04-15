@@ -1,23 +1,34 @@
 import type {
-  CancellableCallback, OriginMessageEvent, OriginMessageData, WorkerMessageData, ApiUpdate,
-} from './PostMessageConnector';
+  CancellableCallback,
+  OriginMessageEvent,
+  OriginMessageData,
+  WorkerMessageData,
+  ApiUpdate,
+} from "./PostMessageConnector";
 
-import { DEBUG } from '../config';
+import { DEBUG } from "../config";
 
 declare const self: WorkerGlobalScope;
 
 const callbackState = new Map<string, CancellableCallback>();
 
 type ApiConfig =
-  ((name: string, ...args: any[]) => any | [any, ArrayBuffer[]])
+  | ((name: string, ...args: any[]) => any | [any, ArrayBuffer[]])
   | Record<string, Function>;
-type SendToOrigin = (data: WorkerMessageData, transferables?: Transferable[]) => void;
+type SendToOrigin = (
+  data: WorkerMessageData,
+  transferables?: Transferable[]
+) => void;
 
 export function createWorkerInterface(api: ApiConfig, channel?: string) {
-  function sendToOrigin(data: WorkerMessageData, transferables?: Transferable[]) {
+  function sendToOrigin(
+    data: WorkerMessageData,
+    transferables?: Transferable[]
+  ) {
     data.channel = channel;
 
     if (transferables) {
+      // @ts-ignore
       postMessage(data, transferables);
     } else {
       postMessage(data);
@@ -37,41 +48,43 @@ async function onMessage(
   api: ApiConfig,
   data: OriginMessageData,
   sendToOrigin: SendToOrigin,
-  onUpdate?: (update: ApiUpdate) => void,
+  onUpdate?: (update: ApiUpdate) => void
 ) {
   if (!onUpdate) {
     onUpdate = (update: ApiUpdate) => {
       sendToOrigin({
-        type: 'update',
+        type: "update",
         update,
       });
     };
   }
 
   switch (data.type) {
-    case 'init': {
+    case "init": {
       const { args } = data;
-      const promise = typeof api === 'function'
-        ? api('init', onUpdate, ...args)
-        : api.init?.(onUpdate, ...args);
+      const promise =
+        typeof api === "function"
+          ? api("init", onUpdate, ...args)
+          : api.init?.(onUpdate, ...args);
       await promise;
 
       break;
     }
-    case 'callMethod': {
-      const {
-        messageId, name, args, withCallback,
-      } = data;
+    case "callMethod": {
+      const { messageId, name, args, withCallback } = data;
       try {
         if (messageId && withCallback) {
           const callback = (...callbackArgs: any[]) => {
             const lastArg = callbackArgs[callbackArgs.length - 1];
 
-            sendToOrigin({
-              type: 'methodCallback',
-              messageId,
-              callbackArgs,
-            }, isTransferable(lastArg) ? [lastArg] : undefined);
+            sendToOrigin(
+              {
+                type: "methodCallback",
+                messageId,
+                callbackArgs,
+              },
+              isTransferable(lastArg) ? [lastArg] : undefined
+            );
           };
 
           callbackState.set(messageId, callback);
@@ -79,18 +92,23 @@ async function onMessage(
           args.push(callback as never);
         }
 
-        const response = typeof api === 'function'
-          ? await api(name, ...args)
-          : await api[name](...args);
-        const { arrayBuffer } = (typeof response === 'object' && 'arrayBuffer' in response && response) || {};
+        const response =
+          typeof api === "function"
+            ? await api(name, ...args)
+            : await api[name](...args);
+        const { arrayBuffer } =
+          (typeof response === "object" &&
+            "arrayBuffer" in response &&
+            response) ||
+          {};
         if (messageId) {
           sendToOrigin(
             {
-              type: 'methodResponse',
+              type: "methodResponse",
               messageId,
               response,
             },
-            arrayBuffer ? [arrayBuffer] : undefined,
+            arrayBuffer ? [arrayBuffer] : undefined
           );
         }
       } catch (error: any) {
@@ -101,7 +119,7 @@ async function onMessage(
 
         if (messageId) {
           sendToOrigin({
-            type: 'methodResponse',
+            type: "methodResponse",
             messageId,
             error: { message: error.message },
           });
@@ -114,7 +132,7 @@ async function onMessage(
 
       break;
     }
-    case 'cancelProgress': {
+    case "cancelProgress": {
       const callback = callbackState.get(data.messageId);
       if (callback) {
         callback.isCanceled = true;
@@ -130,15 +148,21 @@ function isTransferable(obj: any) {
 }
 
 function handleErrors(sendToOrigin: SendToOrigin) {
-  self.onerror = (e) => {
+  self.onerror = (e: any) => {
     // eslint-disable-next-line no-console
     console.error(e);
-    sendToOrigin({ type: 'unhandledError', error: { message: e.error.message || 'Uncaught exception in worker' } });
+    sendToOrigin({
+      type: "unhandledError",
+      error: { message: e.error.message || "Uncaught exception in worker" },
+    });
   };
 
-  self.addEventListener('unhandledrejection', (e) => {
+  self.addEventListener("unhandledrejection", (e: any) => {
     // eslint-disable-next-line no-console
     console.error(e);
-    sendToOrigin({ type: 'unhandledError', error: { message: e.reason.message || 'Uncaught rejection in worker' } });
+    sendToOrigin({
+      type: "unhandledError",
+      error: { message: e.reason.message || "Uncaught rejection in worker" },
+    });
   });
 }

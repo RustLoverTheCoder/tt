@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, memo, useCallback, FC } from "react";
+import { useEffect, useRef, memo, useCallback, FC } from "react";
 import {
   authQrCodeAtom,
   authStateAtom,
@@ -42,7 +42,7 @@ function ensureQrCodeStyling() {
   return qrCodeStylingPromise;
 }
 
-const AuthQrCode: FC = () => {
+const AuthQrCode = () => {
   const [connectionState] = useAtom(connectionStateAtom);
   const [authState] = useAtom(authStateAtom);
   const [authQrCode] = useAtom(authQrCodeAtom);
@@ -56,8 +56,8 @@ const AuthQrCode: FC = () => {
     "ContinueOnThisLanguage",
     true
   );
-  const [isLoading, markIsLoading, unmarkIsLoading] = useFlag();
-  const [isQrMounted, markQrMounted, unmarkQrMounted] = useFlag();
+  const [isLoading, markIsLoading, unmarkIsLoading] = useFlag(true);
+  const [isQrMounted, markQrMounted, unmarkQrMounted] = useFlag(false);
 
   const { result: qrCode } = useAsync(async () => {
     const QrCodeStyling = (await ensureQrCodeStyling()).default;
@@ -82,9 +82,7 @@ const AuthQrCode: FC = () => {
       },
     });
   }, []);
-
   const transitionClassNames = useMediaTransition(isQrMounted);
-
   useEffect(() => {
     if (!authQrCode || !qrCode) {
       return () => {
@@ -138,7 +136,6 @@ const AuthQrCode: FC = () => {
   }, [returnToAuthPhoneNumber]);
 
   const isAuthReady = authState === "authorizationStateWaitQrCode";
-
   return (
     <div id="auth-qr-form" className="custom-scroll">
       <div className="auth-form qr">
@@ -151,15 +148,15 @@ const AuthQrCode: FC = () => {
               key="qr-container"
               className="qr-container"
               ref={qrCodeRef}
-              style={`width: ${QR_SIZE}px; height: ${QR_SIZE}px`}
+              style={{ width: QR_SIZE, height: QR_SIZE }}
             />
-            <AnimatedIcon
+            {/* <AnimatedIcon
               tgsUrl={LOCAL_TGS_URLS.QrPlane}
               size={QR_PLANE_SIZE}
               className="qr-plane"
               nonInteractive
               noLoop={false}
-            />
+            /> */}
           </div>
           {!isQrMounted && (
             <div className="qr-loading">
@@ -197,5 +194,4 @@ const AuthQrCode: FC = () => {
     </div>
   );
 };
-
 export default memo(AuthQrCode);

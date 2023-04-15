@@ -1,3 +1,4 @@
+//
 // Copyright Twitter Inc. Licensed under MIT
 // https://github.com/twitter/twemoji-parser/blob/master/LICENSE.md
 // Version f8312f3 12.03.2022
@@ -6,8 +7,10 @@ const vs16RegExp = /\uFE0F/g;
 // avoid using a string literal like '\u200D' here because minifiers expand it inline
 const zeroWidthJoiner = String.fromCharCode(0x200d);
 
-export function removeVS16s(rawEmoji) {
-  return rawEmoji.indexOf(zeroWidthJoiner) < 0 ? rawEmoji.replace(vs16RegExp, '') : rawEmoji;
+export function removeVS16s(rawEmoji: any) {
+  return rawEmoji.indexOf(zeroWidthJoiner) < 0
+    ? rawEmoji.replace(vs16RegExp, "")
+    : rawEmoji;
 }
 
 // Default Twemoji regex was modified here.

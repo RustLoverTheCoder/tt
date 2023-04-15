@@ -116,8 +116,9 @@ function replaceEmojis(
     }
 
     part = fixNonStandardEmoji(part);
-    const parts = part.split(EMOJI_REGEX);
-    const emojis: string[] = part.match(EMOJI_REGEX) || [];
+    const parts = typeof part === "string" ? part.split(EMOJI_REGEX) : "";
+    const emojis: string[] =
+      typeof part === "string" ? part.match(EMOJI_REGEX) || [] : [];
     result.push(parts[0]);
 
     return emojis.reduce((emojiResult: TextPart[], emoji, i) => {

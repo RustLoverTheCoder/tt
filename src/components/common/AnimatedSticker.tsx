@@ -311,18 +311,14 @@ const AnimatedSticker: FC<OwnProps> = ({
   useBackgroundMode(freezeAnimation, unfreezeAnimationOnRaf, !canPlay);
 
   if (sharedCanvas) {
-    return undefined;
+    return null;
   }
-
+  console.log("style", style);
   return (
     <div
       ref={containerRef}
-      className={clsx("AnimatedSticker", className)}
-      style={buildStyle(
-        size !== undefined && `width: ${size}px; height: ${size}px;`,
-        onClick && "cursor: pointer",
-        style
-      )}
+      className={clsx("AnimatedSticker cursor-pointer", className, style)}
+      style={{ width: size, height: size }}
       onClick={onClick}
     />
   );

@@ -1,1 +1,12 @@
-.Loading {display: flex;height: 100%;align-items: center;justify-content: center;}.Loading.interactive {cursor: pointer;}.Loading .Spinner {--spinner-size: 2.75rem;}
+.Loading {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.Loading.interactive {
+  cursor: pointer;
+}
+.Loading .Spinner {
+  --spinner-size: 2.75rem;
+}

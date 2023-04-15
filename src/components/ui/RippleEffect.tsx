@@ -54,9 +54,7 @@ const RippleEffect: FC = () => {
   return (
     <div className="ripple-container" onMouseDown={handleMouseDown}>
       {ripples.map(({ x, y, size }) => (
-        <span
-          style={`left: ${x}px; top: ${y}px; width: ${size}px; height: ${size}px;`}
-        />
+        <span style={{ left: x, top: y, width: size, height: size }} />
       ))}
     </div>
   );

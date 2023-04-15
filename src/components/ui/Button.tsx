@@ -154,6 +154,7 @@ const Button: FC<OwnProps> = ({
   );
 
   if (href) {
+    console.log("style", style);
     return (
       <a
         ref={elementRef as RefObject<HTMLAnchorElement>}
@@ -166,7 +167,7 @@ const Button: FC<OwnProps> = ({
         dir={isRtl ? "rtl" : undefined}
         aria-label={ariaLabel}
         aria-controls={ariaControls}
-        style={style}
+        // style={style}
         onTransitionEnd={onTransitionEnd}
       >
         {children}
@@ -175,6 +176,7 @@ const Button: FC<OwnProps> = ({
     );
   }
 
+  console.log("style", style);
   return (
     <button
       ref={elementRef as RefObject<HTMLButtonElement>}
@@ -194,10 +196,13 @@ const Button: FC<OwnProps> = ({
       title={ariaLabel}
       tabIndex={tabIndex}
       dir={isRtl ? "rtl" : undefined}
-      style={buildStyle(
-        style,
-        backgroundImage && `background-image: url(${backgroundImage})`
-      )}
+      style={
+        backgroundImage
+          ? {
+              backgroundImage: `url(${backgroundImage})`,
+            }
+          : {}
+      }
     >
       {isLoading ? (
         <div>

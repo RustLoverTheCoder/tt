@@ -1,6 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "variables";
+@import "icons";
+@import "mixins";
+@import "spacing";
+@import "forms";
+@import "common";
 
 .full-height {
   @apply h-screen sm:h-full;
@@ -9,3 +15,4 @@
 .is-auth {
   background: var(--color-background);
 }
+

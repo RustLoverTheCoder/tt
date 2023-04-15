@@ -1,10 +1,10 @@
-import React, { memo } from '../../lib/teact/teact';
+import React, { memo } from 'react';
 
-import type { FC } from '../../lib/teact/teact';
+import type { FC } from 'react';
 
 import { GENERAL_TOPIC_ID } from '../../config';
 import { getFirstLetters } from '../../util/textFormat';
-import buildClassName from '../../util/buildClassName';
+import clsx from 'clsx'
 import renderText from './helpers/renderText';
 import { getTopicDefaultIcon } from '../../util/forumColors';
 
@@ -31,13 +31,13 @@ const TopicDefaultIcon: FC<OwnProps> = ({
 
   if (topicId === GENERAL_TOPIC_ID) {
     return (
-      <i className={buildClassName(styles.root, className, 'icon-hashtag', 'general-forum-icon')} onClick={onClick} />
+      <i className={clsx(styles.root, className, 'icon-hashtag', 'general-forum-icon')} onClick={onClick} />
     );
   }
   return (
-    <div className={buildClassName(styles.root, className)} onClick={onClick}>
+    <div className={clsx(styles.root, className)} onClick={onClick}>
       <img className={styles.icon} src={iconSrc} alt="" draggable={false} />
-      <div className={buildClassName(styles.title, letterClassName, 'topic-icon-letter')}>
+      <div className={clsx(styles.title, letterClassName, 'topic-icon-letter')}>
         {renderText(getFirstLetters(title, 1))}
       </div>
     </div>

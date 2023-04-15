@@ -28,7 +28,7 @@ const ChatLink: FC<OwnProps> = ({
   }
 
   return (
-    <Link className={buildClassName('ChatLink', className)} onClick={handleClick}>{children}</Link>
+    <Link className={clsx('ChatLink', className)} onClick={handleClick}>{children}</Link>
   );
 };
 

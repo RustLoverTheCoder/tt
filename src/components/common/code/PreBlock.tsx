@@ -1,9 +1,9 @@
-import type { FC } from '../../../lib/teact/teact';
-import React, { memo, useCallback, useState } from '../../../lib/teact/teact';
+import type { FC } from "react";
+import React, { memo, useCallback, useState } from "react";
 
-import buildClassName from '../../../util/buildClassName';
+import clsx from "clsx";
 
-import CodeOverlay from './CodeOverlay';
+import CodeOverlay from "./CodeOverlay";
 
 type OwnProps = {
   text: string;
@@ -13,11 +13,11 @@ type OwnProps = {
 const PreBlock: FC<OwnProps> = ({ text, noCopy }) => {
   const [isWordWrap, setWordWrap] = useState(true);
 
-  const handleWordWrapToggle = useCallback((wrap) => {
+  const handleWordWrapToggle = useCallback((wrap: any) => {
     setWordWrap(wrap);
   }, []);
 
-  const blockClass = buildClassName('text-entity-pre', !isWordWrap && 'no-word-wrap');
+  const blockClass = clsx("text-entity-pre", !isWordWrap && "no-word-wrap");
 
   return (
     <pre className={blockClass}>

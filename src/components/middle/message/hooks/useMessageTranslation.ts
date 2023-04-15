@@ -1,4 +1,4 @@
-import { useEffect } from '../../../../lib/teact/teact';
+import { useEffect } from '../../react';
 import { getActions } from '../../../../global';
 import type { ChatTranslatedMessages } from '../../../../global/types';
 

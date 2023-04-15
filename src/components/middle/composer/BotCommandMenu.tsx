@@ -1,7 +1,7 @@
-import React, { memo, useCallback } from '../../../lib/teact/teact';
+import React, { memo, useCallback } from '../react';
 import { getActions } from '../../../global';
 
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from '../react';
 import type { ApiBotCommand } from '../../../api/types';
 
 import { IS_TOUCH_ENV } from '../../../util/windowEnvironment';

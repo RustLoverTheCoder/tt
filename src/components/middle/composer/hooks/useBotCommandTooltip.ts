@@ -1,4 +1,4 @@
-import { useEffect, useState } from '../../../../lib/teact/teact';
+import { useEffect, useState } from '../../react';
 
 import type { ApiBotCommand } from '../../../../api/types';
 import type { Signal } from '../../../../util/signals';

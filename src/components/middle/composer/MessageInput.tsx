@@ -1,8 +1,8 @@
 import type { RefObject, ChangeEvent } from 'react';
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from '../react';
 import React, {
   useEffect, useRef, memo, useState, useCallback, useLayoutEffect,
-} from '../../../lib/teact/teact';
+} from '../react';
 import { getActions, withGlobal } from '../../../global';
 
 import type { IAnchorPosition, ISettings } from '../../../types';

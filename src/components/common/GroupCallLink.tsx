@@ -1,9 +1,9 @@
-import type { FC } from '../../lib/teact/teact';
-import React, { useCallback } from '../../lib/teact/teact';
+import type { FC } from 'react';
+import React, { useCallback } from 'react';
 
 import type { ApiGroupCall } from '../../api/types';
 
-import buildClassName from '../../util/buildClassName';
+import clsx from 'clsx'
 
 import Link from '../ui/Link';
 import { getActions } from '../../global';
@@ -30,7 +30,7 @@ const GroupCallLink: FC<OwnProps> = ({
   }
 
   return (
-    <Link className={buildClassName('GroupCallLink', className)} onClick={handleClick}>{children}</Link>
+    <Link className={clsx('GroupCallLink', className)} onClick={handleClick}>{children}</Link>
   );
 };
 

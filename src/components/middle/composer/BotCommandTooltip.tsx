@@ -1,7 +1,7 @@
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from '../react';
 import React, {
   useCallback, useEffect, useRef, memo,
-} from '../../../lib/teact/teact';
+} from '../react';
 import { getActions, withGlobal } from '../../../global';
 
 import type { Signal } from '../../../util/signals';

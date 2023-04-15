@@ -1,5 +1,5 @@
-import type { StateHookSetter } from '../../../../lib/teact/teact';
-import { useEffect } from '../../../../lib/teact/teact';
+import type { StateHookSetter } from '../../react';
+import { useEffect } from '../../react';
 
 import type { ApiAttachment, ApiFormattedText, ApiMessage } from '../../../../api/types';
 import { ApiMessageEntityTypes } from '../../../../api/types';

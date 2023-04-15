@@ -1,9 +1,9 @@
 import React, {
   memo, useCallback, useRef, useState,
-} from '../../../lib/teact/teact';
+} from '../react';
 import { getActions } from '../../../global';
 
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from '../react';
 import type { IAnchorPosition } from '../../../types';
 import type { ApiVideo, ApiSticker } from '../../../api/types';
 

@@ -1,6 +1,6 @@
 import type { Signal } from '../../../util/signals';
-import type { FC } from '../../../lib/teact/teact';
-import React, { memo, useCallback, useEffect } from '../../../lib/teact/teact';
+import type { FC } from '../react';
+import React, { memo, useCallback, useEffect } from '../react';
 import { getActions, withGlobal } from '../../../global';
 
 import type { ApiMessage, ApiMessageEntityTextUrl, ApiWebPage } from '../../../api/types';

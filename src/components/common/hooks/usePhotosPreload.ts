@@ -1,6 +1,6 @@
 import type { ApiChat, ApiPhoto, ApiUser } from '../../../api/types';
 import { ApiMediaFormat } from '../../../api/types';
-import { useEffect } from '../../../lib/teact/teact';
+import { useEffect } from 'react';
 import * as mediaLoader from '../../../util/mediaLoader';
 
 const PHOTOS_TO_PRELOAD = 4;

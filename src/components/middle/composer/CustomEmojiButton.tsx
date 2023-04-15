@@ -1,6 +1,6 @@
-import React, { memo, useCallback } from '../../../lib/teact/teact';
+import React, { memo, useCallback } from '../react';
 
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from '../react';
 import type { ApiSticker } from '../../../api/types';
 import type { ObserveFn } from '../../../hooks/useIntersectionObserver';
 

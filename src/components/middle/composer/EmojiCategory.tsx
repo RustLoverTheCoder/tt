@@ -1,6 +1,6 @@
-import React, { memo, useRef } from '../../../lib/teact/teact';
+import React, { memo, useRef } from '../react';
 
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from '../react';
 import type { ObserveFn } from '../../../hooks/useIntersectionObserver';
 
 import { RECENT_SYMBOL_SET_ID } from '../../../config';

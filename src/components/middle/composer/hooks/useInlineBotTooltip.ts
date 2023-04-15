@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from '../../../../lib/teact/teact';
+import { useCallback, useEffect } from '../../react';
 
 import type { InlineBotSettings } from '../../../../types';
 import type { Signal } from '../../../../util/signals';

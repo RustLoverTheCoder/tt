@@ -1,7 +1,7 @@
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from '../react';
 import React, {
   memo, useCallback, useEffect, useRef,
-} from '../../../lib/teact/teact';
+} from '../react';
 
 import useShowTransition from '../../../hooks/useShowTransition';
 import buildClassName from '../../../util/buildClassName';

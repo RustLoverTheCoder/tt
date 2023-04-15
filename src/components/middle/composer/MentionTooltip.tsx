@@ -1,7 +1,7 @@
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from '../react';
 import React, {
   useCallback, useEffect, useRef, memo,
-} from '../../../lib/teact/teact';
+} from '../react';
 import { getGlobal } from '../../../global';
 
 import type { ApiUser } from '../../../api/types';

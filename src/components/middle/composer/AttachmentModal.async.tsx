@@ -1,5 +1,5 @@
-import type { FC } from '../../../lib/teact/teact';
-import React, { memo } from '../../../lib/teact/teact';
+import type { FC } from 'react';
+import React, { memo } from 'react';
 import type { OwnProps } from './AttachmentModal';
 import { Bundles } from '../../../util/moduleLoader';
 
@@ -10,7 +10,7 @@ const AttachmentModalAsync: FC<OwnProps> = (props) => {
   const AttachmentModal = useModuleLoader(Bundles.Extra, 'AttachmentModal', !attachments.length);
 
   // eslint-disable-next-line react/jsx-props-no-spreading
-  return AttachmentModal ? <AttachmentModal {...props} /> : undefined;
+  return AttachmentModal ? <AttachmentModal {...props} /> : null;
 };
 
 export default memo(AttachmentModalAsync);

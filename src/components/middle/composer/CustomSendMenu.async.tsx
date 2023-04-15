@@ -1,5 +1,5 @@
-import type { FC } from '../../../lib/teact/teact';
-import React, { memo } from '../../../lib/teact/teact';
+import type { FC } from '../react';
+import React, { memo } from '../react';
 import type { OwnProps } from './CustomSendMenu';
 import { Bundles } from '../../../util/moduleLoader';
 

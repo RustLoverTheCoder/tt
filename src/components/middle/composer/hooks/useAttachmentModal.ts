@@ -1,4 +1,4 @@
-import { useCallback, useState } from '../../../../lib/teact/teact';
+import { useCallback, useState } from '../../react';
 import { getActions } from '../../../../global';
 
 import type { ApiAttachment } from '../../../../api/types';

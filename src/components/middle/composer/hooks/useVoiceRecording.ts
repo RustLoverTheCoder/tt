@@ -1,6 +1,6 @@
 import {
   useCallback, useEffect, useRef, useState,
-} from '../../../../lib/teact/teact';
+} from '../../react';
 
 import { IS_SAFARI, IS_VOICE_RECORDING_SUPPORTED } from '../../../../util/windowEnvironment';
 import * as voiceRecording from '../../../../util/voiceRecording';

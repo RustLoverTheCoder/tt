@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from '../../../../lib/teact/teact';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { fastRaf } from '../../../../util/schedulers';
 import useBackgroundMode from '../../../../hooks/useBackgroundMode';

@@ -1,11 +1,11 @@
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from 'react';
 import React, {
   memo, useCallback, useEffect, useRef, useState,
-} from '../../../lib/teact/teact';
+} from 'react';
 import { getActions } from '../../../global';
 
 import { copyTextToClipboard } from '../../../util/clipboard';
-import buildClassName from '../../../util/buildClassName';
+import clsx from 'clsx'
 import { areLinesWrapping } from '../helpers/renderText';
 
 import useWindowSize from '../../../hooks/useWindowSize';
@@ -54,9 +54,9 @@ const CodeOverlay: FC<OwnProps> = ({
     onWordWrapToggle?.(!isWordWrap);
   }, [isWordWrap, onWordWrapToggle]);
 
-  const contentClass = buildClassName(styles.content, !withWordWrapButton && noCopy && styles.hidden);
-  const overlayClass = buildClassName(styles.overlay, className);
-  const wrapClass = buildClassName(styles.wrap, isWordWrap && styles.wrapOn);
+  const contentClass = clsx(styles.content, !withWordWrapButton && noCopy && styles.hidden);
+  const overlayClass = clsx(styles.overlay, className);
+  const wrapClass = clsx(styles.wrap, isWordWrap && styles.wrapOn);
 
   return (
     <div className={overlayClass} ref={ref}>

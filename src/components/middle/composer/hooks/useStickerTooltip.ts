@@ -1,4 +1,4 @@
-import { useEffect } from '../../../../lib/teact/teact';
+import { useEffect } from '../../react';
 
 import type { ApiSticker } from '../../../../api/types';
 import type { Signal } from '../../../../util/signals';

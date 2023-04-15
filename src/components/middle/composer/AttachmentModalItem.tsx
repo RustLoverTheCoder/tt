@@ -1,6 +1,6 @@
-import React, { memo, useCallback, useMemo } from '../../../lib/teact/teact';
+import React, { memo, useCallback, useMemo } from '../react';
 
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from '../react';
 import type { ApiAttachment } from '../../../api/types';
 
 import { GIF_MIME_TYPE, SUPPORTED_IMAGE_CONTENT_TYPES, SUPPORTED_VIDEO_CONTENT_TYPES } from '../../../config';

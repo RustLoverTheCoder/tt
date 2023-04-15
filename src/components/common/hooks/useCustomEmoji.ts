@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from '../../../lib/teact/teact';
+import { useCallback, useEffect, useState } from 'react';
 import { getGlobal } from '../../../global';
 
 import type { ApiSticker } from '../../../api/types';

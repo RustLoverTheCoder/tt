@@ -1,11 +1,11 @@
 import React, {
   useState, useEffect, memo, useRef, useMemo, useCallback,
-} from '../../../lib/teact/teact';
+} from '../react';
 import { getActions, withGlobal } from '../../../global';
 
 import type { ApiStickerSet, ApiSticker, ApiChat } from '../../../api/types';
 import type { StickerSetOrRecent } from '../../../types';
-import type { FC } from '../../../lib/teact/teact';
+import type { FC } from '../react';
 
 import {
   CHAT_STICKER_SET_ID,

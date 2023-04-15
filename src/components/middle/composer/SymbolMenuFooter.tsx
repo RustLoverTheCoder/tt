@@ -1,5 +1,5 @@
-import type { FC } from '../../../lib/teact/teact';
-import React, { memo, useCallback } from '../../../lib/teact/teact';
+import type { FC } from '../react';
+import React, { memo, useCallback } from '../react';
 
 import useLang from '../../../hooks/useLang';
 

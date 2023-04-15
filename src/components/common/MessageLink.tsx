@@ -1,10 +1,10 @@
-import type { FC } from '../../lib/teact/teact';
-import React, { useCallback } from '../../lib/teact/teact';
+import type { FC } from 'react';
+import React, { useCallback } from 'react';
 import { getActions } from '../../global';
 
 import type { ApiMessage } from '../../api/types';
 
-import buildClassName from '../../util/buildClassName';
+import clsx from 'clsx'
 
 import Link from '../ui/Link';
 
@@ -30,7 +30,7 @@ const MessageLink: FC<OwnProps> = ({
   }
 
   return (
-    <Link className={buildClassName('MessageLink', className)} onClick={handleMessageClick}>{children}</Link>
+    <Link className={clsx('MessageLink', className)} onClick={handleMessageClick}>{children}</Link>
   );
 };
 

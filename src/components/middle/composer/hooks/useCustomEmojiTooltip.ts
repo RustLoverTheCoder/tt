@@ -1,5 +1,5 @@
 import type { RefObject } from 'react';
-import { useCallback, useEffect } from '../../../../lib/teact/teact';
+import { useCallback, useEffect } from '../../react';
 import twemojiRegex from '../../../../lib/twemojiRegex';
 
 import type { ApiSticker } from '../../../../api/types';

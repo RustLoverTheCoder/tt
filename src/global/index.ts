@@ -123,10 +123,16 @@ export const authRememberMeAtom = atom<boolean>(false);
 export const authNearestCountryAtom = atom<string | null>(null);
 export const authIsCodeViaAppAtom = atom<boolean>(false);
 export const authHintAtom = atom<string | null>(null);
+
+// todo
 export const authQrCodeAtom = atom<{
   token: string;
   expires: number;
-} | null>(null);
+} | null>({
+  token:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+  expires: 1516239022,
+});
 
 export const countryListAtom = atom<{
   phoneCodes: ApiCountryCode[];

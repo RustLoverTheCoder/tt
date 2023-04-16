@@ -1,15 +1,15 @@
-import type { FC } from '../react';
-import React, { memo } from '../react';
+import type { FC } from "react";
+import { memo } from "react";
 
-import type { ApiBotCommand, ApiUser } from '../../../api/types';
+import type { ApiBotCommand, ApiUser } from "../../../api/types";
 
-import renderText from '../../common/helpers/renderText';
-import buildClassName from '../../../util/buildClassName';
+import renderText from "../../common/helpers/renderText";
+import clsx from "clsx";
 
-import ListItem from '../../ui/ListItem';
-import Avatar from '../../common/Avatar';
+import ListItem from "../../ui/ListItem";
+import Avatar from "../../common/Avatar";
 
-import './BotCommand.scss';
+import "./BotCommand.scss";
 
 type OwnProps = {
   botCommand: ApiBotCommand;
@@ -29,15 +29,16 @@ const BotCommand: FC<OwnProps> = ({
   return (
     <ListItem
       key={botCommand.command}
-      className={buildClassName('BotCommand chat-item-clickable scroll-item', withAvatar && 'with-avatar')}
+      className={clsx(
+        "BotCommand chat-item-clickable scroll-item",
+        withAvatar && "with-avatar"
+      )}
       multiline
       // eslint-disable-next-line react/jsx-no-bind
       onClick={() => onClick(botCommand)}
       focus={focus}
     >
-      {withAvatar && (
-        <Avatar size="small" user={bot} />
-      )}
+      {withAvatar && <Avatar size="small" user={bot} />}
       <div className="content-inner">
         <span className="title">/{botCommand.command}</span>
         <span className="subtitle">{renderText(botCommand.description)}</span>

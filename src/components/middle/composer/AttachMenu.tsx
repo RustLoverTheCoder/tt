@@ -1,8 +1,8 @@
 import React, {
   memo, useMemo, useCallback, useEffect,
-} from '../react';
+} from 'react';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 import type { GlobalState } from '../../../global/types';
 import type { ApiAttachMenuPeerType } from '../../../api/types';
 import type { ISettings } from '../../../types';

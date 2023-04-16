@@ -100,11 +100,12 @@ export function renderTextWithEntities(
     const nestedEntityContent: TextPart[] = [];
 
     if (
+      Array.isArray(entityContent) &&
       deleteLineBreakAfterPre &&
       entityContent.length > 0 &&
       entityContent[0] === "\n"
     ) {
-      entityContent = entityContent.substr(1);
+      entityContent = entityContent.slice(1);
       deleteLineBreakAfterPre = false;
     }
 

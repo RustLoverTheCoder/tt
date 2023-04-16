@@ -2,7 +2,6 @@ import type { FC } from 'react';
 import React, {
   memo, useCallback, useMemo, useState,
 } from 'react';
-import { getActions } from '../../../global';
 
 import type { IAnchorPosition, ISettings } from '../../../types';
 import type { ApiAttachBot } from '../../../api/types';
@@ -14,6 +13,7 @@ import Portal from '../../ui/Portal';
 import Menu from '../../ui/Menu';
 import MenuItem from '../../ui/MenuItem';
 import AttachBotIcon from './AttachBotIcon';
+import { toggleAttachBot, callAttachBot } from '../../../global/actions';
 
 type OwnProps = {
   bot: ApiAttachBot;
@@ -32,8 +32,7 @@ const AttachBotItem: FC<OwnProps> = ({
   onMenuOpened,
   onMenuClosed,
 }) => {
-  const { callAttachBot, toggleAttachBot } = getActions();
-
+  
   const lang = useLang();
 
   const icon = useMemo(() => {

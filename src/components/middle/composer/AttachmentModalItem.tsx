@@ -1,11 +1,11 @@
-import React, { memo, useCallback, useMemo } from '../react';
+import React, { memo, useCallback, useMemo } from 'react';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 import type { ApiAttachment } from '../../../api/types';
 
 import { GIF_MIME_TYPE, SUPPORTED_IMAGE_CONTENT_TYPES, SUPPORTED_VIDEO_CONTENT_TYPES } from '../../../config';
 import { getFileExtension } from '../../common/helpers/documentInfo';
-import buildClassName from '../../../util/buildClassName';
+import clsx from 'clsx'
 import { formatMediaDuration } from '../../../util/dateFormat';
 import { REM } from '../../common/helpers/mediaDimensions';
 
@@ -83,7 +83,7 @@ const AttachmentModalItem: FC<OwnProps> = ({
             />
             {onDelete && (
               <i
-                className={buildClassName('icon-delete', styles.actionItem, styles.deleteFile)}
+                className={clsx('icon-delete', styles.actionItem, styles.deleteFile)}
                 onClick={() => onDelete(index)}
               />
             )}
@@ -115,7 +115,7 @@ const AttachmentModalItem: FC<OwnProps> = ({
         <div className={styles.overlay}>
           {canDisplaySpoilerButton && (
             <i
-              className={buildClassName(
+              className={clsx(
                 attachment.shouldSendAsSpoiler ? 'icon-spoiler-disable' : 'icon-spoiler',
                 styles.actionItem,
               )}
@@ -123,7 +123,7 @@ const AttachmentModalItem: FC<OwnProps> = ({
             />
           )}
           {onDelete && (
-            <i className={buildClassName('icon-delete', styles.actionItem)} onClick={() => onDelete(index)} />
+            <i className={clsx('icon-delete', styles.actionItem)} onClick={() => onDelete(index)} />
           )}
         </div>
       )}

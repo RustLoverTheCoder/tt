@@ -1,9 +1,9 @@
+//todo
 import React, {
   memo, useCallback, useEffect, useMemo, useRef, useState,
-} from '../react';
-import { getActions, withGlobal } from '../../../global';
+} from 'react';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 import type {
   ApiAttachment, ApiChatMember, ApiSticker,
 } from '../../../api/types';
@@ -21,11 +21,12 @@ import {
 import captureEscKeyListener from '../../../util/captureEscKeyListener';
 import getFilesFromDataTransferItems from './helpers/getFilesFromDataTransferItems';
 import { getHtmlTextLength } from './helpers/getHtmlTextLength';
-import { selectChat, selectIsChatWithSelf } from '../../../global/selectors';
-import { selectCurrentLimit } from '../../../global/selectors/limits';
+// import { selectChat, selectIsChatWithSelf } from '../../../global/selectors';
+// import { selectCurrentLimit } from '../../../global/selectors/limits';
 import { openSystemFilesDialog } from '../../../util/systemFilesDialog';
-import buildClassName from '../../../util/buildClassName';
+
 import { validateFiles } from '../../../util/files';
+import clsx from 'clsx';
 
 import usePrevious from '../../../hooks/usePrevious';
 import useMentionTooltip from './hooks/useMentionTooltip';
@@ -52,6 +53,7 @@ import MenuItem from '../../ui/MenuItem';
 import SymbolMenuButton from './SymbolMenuButton';
 
 import styles from './AttachmentModal.module.scss';
+import { updateAttachmentSettings, addRecentEmoji, addRecentCustomEmoji } from '../../../global/actions';
 
 export type OwnProps = {
   chatId: string;
@@ -77,41 +79,31 @@ export type OwnProps = {
   onEmojiSelect: (emoji: string) => void;
 };
 
-type StateProps = {
-  isChatWithSelf?: boolean;
-  currentUserId?: string;
-  groupChatMembers?: ApiChatMember[];
-  recentEmojis: string[];
-  baseEmojiKeywords?: Record<string, string[]>;
-  emojiKeywords?: Record<string, string[]>;
-  shouldSuggestCustomEmoji?: boolean;
-  customEmojiForEmoji?: ApiSticker[];
-  captionLimit: number;
-  attachmentSettings: GlobalState['attachmentSettings'];
-};
+// type StateProps = {
+//   isChatWithSelf?: boolean;
+//   currentUserId?: string;
+//   groupChatMembers?: ApiChatMember[];
+//   recentEmojis: string[];
+//   baseEmojiKeywords?: Record<string, string[]>;
+//   emojiKeywords?: Record<string, string[]>;
+//   shouldSuggestCustomEmoji?: boolean;
+//   customEmojiForEmoji?: ApiSticker[];
+//   captionLimit: number;
+//   attachmentSettings: GlobalState['attachmentSettings'];
+// };
 
 const ATTACHMENT_MODAL_INPUT_ID = 'caption-input-text';
 const DROP_LEAVE_TIMEOUT_MS = 150;
 const MAX_LEFT_CHARS_TO_SHOW = 100;
 
-const AttachmentModal: FC<OwnProps & StateProps> = ({
+const AttachmentModal: FC<OwnProps> = ({
   chatId,
   threadId,
   attachments,
   getHtml,
   canShowCustomSendMenu,
-  captionLimit,
   isReady,
-  isChatWithSelf,
-  currentUserId,
-  groupChatMembers,
-  recentEmojis,
-  baseEmojiKeywords,
-  emojiKeywords,
   shouldSchedule,
-  shouldSuggestCustomEmoji,
-  customEmojiForEmoji,
-  attachmentSettings,
   shouldSuggestCompression,
   shouldForceCompression,
   shouldForceAsFile,
@@ -127,7 +119,6 @@ const AttachmentModal: FC<OwnProps & StateProps> = ({
   onRemoveSymbol,
   onEmojiSelect,
 }) => {
-  const { addRecentCustomEmoji, addRecentEmoji, updateAttachmentSettings } = getActions();
 
   const lang = useLang();
 
@@ -421,7 +412,7 @@ const AttachmentModal: FC<OwnProps & StateProps> = ({
 
   function renderHeader() {
     if (!renderingAttachments) {
-      return undefined;
+      return null;
     }
 
     return (
@@ -492,7 +483,7 @@ const AttachmentModal: FC<OwnProps & StateProps> = ({
       isOpen={isOpen}
       onClose={onClear}
       header={renderHeader()}
-      className={buildClassName(
+      className={clsx(
         styles.root,
         isHovered && styles.hovered,
         !areAttachmentsNotScrolled && styles.headerBorder,
@@ -512,7 +503,7 @@ const AttachmentModal: FC<OwnProps & StateProps> = ({
         data-dropzone
       >
         <div
-          className={buildClassName(
+          className={clsx(
             styles.attachments,
             'custom-scroll',
             isBottomDividerShown && styles.attachmentsBottomPadding,
@@ -533,7 +524,7 @@ const AttachmentModal: FC<OwnProps & StateProps> = ({
           ))}
         </div>
         <div
-          className={buildClassName(
+          className={clsx(
             styles.captionWrapper,
             isBottomDividerShown && styles.captionTopBorder,
           )}
@@ -622,32 +613,34 @@ const AttachmentModal: FC<OwnProps & StateProps> = ({
   );
 };
 
-export default memo(withGlobal<OwnProps>(
-  (global, { chatId }): StateProps => {
-    const {
-      currentUserId,
-      recentEmojis,
-      customEmojis,
-      attachmentSettings,
-    } = global;
+// export default memo(withGlobal<OwnProps>(
+//   (global, { chatId }): StateProps => {
+//     const {
+//       currentUserId,
+//       recentEmojis,
+//       customEmojis,
+//       attachmentSettings,
+//     } = global;
 
-    const chat = selectChat(global, chatId);
-    const isChatWithSelf = selectIsChatWithSelf(global, chatId);
-    const { language, shouldSuggestCustomEmoji } = global.settings.byKey;
-    const baseEmojiKeywords = global.emojiKeywords[BASE_EMOJI_KEYWORD_LANG];
-    const emojiKeywords = language !== BASE_EMOJI_KEYWORD_LANG ? global.emojiKeywords[language] : undefined;
+//     const chat = selectChat(global, chatId);
+//     const isChatWithSelf = selectIsChatWithSelf(global, chatId);
+//     const { language, shouldSuggestCustomEmoji } = global.settings.byKey;
+//     const baseEmojiKeywords = global.emojiKeywords[BASE_EMOJI_KEYWORD_LANG];
+//     const emojiKeywords = language !== BASE_EMOJI_KEYWORD_LANG ? global.emojiKeywords[language] : undefined;
 
-    return {
-      isChatWithSelf,
-      currentUserId,
-      groupChatMembers: chat?.fullInfo?.members,
-      recentEmojis,
-      baseEmojiKeywords: baseEmojiKeywords?.keywords,
-      emojiKeywords: emojiKeywords?.keywords,
-      shouldSuggestCustomEmoji,
-      customEmojiForEmoji: customEmojis.forEmoji.stickers,
-      captionLimit: selectCurrentLimit(global, 'captionLength'),
-      attachmentSettings,
-    };
-  },
-)(AttachmentModal));
+//     return {
+//       isChatWithSelf,
+//       currentUserId,
+//       groupChatMembers: chat?.fullInfo?.members,
+//       recentEmojis,
+//       baseEmojiKeywords: baseEmojiKeywords?.keywords,
+//       emojiKeywords: emojiKeywords?.keywords,
+//       shouldSuggestCustomEmoji,
+//       customEmojiForEmoji: customEmojis.forEmoji.stickers,
+//       captionLimit: selectCurrentLimit(global, 'captionLength'),
+//       attachmentSettings,
+//     };
+//   },
+// )(AttachmentModal));
+
+export default memo(AttachmentModal)

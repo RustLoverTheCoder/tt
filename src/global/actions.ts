@@ -59,3 +59,15 @@ export const loadCustomEmojis = (params: any) => {};
 export const updateLastRenderedCustomEmojis = (params: any) => {};
 
 export const showNotification = (params: any) => {};
+
+export const callAttachBot = (params: any) => {};
+
+export const toggleAttachBot = (params: any) => {};
+
+export const loadFullUser = (params: any) => {};
+
+export const addRecentCustomEmoji = (params: any) => {};
+
+export const addRecentEmoji = (params: any) => {};
+
+export const updateAttachmentSettings = (params: any) => {};

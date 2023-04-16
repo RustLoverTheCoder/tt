@@ -36,7 +36,7 @@ import {
 } from "../api/types/updates";
 import { ApiAttachBot, ApiUser } from "../api/types/users";
 import { ApiChat, ApiChatFolder } from "../api/types/chats";
-import { ApiMessage } from "../api/types/messages";
+import { ApiMessage, ApiSticker, ApiTranscription } from "../api/types/messages";
 import { ApiGroupCall, ApiPhoneCall } from "../api/types/calls";
 
 export const configAtom = atom<ApiConfig | null>(null);
@@ -255,3 +255,29 @@ export const privacyAtom = atom<
 >({});
 
 export const notifyExceptionsAtom = atom<Record<number, NotifyException>>({});
+
+export const customEmojisAtom = atom<{
+  added: {
+    hash?: string;
+    setIds?: string[];
+  };
+  lastRendered: string[];
+  byId: Record<string, ApiSticker>;
+  forEmoji: {
+    emoji?: string;
+    stickers?: ApiSticker[];
+  };
+  featuredIds?: string[];
+  statusRecent: {
+    hash?: string;
+    emojis?: ApiSticker[];
+  };
+}>({
+  lastRendered: [],
+  byId: {},
+  added: {},
+  forEmoji: {},
+  statusRecent: {},
+});
+
+export const transcriptionsAtom = atom<Record<string, ApiTranscription>>({})

@@ -1,10 +1,9 @@
-import React, { memo, useCallback } from 'react'
-import { getActions } from '../../global';
+import React, { memo, useCallback } from "react";
+import type { FC } from "react";
 
-import type { FC } from 'react';
-
-import clsx from 'clsx';
-import Link from '../ui/Link';
+import clsx from "clsx";
+import Link from "../ui/Link";
+import { openChat } from "../../global/actions";
 
 type OwnProps = {
   className?: string;
@@ -12,11 +11,7 @@ type OwnProps = {
   children: React.ReactNode;
 };
 
-const ChatLink: FC<OwnProps> = ({
-  className, chatId, children,
-}) => {
-  const { openChat } = getActions();
-
+const ChatLink: FC<OwnProps> = ({ className, chatId, children }) => {
   const handleClick = useCallback(() => {
     if (chatId) {
       openChat({ id: chatId });
@@ -24,11 +19,13 @@ const ChatLink: FC<OwnProps> = ({
   }, [chatId, openChat]);
 
   if (!chatId) {
-    return children;
+    return <>{children}</>;
   }
 
   return (
-    <Link className={clsx('ChatLink', className)} onClick={handleClick}>{children}</Link>
+    <Link className={clsx("ChatLink", className)} onClick={handleClick}>
+      {children}
+    </Link>
   );
 };
 

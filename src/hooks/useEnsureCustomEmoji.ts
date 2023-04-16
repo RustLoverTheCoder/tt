@@ -1,4 +1,6 @@
-import { getActions, getGlobal } from '../global';
+import { useAtom } from 'jotai';
+import { customEmojisAtom } from '../global';
+import { loadCustomEmojis, updateLastRenderedCustomEmojis } from '../global/actions';
 import { addCustomEmojiInputRenderCallback } from '../util/customEmojiManager';
 
 import { throttle } from '../util/schedulers';
@@ -16,7 +18,7 @@ const loadFromQueue = throttle(() => {
   const queueToLoad = queue.slice(0, LIMIT_PER_REQUEST);
   const otherQueue = queue.slice(LIMIT_PER_REQUEST + 1);
 
-  getActions().loadCustomEmojis({
+  loadCustomEmojis({
     ids: queueToLoad,
   });
 
@@ -29,7 +31,7 @@ const loadFromQueue = throttle(() => {
 }, THROTTLE, false);
 
 const updateLastRendered = throttle(() => {
-  getActions().updateLastRenderedCustomEmojis({
+  updateLastRenderedCustomEmojis({
     ids: [...RENDER_HISTORY].reverse(),
   });
 
@@ -45,10 +47,11 @@ addCustomEmojiInputRenderCallback(notifyCustomEmojiRender);
 
 export default function useEnsureCustomEmoji(id?: string) {
   const lastSyncTime = useLastSyncTime();
+  const [customEmojis] = useAtom(customEmojisAtom)
   if (!id) return;
   notifyCustomEmojiRender(id);
 
-  if (getGlobal().customEmojis.byId[id]) {
+  if (customEmojis.byId[id]) {
     return;
   }
 

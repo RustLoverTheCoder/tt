@@ -240,7 +240,7 @@ const CustomEmojiPicker: FC<OwnProps & StateProps> = ({
     );
 
     const withSharedCanvas = index < STICKER_PICKER_MAX_SHARED_COVERS;
-    const isHq = selectIsAlwaysHighPriorityEmoji(getGlobal(), stickerSet as ApiStickerSet);
+    const isHq = selectIsAlwaysHighPriorityEmoji(stickerSet as ApiStickerSet);
 
     if (stickerSet.id === RECENT_SYMBOL_SET_ID
       || stickerSet.id === FAVORITE_SYMBOL_SET_ID

@@ -1,32 +1,42 @@
 import type {
-  ApiChat, ApiMessage, ApiMessageEntityTextUrl, ApiUser,
-} from '../../api/types';
-import { ApiMessageEntityTypes } from '../../api/types';
-import type { LangFn } from '../../hooks/useLang';
+  ApiChat,
+  ApiMessage,
+  ApiMessageEntityTextUrl,
+  ApiUser,
+} from "../../api/types";
+import { ApiMessageEntityTypes } from "../../api/types";
+import type { LangFn } from "../../hooks/useLang";
 
 import {
   CONTENT_NOT_SUPPORTED,
   LOCAL_MESSAGE_MIN_ID,
   RE_LINK_TEMPLATE,
   SERVICE_NOTIFICATIONS_USER_ID,
-} from '../../config';
-import { getUserFullName } from './users';
-import { IS_OPUS_SUPPORTED, isWebpSupported } from '../../util/windowEnvironment';
-import { getChatTitle, isUserId } from './chats';
-import { getGlobal } from '../index';
+} from "../../config";
+import { getUserFullName } from "./users";
+import {
+  IS_OPUS_SUPPORTED,
+  isWebpSupported,
+} from "../../util/windowEnvironment";
+import { getChatTitle, isUserId } from "./chats";
+import { useAtom } from "jotai";
+import { transcriptionsAtom } from "..";
 
-const RE_LINK = new RegExp(RE_LINK_TEMPLATE, 'i');
+const RE_LINK = new RegExp(RE_LINK_TEMPLATE, "i");
 
 export type MessageKey = `msg${string}-${number}`;
 
 export function getMessageHtmlId(messageId: number) {
-  return `message${messageId.toString().replace('.', '-')}`;
+  return `message${messageId.toString().replace(".", "-")}`;
 }
 
 export function getMessageKey(message: ApiMessage): MessageKey {
   const { chatId, id, previousLocalId } = message;
 
-  return buildMessageKey(chatId, isServiceNotificationMessage(message) ? previousLocalId || id : id);
+  return buildMessageKey(
+    chatId,
+    isServiceNotificationMessage(message) ? previousLocalId || id : id
+  );
 }
 
 export function buildMessageKey(chatId: string, msgId: number): MessageKey {
@@ -45,43 +55,97 @@ export function getMessageOriginalId(message: ApiMessage) {
 
 export function getMessageTranscription(message: ApiMessage) {
   const { transcriptionId } = message;
-  // eslint-disable-next-line eslint-multitab-tt/no-immediate-global
-  const global = getGlobal();
-  // todo
-  return transcriptionId && global.transcriptions[transcriptionId]?.text;
+  const [transcriptions] = useAtom(transcriptionsAtom);
+  return transcriptionId && transcriptions[transcriptionId]?.text;
 }
 
 export function hasMessageText(message: ApiMessage) {
   const {
-    text, sticker, photo, video, audio, voice, document, poll, webPage, contact, invoice, location,
-    game, action,
+    text,
+    sticker,
+    photo,
+    video,
+    audio,
+    voice,
+    document,
+    poll,
+    webPage,
+    contact,
+    invoice,
+    location,
+    game,
+    action,
   } = message.content;
 
-  return Boolean(text) || !(
-    sticker || photo || video || audio || voice || document || contact || poll || webPage || invoice || location
-    || game || action?.phoneCall
+  return (
+    Boolean(text) ||
+    !(
+      sticker ||
+      photo ||
+      video ||
+      audio ||
+      voice ||
+      document ||
+      contact ||
+      poll ||
+      webPage ||
+      invoice ||
+      location ||
+      game ||
+      action?.phoneCall
+    )
   );
 }
 
 export function getMessageText(message: ApiMessage) {
-  return hasMessageText(message) ? message.content.text?.text || CONTENT_NOT_SUPPORTED : undefined;
+  return hasMessageText(message)
+    ? message.content.text?.text || CONTENT_NOT_SUPPORTED
+    : undefined;
 }
 
 export function getMessageCustomShape(message: ApiMessage): boolean {
   const {
-    text, sticker, photo, video, audio, voice, document, poll, webPage, contact, action, game, invoice, location,
+    text,
+    sticker,
+    photo,
+    video,
+    audio,
+    voice,
+    document,
+    poll,
+    webPage,
+    contact,
+    action,
+    game,
+    invoice,
+    location,
   } = message.content;
 
-  if (sticker || (video?.isRound)) {
+  if (sticker || video?.isRound) {
     return true;
   }
 
-  if (!text || photo || video || audio || voice || document || poll || webPage || contact || action || game || invoice
-    || location) {
+  if (
+    !text ||
+    photo ||
+    video ||
+    audio ||
+    voice ||
+    document ||
+    poll ||
+    webPage ||
+    contact ||
+    action ||
+    game ||
+    invoice ||
+    location
+  ) {
     return false;
   }
 
-  const hasOtherFormatting = text?.entities?.some((entity) => entity.type !== ApiMessageEntityTypes.CustomEmoji);
+  const hasOtherFormatting = text?.entities?.some(
+    (entity) => entity.type !== ApiMessageEntityTypes.CustomEmoji
+  );
 
   return Boolean(message.emojiOnlyCount && !hasOtherFormatting);
 }
@@ -96,12 +160,16 @@ export function getMessageSingleRegularEmoji(message: ApiMessage) {
   return text!.text;
 }
 
-export function getMessageSingleCustomEmoji(message: ApiMessage): string | undefined {
+export function getMessageSingleCustomEmoji(
+  message: ApiMessage
+): string | undefined {
   const { text } = message.content;
 
-  if (text?.entities?.length !== 1
-    || text.entities[0].type !== ApiMessageEntityTypes.CustomEmoji
-    || message.emojiOnlyCount !== 1) {
+  if (
+    text?.entities?.length !== 1 ||
+    text.entities[0].type !== ApiMessageEntityTypes.CustomEmoji ||
+    message.emojiOnlyCount !== 1
+  ) {
     return undefined;
   }
 
@@ -113,15 +181,18 @@ export function getFirstLinkInMessage(message: ApiMessage) {
 
   let match: RegExpMatchArray | null | undefined;
   if (text?.entities) {
-    const firstTextUrl = text.entities.find((entity): entity is ApiMessageEntityTextUrl => (
-      entity.type === ApiMessageEntityTypes.TextUrl
-    ));
+    const firstTextUrl = text.entities.find(
+      (entity): entity is ApiMessageEntityTextUrl =>
+        entity.type === ApiMessageEntityTypes.TextUrl
+    );
     if (firstTextUrl) {
       match = firstTextUrl.url.match(RE_LINK);
     }
 
     if (!match) {
-      const firstUrl = text.entities.find((entity) => entity.type === ApiMessageEntityTypes.Url);
+      const firstUrl = text.entities.find(
+        (entity) => entity.type === ApiMessageEntityTypes.Url
+      );
       if (firstUrl) {
         const { offset, length } = firstUrl;
         match = text.text.substring(offset, offset + length).match(RE_LINK);
@@ -174,23 +245,34 @@ export function isActionMessage(message: ApiMessage) {
 }
 
 export function isServiceNotificationMessage(message: ApiMessage) {
-  return message.chatId === SERVICE_NOTIFICATIONS_USER_ID && Math.round(message.id) !== message.id;
+  return (
+    message.chatId === SERVICE_NOTIFICATIONS_USER_ID &&
+    Math.round(message.id) !== message.id
+  );
 }
 
 export function isAnonymousOwnMessage(message: ApiMessage) {
-  return Boolean(message.senderId) && !isUserId(message.senderId!) && isOwnMessage(message);
+  return (
+    Boolean(message.senderId) &&
+    !isUserId(message.senderId!) &&
+    isOwnMessage(message)
+  );
 }
 
 export function getSenderTitle(lang: LangFn, sender: ApiUser | ApiChat) {
-  return isUserId(sender.id) ? getUserFullName(sender as ApiUser) : getChatTitle(lang, sender as ApiChat);
+  return isUserId(sender.id)
+    ? getUserFullName(sender as ApiUser)
+    : getChatTitle(lang, sender as ApiChat);
 }
 
 export function getSendingState(message: ApiMessage) {
   if (!message.sendingState) {
-    return 'succeeded';
+    return "succeeded";
   }
 
-  return message.sendingState === 'messageSendingStateFailed' ? 'failed' : 'pending';
+  return message.sendingState === "messageSendingStateFailed"
+    ? "failed"
+    : "pending";
 }
 
 export function isMessageLocal(message: ApiMessage) {
@@ -202,7 +284,9 @@ export function isLocalMessageId(id: number) {
 }
 
 export function isHistoryClearMessage(message: ApiMessage) {
-  return message.content.action && message.content.action.type === 'historyClear';
+  return (
+    message.content.action && message.content.action.type === "historyClear"
+  );
 }
 
 export function getMessageContentFilename(message: ApiMessage) {
@@ -210,7 +294,9 @@ export function getMessageContentFilename(message: ApiMessage) {
 
   const video = content.webPage ? content.webPage.video : content.video;
   const photo = content.webPage ? content.webPage.photo : content.photo;
-  const document = content.webPage ? content.webPage.document : content.document;
+  const document = content.webPage
+    ? content.webPage.document
+    : content.document;
   if (document) {
     return document.fileName;
   }
@@ -220,8 +306,13 @@ export function getMessageContentFilename(message: ApiMessage) {
   }
 
   if (content.sticker) {
-    const extension = content.sticker.isLottie ? 'tgs' : content.sticker.isVideo
-      ? 'webm' : isWebpSupported() ? 'webp' : 'png';
+    const extension = content.sticker.isLottie
+      ? "tgs"
+      : content.sticker.isVideo
+      ? "webm"
+      : isWebpSupported()
+      ? "webp"
+      : "png";
     return `${content.sticker.id}.${extension}`;
   }
 
@@ -242,14 +333,19 @@ export function getMessageContentFilename(message: ApiMessage) {
   return baseFilename;
 }
 
-export function isGeoLiveExpired(message: ApiMessage, timestamp = Date.now() / 1000) {
+export function isGeoLiveExpired(
+  message: ApiMessage,
+  timestamp = Date.now() / 1000
+) {
   const { location } = message.content;
-  if (location?.type !== 'geoLive') return false;
-  return (timestamp - (message.date || 0) >= location.period);
+  if (location?.type !== "geoLive") return false;
+  return timestamp - (message.date || 0) >= location.period;
 }
 
 export function getMessageSingleInlineButton(message: ApiMessage) {
-  return message.inlineButtons?.length === 1
-    && message.inlineButtons[0].length === 1
-    && message.inlineButtons[0][0];
+  return (
+    message.inlineButtons?.length === 1 &&
+    message.inlineButtons[0].length === 1 &&
+    message.inlineButtons[0][0]
+  );
 }

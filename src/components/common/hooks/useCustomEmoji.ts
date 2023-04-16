@@ -1,22 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
-import { getGlobal } from '../../../global';
+import { useCallback, useEffect, useState } from "react";
 
-import type { ApiSticker } from '../../../api/types';
+import type { ApiSticker } from "../../../api/types";
 
-import { addCustomEmojiCallback, removeCustomEmojiCallback } from '../../../util/customEmojiManager';
+import {
+  addCustomEmojiCallback,
+  removeCustomEmojiCallback,
+} from "../../../util/customEmojiManager";
 
-import useEnsureCustomEmoji from '../../../hooks/useEnsureCustomEmoji';
+import useEnsureCustomEmoji from "../../../hooks/useEnsureCustomEmoji";
+import { useAtom } from "jotai";
+import { customEmojisAtom } from "../../../global";
 
 export default function useCustomEmoji(documentId?: string) {
+  const customEmojis = useAtom(customEmojisAtom);
   const [customEmoji, setCustomEmoji] = useState<ApiSticker | undefined>(
-    documentId ? getGlobal().customEmojis.byId[documentId] : undefined,
+    documentId ? customEmojis.byId[documentId] : undefined
   );
 
   useEnsureCustomEmoji(documentId);
 
   const handleGlobalChange = useCallback(() => {
     if (!documentId) return;
-    setCustomEmoji(getGlobal().customEmojis.byId[documentId]);
+    setCustomEmoji(customEmojis.byId[documentId]);
   }, [documentId]);
 
   useEffect(handleGlobalChange, [documentId, handleGlobalChange]);

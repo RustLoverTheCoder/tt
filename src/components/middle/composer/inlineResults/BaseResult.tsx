@@ -1,5 +1,5 @@
-import type { FC, TeactNode } from '../../react';
-import React, { memo } from '../../react';
+import type { FC, ReactNode } from 'react';
+import React, { memo } from 'react';
 
 import type { ApiWebDocument } from '../../../../api/types';
 
@@ -31,7 +31,7 @@ const BaseResult: FC<OwnProps> = ({
   transitionClassNames = '',
   onClick,
 }) => {
-  let content: TeactNode | undefined;
+  let content: ReactNode | undefined;
 
   const thumbnailDataUrl = useMedia(thumbnail ? `webDocument:${thumbnail.url}` : undefined);
   thumbUrl = thumbUrl || thumbnailDataUrl;

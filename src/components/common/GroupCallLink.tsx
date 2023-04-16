@@ -1,12 +1,12 @@
-import type { FC } from 'react';
-import React, { useCallback } from 'react';
+import type { FC } from "react";
+import React, { useCallback } from "react";
 
-import type { ApiGroupCall } from '../../api/types';
+import type { ApiGroupCall } from "../../api/types";
 
-import clsx from 'clsx'
+import clsx from "clsx";
 
-import Link from '../ui/Link';
-import { getActions } from '../../global';
+import Link from "../ui/Link";
+import { requestMasterAndJoinGroupCall } from "../../global/actions";
 
 type OwnProps = {
   className?: string;
@@ -14,23 +14,24 @@ type OwnProps = {
   children: React.ReactNode;
 };
 
-const GroupCallLink: FC<OwnProps> = ({
-  className, groupCall, children,
-}) => {
-  const { requestMasterAndJoinGroupCall } = getActions();
-
+const GroupCallLink: FC<OwnProps> = ({ className, groupCall, children }) => {
   const handleClick = useCallback(() => {
     if (groupCall) {
-      requestMasterAndJoinGroupCall({ id: groupCall.id, accessHash: groupCall.accessHash });
+      requestMasterAndJoinGroupCall({
+        id: groupCall.id,
+        accessHash: groupCall.accessHash,
+      });
     }
   }, [groupCall, requestMasterAndJoinGroupCall]);
 
   if (!groupCall) {
-    return children;
+    return <>{children}</>;
   }
 
   return (
-    <Link className={clsx('GroupCallLink', className)} onClick={handleClick}>{children}</Link>
+    <Link className={clsx("GroupCallLink", className)} onClick={handleClick}>
+      {children}
+    </Link>
   );
 };
 

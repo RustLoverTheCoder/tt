@@ -50,4 +50,12 @@ export const interactWithAnimatedEmoji = (params: any) => {};
 
 export const sendWatchingEmojiInteraction = (params: any) => {};
 
-export const sendEmojiInteraction = (params: any) => {}
+export const sendEmojiInteraction = (params: any) => {};
+
+export const requestMasterAndJoinGroupCall = (params: any) => {};
+
+export const loadCustomEmojis = (params: any) => {};
+
+export const updateLastRenderedCustomEmojis = (params: any) => {};
+
+export const showNotification = (params: any) => {};

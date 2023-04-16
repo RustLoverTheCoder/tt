@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import { addCallback } from '../lib/teact/teactn';
-import { getGlobal } from '../global';
+import { useEffect } from "react";
+import { addCallback } from "../lib/Reactn";
 
-import type { GlobalState } from '../global/types';
+import type { GlobalState } from "../global/types";
+import { useAtom } from "jotai";
+import { lastSyncTimeAtom } from "../global";
 
 type LastSyncTimeSetter = (time: number) => void;
 
@@ -20,7 +21,7 @@ addCallback((global: GlobalState) => {
 });
 
 export default function useLastSyncTime() {
-  const [lastSyncTime, setLastSyncTime] = useState(getGlobal().lastSyncTime);
+  const [lastSyncTime, setLastSyncTime] = useAtom(lastSyncTimeAtom);
 
   useEffect(() => {
     handlers.add(setLastSyncTime);

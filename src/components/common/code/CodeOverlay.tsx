@@ -2,7 +2,6 @@ import type { FC } from 'react';
 import React, {
   memo, useCallback, useEffect, useRef, useState,
 } from 'react';
-import { getActions } from '../../../global';
 
 import { copyTextToClipboard } from '../../../util/clipboard';
 import clsx from 'clsx'
@@ -12,6 +11,7 @@ import useWindowSize from '../../../hooks/useWindowSize';
 import useLang from '../../../hooks/useLang';
 
 import styles from './CodeOverlay.module.scss';
+import { showNotification } from '../../../global/actions';
 
 export type OwnProps = {
   className?: string;
@@ -23,8 +23,6 @@ export type OwnProps = {
 const CodeOverlay: FC<OwnProps> = ({
   text, className, noCopy, onWordWrapToggle,
 }) => {
-  const { showNotification } = getActions();
-  // eslint-disable-next-line no-null/no-null
   const ref = useRef<HTMLDivElement>(null);
   const windowSize = useWindowSize();
   const lang = useLang();

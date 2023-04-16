@@ -1,20 +1,23 @@
-import { addCallback } from '../lib/teact/teactn';
-import { getGlobal } from '../global';
+import { addCallback } from "../lib/Reactn";
 
-import { ApiMediaFormat } from '../api/types';
-import type { ApiSticker } from '../api/types';
-import type { GlobalState } from '../global/types';
+import { ApiMediaFormat } from "../api/types";
+import type { ApiSticker } from "../api/types";
+import type { GlobalState } from "../global/types";
 
-import { getStickerPreviewHash } from '../global/helpers';
-import * as mediaLoader from './mediaLoader';
-import { throttle } from './schedulers';
-import generateIdFor from './generateIdFor';
-import { IS_WEBM_SUPPORTED } from './windowEnvironment';
+import { getStickerPreviewHash } from "../global/helpers";
+import * as mediaLoader from "./mediaLoader";
+import { throttle } from "./schedulers";
+import generateIdFor from "./generateIdFor";
+import { IS_WEBM_SUPPORTED } from "./windowEnvironment";
 
-import placeholderSrc from '../assets/square.svg';
-import blankSrc from '../assets/blank.png';
+import placeholderSrc from "../assets/square.svg";
+import blankSrc from "../assets/blank.png";
+import { useAtom } from "jotai";
+import { customEmojisAtom } from "../global";
 
-type CustomEmojiLoadCallback = (customEmojis: GlobalState['customEmojis']) => void;
+type CustomEmojiLoadCallback = (
+  customEmojis: GlobalState["customEmojis"]
+) => void;
 type CustomEmojiInputRenderCallback = (emojiId: string) => void;
 
 const ID_STORE = {};
@@ -42,7 +45,10 @@ addCallback((global: GlobalState) => {
   prevGlobal = global;
 });
 
-export function addCustomEmojiCallback(handler: CustomEmojiLoadCallback, emojiId: string) {
+export function addCustomEmojiCallback(
+  handler: CustomEmojiLoadCallback,
+  emojiId: string
+) {
   handlers.set(handler, emojiId);
 }
 
@@ -54,7 +60,9 @@ export function addCustomEmojiInputRenderCallback(handler: AnyToVoidFunction) {
   renderHandlers.add(handler);
 }
 
-export function removeCustomEmojiInputRenderCallback(handler: AnyToVoidFunction) {
+export function removeCustomEmojiInputRenderCallback(
+  handler: AnyToVoidFunction
+) {
   renderHandlers.delete(handler);
 }
 
@@ -63,18 +71,22 @@ const callInputRenderHandlers = throttle((emojiId: string) => {
 }, DOM_PROCESS_THROTTLE);
 
 function processDomForCustomEmoji() {
-  const emojis = document.querySelectorAll<HTMLImageElement>('.custom-emoji.placeholder');
-  emojis.forEach((emoji) => {
-    const customEmoji = getGlobal().customEmojis.byId[emoji.dataset.documentId!];
+  const [customEmojis] = useAtom(customEmojisAtom);
+  const emojis = document.querySelectorAll<HTMLImageElement>(
+    ".custom-emoji.placeholder"
+  );
+  emojis.forEach((emoji: any) => {
+    const customEmoji = customEmojis.byId[emoji.dataset.documentId!];
     if (!customEmoji) {
       INPUT_WAITING_CUSTOM_EMOJI_IDS.add(emoji.dataset.documentId!);
       return;
     }
-    const [isPlaceholder, src, uniqueId] = getInputCustomEmojiParams(customEmoji);
+    const [isPlaceholder, src, uniqueId] =
+      getInputCustomEmojiParams(customEmoji);
 
     if (!isPlaceholder) {
       emoji.src = src;
-      emoji.classList.remove('placeholder');
+      emoji.classList.remove("placeholder");
       if (uniqueId) emoji.dataset.uniqueId = uniqueId;
 
       callInputRenderHandlers(customEmoji.id);
@@ -82,18 +94,28 @@ function processDomForCustomEmoji() {
   });
 }
 
-export const processMessageInputForCustomEmoji = throttle(processDomForCustomEmoji, DOM_PROCESS_THROTTLE);
+export const processMessageInputForCustomEmoji = throttle(
+  processDomForCustomEmoji,
+  DOM_PROCESS_THROTTLE
+);
 
-function checkInputCustomEmojiLoad(customEmojis: GlobalState['customEmojis']) {
-  const loaded = Array.from(INPUT_WAITING_CUSTOM_EMOJI_IDS).filter((id) => Boolean(customEmojis.byId[id]));
+function checkInputCustomEmojiLoad(customEmojis: GlobalState["customEmojis"]) {
+  const loaded = Array.from(INPUT_WAITING_CUSTOM_EMOJI_IDS).filter((id) =>
+    Boolean(customEmojis.byId[id])
+  );
   if (loaded.length) {
     loaded.forEach((id) => INPUT_WAITING_CUSTOM_EMOJI_IDS.delete(id));
     processMessageInputForCustomEmoji();
   }
 }
 
-export function getCustomEmojiMediaDataForInput(emojiId: string, isPreview?: boolean) {
-  const mediaHash = isPreview ? getStickerPreviewHash(emojiId) : `sticker${emojiId}`;
+export function getCustomEmojiMediaDataForInput(
+  emojiId: string,
+  isPreview?: boolean
+) {
+  const mediaHash = isPreview
+    ? getStickerPreviewHash(emojiId)
+    : `sticker${emojiId}`;
   const data = mediaLoader.getFromMemory(mediaHash);
   if (data) {
     return data;
@@ -112,13 +134,17 @@ function fetchAndProcess(mediaHash: string) {
 export function getInputCustomEmojiParams(customEmoji?: ApiSticker) {
   if (!customEmoji) return [true, placeholderSrc, undefined];
   const shouldUseStaticFallback = !IS_WEBM_SUPPORTED && customEmoji.isVideo;
-  const isUsingSharedCanvas = customEmoji.isLottie || (customEmoji.isVideo && !shouldUseStaticFallback);
+  const isUsingSharedCanvas =
+    customEmoji.isLottie || (customEmoji.isVideo && !shouldUseStaticFallback);
   if (isUsingSharedCanvas) {
     fetchAndProcess(`sticker${customEmoji.id}`);
     return [false, blankSrc, generateIdFor(ID_STORE, true)];
   }
 
-  const mediaData = getCustomEmojiMediaDataForInput(customEmoji.id, shouldUseStaticFallback);
+  const mediaData = getCustomEmojiMediaDataForInput(
+    customEmoji.id,
+    shouldUseStaticFallback
+  );
 
   return [!mediaData, mediaData || placeholderSrc, undefined];
 }

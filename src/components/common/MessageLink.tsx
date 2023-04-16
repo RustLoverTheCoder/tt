@@ -1,12 +1,12 @@
-import type { FC } from 'react';
-import React, { useCallback } from 'react';
-import { getActions } from '../../global';
+import type { FC } from "react";
+import React, { useCallback } from "react";
 
-import type { ApiMessage } from '../../api/types';
+import type { ApiMessage } from "../../api/types";
 
-import clsx from 'clsx'
+import clsx from "clsx";
 
-import Link from '../ui/Link';
+import Link from "../ui/Link";
+import { focusMessage } from "../../global/actions";
 
 type OwnProps = {
   className?: string;
@@ -14,11 +14,7 @@ type OwnProps = {
   children: React.ReactNode;
 };
 
-const MessageLink: FC<OwnProps> = ({
-  className, message, children,
-}) => {
-  const { focusMessage } = getActions();
-
+const MessageLink: FC<OwnProps> = ({ className, message, children }) => {
   const handleMessageClick = useCallback((): void => {
     if (message) {
       focusMessage({ chatId: message.chatId, messageId: message.id });
@@ -26,11 +22,16 @@ const MessageLink: FC<OwnProps> = ({
   }, [focusMessage, message]);
 
   if (!message) {
-    return children;
+    return <>{children}</>;
   }
 
   return (
-    <Link className={clsx('MessageLink', className)} onClick={handleMessageClick}>{children}</Link>
+    <Link
+      className={clsx("MessageLink", className)}
+      onClick={handleMessageClick}
+    >
+      {children}
+    </Link>
   );
 };
 

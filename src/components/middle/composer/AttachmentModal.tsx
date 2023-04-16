@@ -21,7 +21,7 @@ import {
 import captureEscKeyListener from '../../../util/captureEscKeyListener';
 import getFilesFromDataTransferItems from './helpers/getFilesFromDataTransferItems';
 import { getHtmlTextLength } from './helpers/getHtmlTextLength';
-// import { selectChat, selectIsChatWithSelf } from '../../../global/selectors';
+import { selectChat, selectIsChatWithSelf } from '../../../global/selectors';
 // import { selectCurrentLimit } from '../../../global/selectors/limits';
 import { openSystemFilesDialog } from '../../../util/systemFilesDialog';
 
@@ -54,6 +54,8 @@ import SymbolMenuButton from './SymbolMenuButton';
 
 import styles from './AttachmentModal.module.scss';
 import { updateAttachmentSettings, addRecentEmoji, addRecentCustomEmoji } from '../../../global/actions';
+import { useAtom } from 'jotai';
+import { currentUserIdAtom } from '../../../global';
 
 export type OwnProps = {
   chatId: string;
@@ -121,6 +123,9 @@ const AttachmentModal: FC<OwnProps> = ({
 }) => {
 
   const lang = useLang();
+
+  const isChatWithSelf = selectIsChatWithSelf(chatId)
+  const [currentUserId] = useAtom(currentUserIdAtom)
 
   // eslint-disable-next-line no-null/no-null
   const mainButtonRef = useRef<HTMLButtonElement | null>(null);

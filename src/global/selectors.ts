@@ -17,3 +17,9 @@ export const selectNotifyExceptions = () => {};
 export const selectNotifySettings = () => {};
 
 export const selectUser = () => {};
+
+export const selectIsChatWithSelf = (chatId:string) => {
+  return true
+}
+
+export const selectChat = () => {}

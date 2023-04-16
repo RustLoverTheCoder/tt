@@ -281,3 +281,5 @@ export const customEmojisAtom = atom<{
 });
 
 export const transcriptionsAtom = atom<Record<string, ApiTranscription>>({})
+
+export const currentUserIdAtom = atom<string>('')

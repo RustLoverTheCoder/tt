@@ -53,24 +53,7 @@ function subscribeToWorker(worker: any) {
 if (IS_SERVICE_WORKER_SUPPORTED) {
   try {
     const worker = new ServiceWorker();
-    if (navigator.serviceWorker.controller) {
-      if (DEBUG) {
-        // eslint-disable-next-line no-console
-        console.log("[SW] ServiceWorker ready");
-      }
-      subscribeToWorker(worker);
-    } else {
-      if (DEBUG) {
-        // eslint-disable-next-line no-console
-        console.error("[SW] ServiceWorker not available");
-      }
-
-      if (!IS_IOS && !IS_ANDROID && !IS_TEST) {
-        showDialog?.({
-          data: { message: "SERVICE_WORKER_DISABLED", hasErrorKey: true },
-        });
-      }
-    }
+    subscribeToWorker(worker);
   } catch (err) {
     if (DEBUG) {
       // eslint-disable-next-line no-console

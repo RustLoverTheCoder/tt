@@ -131,7 +131,7 @@ const AnimatedSticker: FC<OwnProps> = ({
         setTimeout(exec, ANIMATION_END_TIMEOUT);
         return;
       }
-
+      console.log("RLottie", RLottie);
       const newAnimation = RLottie.init(
         tgsUrl,
         container,

@@ -7,7 +7,7 @@ export const RELEASE_DATETIME = "";
 export const PRODUCTION_HOSTNAME = '';
 
 export const DEBUG = "true";
-export const DEBUG_MORE = false;
+export const DEBUG_MORE = true;
 
 export const IS_MOCKED_CLIENT = "false";
 export const IS_TEST = "false";

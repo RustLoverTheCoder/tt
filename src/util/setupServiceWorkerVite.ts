@@ -8,7 +8,7 @@ import {
 import { validateFiles } from "./files";
 import { playNotifySoundDebounced } from "./notifications";
 import { focusMessage, openChatWithDraft, showDialog } from "../global/actions";
-import ServiceWorker from "../serviceWorker?worker&inline";
+import Worker from "../serviceWorker?worker&inline";
 
 type WorkerAction = {
   type: string;
@@ -41,23 +41,29 @@ function handleWorkerMessage(e: MessageEvent) {
   }
 }
 
-function subscribeToWorker(worker: any) {
-  worker.removeEventListener("message", handleWorkerMessage);
-  worker.addEventListener("message", handleWorkerMessage);
-
-  worker.postMessage({
-    type: "clientReady",
-  });
-}
-
-if (IS_SERVICE_WORKER_SUPPORTED) {
-  try {
-    const worker = new ServiceWorker();
-    subscribeToWorker(worker);
-  } catch (err) {
-    if (DEBUG) {
-      // eslint-disable-next-line no-console
-      console.error("[SW] ServiceWorker registration failed: ", err);
+class ServiceWorker {
+  worker: any;
+  constructor() {
+    try {
+      this.worker = new Worker();
+      this.worker.removeEventListener("message", handleWorkerMessage);
+      this.worker.addEventListener("message", handleWorkerMessage);
+      this.worker.postMessage({
+        type: "clientReady",
+      });
+    } catch (err) {
+      if (DEBUG) {
+        // eslint-disable-next-line no-console
+        console.error("[SW] ServiceWorker registration failed: ", err);
+      }
     }
   }
+  postMessage(message: any) {
+    this.worker.postMessage(message);
+  }
+  terminate() {
+    this.worker.terminate();
+  }
 }
+
+export default new ServiceWorker();

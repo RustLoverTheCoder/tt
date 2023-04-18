@@ -256,7 +256,7 @@ export function handleClientMessage(e: ExtendableMessageEvent) {
   const source = e.source as WindowClient;
   if (e.data.type === "clientReady") {
     // focus on chat message when client is fully ready
-    const data = clickBuffer[source.id] || clickBuffer[0];
+    const data = clickBuffer[source?.id] || clickBuffer[0];
     if (data) {
       delete clickBuffer[source.id];
       delete clickBuffer[0];

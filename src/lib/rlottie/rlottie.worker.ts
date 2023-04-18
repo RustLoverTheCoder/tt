@@ -2,9 +2,11 @@ import { inflate } from "pako/dist/pako_inflate";
 import { createWorkerInterface } from "../../util/createPostMessageInterface";
 import type { CancellableCallback } from "../../util/PostMessageConnector";
 
-import "./rlottie-wasm.wasm";
+import { Module } from "./rlottie-wasm.wasm";
 
-declare const Module: any;
+console.log("Module", Module);
+
+// declare const Module: any = Mo
 
 declare function allocate(...args: any[]): string;
 
@@ -53,10 +55,12 @@ async function init(
   onInit: CancellableCallback
 ) {
   if (!rLottieApi) {
+    console.log("1");
     await rLottieApiPromise;
   }
 
   const json = await extractJson(tgsUrl);
+  console.log("json", json);
   const stringOnWasmHeap = allocate(intArrayFromString(json), "i8", 0);
   const handle = rLottieApi.init();
   const framesCount = rLottieApi.loadFromData(handle, stringOnWasmHeap);

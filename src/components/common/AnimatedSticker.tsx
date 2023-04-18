@@ -105,6 +105,7 @@ const AnimatedSticker: FC<OwnProps> = ({
   const playSegmentRef = useStateRef(playSegment);
 
   const isUnmountedRef = useRef<boolean>();
+  
   useEffect(() => {
     return () => {
       isUnmountedRef.current = true;
@@ -115,17 +116,20 @@ const AnimatedSticker: FC<OwnProps> = ({
     if (animation || !tgsUrl || (sharedCanvas && !sharedCanvasCoords)) {
       return;
     }
-
+    console.log("rlottie", RLottie);
     const exec = () => {
+      console.log("isUnmountedRef", isUnmountedRef);
       if (isUnmountedRef.current) {
         return;
       }
 
       const container = containerRef.current || sharedCanvas;
+      console.log("container", container);
       if (!container) {
         return;
       }
 
+      console.log("sharedCanvas", sharedCanvas);
       // Wait until element is properly mounted
       if (sharedCanvas && !sharedCanvas.offsetParent) {
         setTimeout(exec, ANIMATION_END_TIMEOUT);

@@ -32,6 +32,6 @@ declare module "*.txt" {
   export default content;
 }
 
-declare module "pako/dist/pako_inflate" {
+declare module "pako" {
   function inflate(...args: any[]): string;
 }

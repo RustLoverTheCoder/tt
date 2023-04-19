@@ -1,5 +1,4 @@
 import type { RLottieApi } from "./rlottie.worker";
-import RLottieWorker from "./rlottie.worker.ts?worker&inline";
 
 import {
   DPR,
@@ -36,7 +35,7 @@ const instancesByRenderId = new Map<string, RLottie>();
 
 const workers = new Array(MAX_WORKERS)
   .fill(undefined)
-  .map(() => createConnector<RLottieApi>(new RLottieWorker()));
+  .map(() => createConnector<RLottieApi>(new Worker(new URL('./rlottie.worker.ts', import.meta.url))));
 let lastWorkerIndex = -1;
 
 class RLottie {
@@ -403,6 +402,7 @@ class RLottie {
     msPerFrame: number,
     framesCount: number
   ) {
+    console.log("reduceFactor", reduceFactor, msPerFrame, framesCount);
     this.isRendererInited = true;
     this.reduceFactor = reduceFactor;
     this.msPerFrame = msPerFrame;

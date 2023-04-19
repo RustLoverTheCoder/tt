@@ -1,4 +1,4 @@
-import { inflate } from "pako/dist/pako_inflate";
+import { inflate } from "pako";
 import { createWorkerInterface } from "../../util/createPostMessageInterface";
 import type { CancellableCallback } from "../../util/PostMessageConnector";
 

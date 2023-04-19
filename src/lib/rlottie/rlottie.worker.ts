@@ -2,11 +2,7 @@ import { inflate } from "pako";
 import { createWorkerInterface } from "../../util/createPostMessageInterface";
 import type { CancellableCallback } from "../../util/PostMessageConnector";
 
-import { Module } from "./rlottie-wasm.wasm";
-
-console.log("Module", Module);
-
-// declare const Module: any = Mo
+import { Module } from "./rlottie-wasm";
 
 declare function allocate(...args: any[]): string;
 

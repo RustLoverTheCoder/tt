@@ -35,7 +35,13 @@ const instancesByRenderId = new Map<string, RLottie>();
 
 const workers = new Array(MAX_WORKERS)
   .fill(undefined)
-  .map(() => createConnector<RLottieApi>(new Worker(new URL('./rlottie.worker.ts', import.meta.url))));
+  .map(() =>
+    createConnector<RLottieApi>(
+      new Worker(new URL("./rlottie.worker.ts", import.meta.url), {
+        type: "module",
+      })
+    )
+  );
 let lastWorkerIndex = -1;
 
 class RLottie {
@@ -376,7 +382,7 @@ class RLottie {
 
   private initRenderer() {
     this.workerIndex = cycleRestrict(MAX_WORKERS, ++lastWorkerIndex);
-    console.log('workers',workers)
+    console.log("workers", workers);
     workers[this.workerIndex].request({
       name: "init",
       args: [

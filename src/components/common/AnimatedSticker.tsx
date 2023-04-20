@@ -235,7 +235,6 @@ const AnimatedSticker: FC<OwnProps> = ({
   }, [animation, pauseAnimation]);
 
   const unfreezeAnimation = useCallback(() => {
-    console.log("wasPlaying", wasPlaying);
     if (wasPlaying.current) {
       playAnimation(noLoop);
     }

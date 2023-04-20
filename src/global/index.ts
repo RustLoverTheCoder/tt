@@ -36,7 +36,11 @@ import {
 } from "../api/types/updates";
 import { ApiAttachBot, ApiUser } from "../api/types/users";
 import { ApiChat, ApiChatFolder } from "../api/types/chats";
-import { ApiMessage, ApiSticker, ApiTranscription } from "../api/types/messages";
+import {
+  ApiMessage,
+  ApiSticker,
+  ApiTranscription,
+} from "../api/types/messages";
 import { ApiGroupCall, ApiPhoneCall } from "../api/types/calls";
 
 export const configAtom = atom<ApiConfig | null>(null);
@@ -44,7 +48,7 @@ export const appConfigAtom = atom<ApiAppConfig | null>(null);
 export const hasWebAuthTokenFailedAtom = atom<boolean>(false);
 export const hasWebAuthTokenPasswordRequiredAtom = atom<boolean>(true);
 export const connectionStateAtom = atom<ApiUpdateConnectionStateType | null>(
-  null
+  "connectionStateReady"
 );
 export const currentUserId = atom<string | null>(null);
 export const isSyncingAtom = atom<boolean>(false);
@@ -129,8 +133,7 @@ export const authQrCodeAtom = atom<{
   token: string;
   expires: number;
 } | null>({
-  token:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
   expires: 1516239022,
 });
 
@@ -280,6 +283,6 @@ export const customEmojisAtom = atom<{
   statusRecent: {},
 });
 
-export const transcriptionsAtom = atom<Record<string, ApiTranscription>>({})
+export const transcriptionsAtom = atom<Record<string, ApiTranscription>>({});
 
-export const currentUserIdAtom = atom<string>('')
+export const currentUserIdAtom = atom<string>("");

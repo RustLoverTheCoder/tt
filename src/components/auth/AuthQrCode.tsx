@@ -1,4 +1,4 @@
-import { useEffect, useRef, memo, useCallback, FC } from "react";
+import { useEffect, useRef, memo, useCallback } from "react";
 import {
   authQrCodeAtom,
   authStateAtom,
@@ -43,7 +43,7 @@ function ensureQrCodeStyling() {
 }
 
 const AuthQrCode = () => {
-  const [connectionState, setConnectionState] = useAtom(connectionStateAtom);
+  const [connectionState] = useAtom(connectionStateAtom);
   const [authState] = useAtom(authStateAtom);
   const [authQrCode] = useAtom(authQrCodeAtom);
   const [language] = useAtom(languageAtom);
@@ -91,14 +91,12 @@ const AuthQrCode = () => {
     }
 
     if (connectionState !== "connectionStateReady") {
-      // todo
-      setConnectionState("connectionStateReady");
       return undefined;
     }
 
     const container = qrCodeRef.current!;
     const data = `${DATA_PREFIX}${authQrCode.token}`;
-    
+
     qrCode.update({
       data,
     });
@@ -138,6 +136,7 @@ const AuthQrCode = () => {
   }, [returnToAuthPhoneNumber]);
 
   const isAuthReady = authState === "authorizationStateWaitQrCode";
+
   return (
     <div id="auth-qr-form" className="custom-scroll">
       <div className="auth-form qr">
@@ -152,13 +151,15 @@ const AuthQrCode = () => {
               ref={qrCodeRef}
               style={{ width: QR_SIZE, height: QR_SIZE }}
             />
-            <AnimatedIcon
-              tgsUrl={LOCAL_TGS_URLS.QrPlane}
-              size={QR_PLANE_SIZE}
-              className="qr-plane"
-              nonInteractive
-              noLoop={false}
-            />
+            {!!isQrMounted && (
+              <AnimatedIcon
+                tgsUrl={LOCAL_TGS_URLS.QrPlane}
+                size={QR_PLANE_SIZE}
+                className="qr-plane"
+                nonInteractive
+                noLoop={false}
+              />
+            )}
           </div>
           {!isQrMounted && (
             <div className="qr-loading">

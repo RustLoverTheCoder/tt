@@ -1,6 +1,6 @@
-import { useEffect } from '../../react';
-import { getActions } from '../../../../global';
+import { useEffect } from 'react';
 import type { ChatTranslatedMessages } from '../../../../global/types';
+import { translateMessages } from '../../../../global/actions';
 
 export default function useMessageTranslation(
   chatTranslations: ChatTranslatedMessages | undefined,
@@ -8,7 +8,6 @@ export default function useMessageTranslation(
   messageId: number,
   requestedLanguageCode?: string,
 ) {
-  const { translateMessages } = getActions();
   const messageTranslation = requestedLanguageCode
     ? chatTranslations?.byLangCode[requestedLanguageCode]?.[messageId] : undefined;
 

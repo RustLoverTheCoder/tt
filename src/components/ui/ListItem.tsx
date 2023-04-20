@@ -39,9 +39,9 @@ interface OwnProps {
   ref?: RefObject<HTMLDivElement>;
   buttonRef?: RefObject<HTMLDivElement | HTMLAnchorElement>;
   icon?: string;
-  leftElement?: TeactNode;
+  leftElement?: ReactNode;
   secondaryIcon?: string;
-  rightElement?: TeactNode;
+  rightElement?: ReactNode;
   buttonClassName?: string;
   className?: string;
   style?: string;
@@ -140,6 +140,7 @@ const ListItem: FC<OwnProps> = ({
   } = useContextMenuPosition(
     contextMenuPosition,
     getTriggerElement,
+    //@ts-ignore
     getRootElement,
     getMenuElement,
     getLayout
@@ -255,13 +256,13 @@ const ListItem: FC<OwnProps> = ({
   );
 
   const ButtonElementTag = href ? "a" : "div";
-
+  console.log("style", style);
   return (
     <div
       ref={containerRef}
       className={fullClassName}
       dir={lang.isRtl ? "rtl" : undefined}
-      style={style}
+      // style={style}
       onMouseDown={onMouseDown}
       onDragEnter={onDragEnter}
     >

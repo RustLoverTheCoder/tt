@@ -136,7 +136,7 @@ export function useIntersectionObserver(
   }
 
   const observe = useCallback(
-    (target, targetCallback) => {
+    (target: any, targetCallback: any) => {
       if (!controllerRef.current) {
         initController();
       }

@@ -6,12 +6,12 @@ import useHeavyAnimationCheck from '../../../../hooks/useHeavyAnimationCheck';
 import usePlayPause from '../../../../hooks/usePlayPause';
 
 export default function useVideoAutoPause(playerRef: { current: HTMLVideoElement | null }, canPlay: boolean) {
-  const canPlayRef = useRef();
+  const canPlayRef = useRef<boolean>();
   canPlayRef.current = canPlay;
 
   const { play, pause } = usePlayPause(playerRef);
 
-  const isFrozenRef = useRef();
+  const isFrozenRef = useRef<boolean>();
 
   const freezePlaying = useCallback(() => {
     isFrozenRef.current = true;

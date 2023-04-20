@@ -1,22 +1,25 @@
-import type { RefObject } from 'react';
-import type { FC } from 'react';
-import React, { memo, useEffect, useRef } from 'react';
+import type { RefObject } from "react";
+import type { FC } from "react";
+import React, { memo, useEffect, useRef } from "react";
 
-import useShowTransition from '../../hooks/useShowTransition';
-import useKeyboardListNavigation from '../../hooks/useKeyboardListNavigation';
-import useVirtualBackdrop from '../../hooks/useVirtualBackdrop';
-import useEffectWithPrevDeps from '../../hooks/useEffectWithPrevDeps';
-import captureEscKeyListener from '../../util/captureEscKeyListener';
-import clsx from 'clsx';
-import buildStyle from '../../util/buildStyle';
-import { dispatchHeavyAnimationEvent } from '../../hooks/useHeavyAnimationCheck';
-import useHistoryBack from '../../hooks/useHistoryBack';
-import { preventMessageInputBlurWithBubbling } from '../middle/helpers/preventMessageInputBlur';
-import { IS_BACKDROP_BLUR_SUPPORTED, IS_COMPACT_MENU } from '../../util/windowEnvironment';
+import useShowTransition from "../../hooks/useShowTransition";
+import useKeyboardListNavigation from "../../hooks/useKeyboardListNavigation";
+import useVirtualBackdrop from "../../hooks/useVirtualBackdrop";
+import useEffectWithPrevDeps from "../../hooks/useEffectWithPrevDeps";
+import captureEscKeyListener from "../../util/captureEscKeyListener";
+import clsx from "clsx";
+import buildStyle from "../../util/buildStyle";
+import { dispatchHeavyAnimationEvent } from "../../hooks/useHeavyAnimationCheck";
+import useHistoryBack from "../../hooks/useHistoryBack";
+import { preventMessageInputBlurWithBubbling } from "../middle/helpers/preventMessageInputBlur";
+import {
+  IS_BACKDROP_BLUR_SUPPORTED,
+  IS_COMPACT_MENU,
+} from "../../util/windowEnvironment";
 
-import Portal from './Portal';
+import Portal from "./Portal";
 
-import './Menu.scss';
+import "./Menu.scss";
 
 type OwnProps = {
   ref?: RefObject<HTMLDivElement>;
@@ -30,8 +33,8 @@ type OwnProps = {
   ariaLabelledBy?: string;
   transformOriginX?: number;
   transformOriginY?: number;
-  positionX?: 'left' | 'right';
-  positionY?: 'top' | 'bottom';
+  positionX?: "left" | "right";
+  positionY?: "top" | "bottom";
   autoClose?: boolean;
   shouldSkipTransition?: boolean;
   footer?: string;
@@ -41,7 +44,9 @@ type OwnProps = {
   onCloseAnimationEnd?: () => void;
   onClose: () => void;
   onMouseEnter?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  onMouseEnterBackdrop?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onMouseEnterBackdrop?: (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
   onMouseLeave?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   withPortal?: boolean;
   children: React.ReactNode;
@@ -62,8 +67,8 @@ const Menu: FC<OwnProps> = ({
   children,
   transformOriginX,
   transformOriginY,
-  positionX = 'left',
-  positionY = 'top',
+  positionX = "left",
+  positionY = "top",
   autoClose = false,
   footer,
   noCloseOnBackdrop = false,
@@ -83,19 +88,17 @@ const Menu: FC<OwnProps> = ({
   }
   const backdropContainerRef = containerRef || menuRef;
 
-  const {
-    transitionClassNames,
-  } = useShowTransition(
+  const { transitionClassNames } = useShowTransition(
     isOpen,
     onCloseAnimationEnd,
     shouldSkipTransition,
     undefined,
-    shouldSkipTransition,
+    shouldSkipTransition
   );
 
   useEffect(
     () => (isOpen ? captureEscKeyListener(onClose) : undefined),
-    [isOpen, onClose],
+    [isOpen, onClose]
   );
 
   useHistoryBack({
@@ -104,44 +107,55 @@ const Menu: FC<OwnProps> = ({
     shouldBeReplaced: true,
   });
 
-  useEffectWithPrevDeps(([prevIsOpen]) => {
-    if (isOpen || (!isOpen && prevIsOpen === true)) {
-      dispatchHeavyAnimationEvent(ANIMATION_DURATION);
-    }
-  }, [isOpen]);
+  useEffectWithPrevDeps(
+    ([prevIsOpen]) => {
+      if (isOpen || (!isOpen && prevIsOpen === true)) {
+        dispatchHeavyAnimationEvent(ANIMATION_DURATION);
+      }
+    },
+    [isOpen]
+  );
 
-  const handleKeyDown = useKeyboardListNavigation(menuRef, isOpen, autoClose ? onClose : undefined, undefined, true);
+  const handleKeyDown = useKeyboardListNavigation(
+    menuRef,
+    isOpen,
+    autoClose ? onClose : undefined,
+    undefined,
+    true
+  );
 
   useVirtualBackdrop(
     isOpen,
     backdropContainerRef,
-    noCloseOnBackdrop ? undefined : onClose,
+    noCloseOnBackdrop ? undefined : onClose
   );
 
   const bubbleFullClassName = clsx(
-    'bubble menu-container custom-scroll',
+    "bubble menu-container custom-scroll",
     positionY,
     positionX,
-    footer && 'with-footer',
+    footer && "with-footer",
     transitionClassNames,
-    bubbleClassName,
+    bubbleClassName
   );
 
-  const transformOriginYStyle = transformOriginY !== undefined ? `${transformOriginY}px` : undefined;
-  const transformOriginXStyle = transformOriginX !== undefined ? `${transformOriginX}px` : undefined;
-
+  const transformOriginYStyle =
+    transformOriginY !== undefined ? `${transformOriginY}px` : undefined;
+  const transformOriginXStyle =
+    transformOriginX !== undefined ? `${transformOriginX}px` : undefined;
+  console.log("style,bubbleStyle", style, bubbleStyle);
   const menu = (
     <div
       id={id}
       className={clsx(
-        'Menu no-selection',
-        !noCompact && IS_COMPACT_MENU && 'compact',
-        !IS_BACKDROP_BLUR_SUPPORTED && 'no-blur',
-        className,
+        "Menu no-selection",
+        !noCompact && IS_COMPACT_MENU && "compact",
+        !IS_BACKDROP_BLUR_SUPPORTED && "no-blur",
+        className
       )}
-      style={style}
+      // style={style}
       aria-labelledby={ariaLabelledBy}
-      role={ariaLabelledBy ? 'menu' : undefined}
+      role={ariaLabelledBy ? "menu" : undefined}
       onKeyDown={isOpen ? handleKeyDown : undefined}
       onMouseEnter={onMouseEnter}
       onMouseLeave={isOpen ? onMouseLeave : undefined}
@@ -158,10 +172,17 @@ const Menu: FC<OwnProps> = ({
         role="presentation"
         ref={menuRef}
         className={bubbleFullClassName}
-        style={buildStyle(
-          `transform-origin: ${transformOriginXStyle || positionX} ${transformOriginYStyle || positionY}`,
-          bubbleStyle,
-        )}
+        // style={buildStyle(
+        //   `transform-origin: ${transformOriginXStyle || positionX} ${
+        //     transformOriginYStyle || positionY
+        //   }`,
+        //   bubbleStyle
+        // )}
+        style={{
+          transformOrigin: `${transformOriginXStyle || positionX} ${
+            transformOriginYStyle || positionY
+          }`,
+        }}
         onClick={autoClose ? onClose : undefined}
       >
         {children}

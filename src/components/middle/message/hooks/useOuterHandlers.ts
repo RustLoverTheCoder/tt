@@ -1,7 +1,6 @@
 import type { RefObject } from 'react';
-import type React from '../../react';
-import { useEffect, useRef } from '../../react';
-import { getActions } from '../../../../global';
+import type React from 'react';
+import { useEffect, useRef } from 'react';
 
 import { IS_ANDROID, IS_TOUCH_ENV } from '../../../../util/windowEnvironment';
 import windowSize from '../../../../util/windowSize';
@@ -10,6 +9,7 @@ import useFlag from '../../../../hooks/useFlag';
 import { preventMessageInputBlur } from '../../helpers/preventMessageInputBlur';
 import stopEvent from '../../../../util/stopEvent';
 import { REM } from '../../../common/helpers/mediaDimensions';
+import { sendDefaultReaction, setReplyingToId } from '../../../../global/actions';
 
 const ANDROID_KEYBOARD_HIDE_DELAY_MS = 350;
 const SWIPE_ANIMATION_DURATION = 150;
@@ -34,8 +34,6 @@ export default function useOuterHandlers(
   isOwn: boolean,
   shouldHandleMouseLeave: boolean,
 ) {
-  const { setReplyingToId, sendDefaultReaction } = getActions();
-
   const [isQuickReactionVisible, markQuickReactionVisible, unmarkQuickReactionVisible] = useFlag();
   const [isSwiped, markSwiped, unmarkSwiped] = useFlag();
   const doubleTapTimeoutRef = useRef<NodeJS.Timeout>();

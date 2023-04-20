@@ -92,5 +92,33 @@ export const clickBotInlineButton = ({
   button: ApiKeyboardButton;
 }) => {};
 
-
 export const deleteDeviceToken = () => {};
+
+export const setReplyingToId = ({ messageId }: { messageId: number }) => {};
+
+export const sendDefaultReaction = ({
+  chatId,
+  messageId,
+}: {
+  chatId: string;
+  messageId: number;
+}) => {};
+
+export const translateMessages = (params: any) => {};
+
+
+export const openMediaViewer = (params: any) => {};
+
+export const openAudioPlayer = (params: any) => {};
+
+export const markMessagesRead = (params: any) => {};
+
+export const cancelSendingMessage = (params: any) => {};
+
+export const sendPollVote = (params: any) => {};
+
+export const openForwardMenu = (params: any) => {};
+
+export const focusMessageInComments = (params: any) => {};
+
+export const openMessageLanguageModal = (params: any) => {};

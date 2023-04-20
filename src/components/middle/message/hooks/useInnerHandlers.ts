@@ -1,6 +1,5 @@
-import type React from '../../react';
-import { useCallback } from '../../react';
-import { getActions } from '../../../../global';
+import type React from 'react';
+import { useCallback } from 'react';
 
 import type { IAlbum } from '../../../../types';
 import { MediaViewerOrigin } from '../../../../types';
@@ -9,6 +8,7 @@ import type {
 } from '../../../../api/types';
 import { MAIN_THREAD_ID } from '../../../../api/types';
 import type { LangFn } from '../../../../hooks/useLang';
+import { openChat, showNotification, focusMessage, cancelSendingMessage, focusMessageInComments, markMessagesRead, openAudioPlayer, openForwardMenu, openMediaViewer, sendPollVote, openMessageLanguageModal } from '../../../../global/actions';
 
 export default function useInnerHandlers(
   lang: LangFn,
@@ -26,12 +26,6 @@ export default function useInnerHandlers(
   botSender?: ApiUser,
   messageTopic?: ApiTopic,
 ) {
-  const {
-    openChat, showNotification, focusMessage, openMediaViewer, openAudioPlayer,
-    markMessagesRead, cancelSendingMessage, sendPollVote, openForwardMenu, focusMessageInComments,
-    openMessageLanguageModal,
-  } = getActions();
-
   const {
     id: messageId, forwardInfo, replyToMessageId, replyToChatId, replyToTopMessageId, groupedId,
   } = message;

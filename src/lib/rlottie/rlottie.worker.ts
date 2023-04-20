@@ -4,10 +4,6 @@ import type { CancellableCallback } from "../../util/PostMessageConnector";
 
 import { Module } from "./rlottie-wasm";
 
-declare function allocate(...args: any[]): string;
-
-declare function intArrayFromString(str: String): string;
-
 let rLottieApi: Record<string, Function>;
 const rLottieApiPromise = new Promise<void>((resolve) => {
   Module.onRuntimeInitialized = () => {
@@ -57,9 +53,10 @@ async function init(
 
   const json = await extractJson(tgsUrl);
   console.log("json", json);
-  const stringOnWasmHeap = allocate(intArrayFromString(json), "i8", 0);
+  const stringOnWasmHeap = Module.allocate(Module.intArrayFromString(json), "i8", 0);
   const handle = rLottieApi.init();
   const framesCount = rLottieApi.loadFromData(handle, stringOnWasmHeap);
+  console.log('framesCount',framesCount)
   rLottieApi.resize(handle, imgSize, imgSize);
 
   const imageData = new ImageData(imgSize, imgSize);
@@ -92,7 +89,7 @@ async function changeData(
   }
 
   const json = await extractJson(tgsUrl);
-  const stringOnWasmHeap = allocate(intArrayFromString(json), "i8", 0);
+  const stringOnWasmHeap = Module.allocate(Module.intArrayFromString(json), "i8", 0);
   const { handle } = renderers.get(key)!;
   const framesCount = rLottieApi.loadFromData(handle, stringOnWasmHeap);
 

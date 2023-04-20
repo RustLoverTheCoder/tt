@@ -42,6 +42,7 @@ import {
   ApiTranscription,
 } from "../api/types/messages";
 import { ApiGroupCall, ApiPhoneCall } from "../api/types/calls";
+import { focusAtom } from 'jotai-optics'
 
 export const configAtom = atom<ApiConfig | null>(null);
 export const appConfigAtom = atom<ApiAppConfig | null>(null);
@@ -235,6 +236,8 @@ export const settingsAtom = atom<ISettings>({
   canDisplayChatInTitle: true,
 });
 
+export const notificationSoundVolumeAtom = focusAtom(settingsAtom, (optic) => optic.prop('notificationSoundVolume'))
+
 export const languageAtom = atom(
   (get) => get(settingsAtom).language,
   (get, set, language: LangCode) => {
@@ -286,3 +289,16 @@ export const customEmojisAtom = atom<{
 export const transcriptionsAtom = atom<Record<string, ApiTranscription>>({});
 
 export const currentUserIdAtom = atom<string>("");
+
+export const isLeftColumnShownAtom = atom<boolean>(true)
+
+// todo
+export const isCurrentUserPremiumAtom = atom<boolean>(false)
+
+export const usersByIdAtom = atom<Record<string, ApiUser>>({});
+
+// 当前消息
+export const currentMessageAtom = atom<ApiMessage | null>(null);
+
+// 当前聊天 或者是当前消息的聊天列表
+export const currentChatAtom = atom<ApiChat | null>(null);

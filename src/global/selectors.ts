@@ -23,3 +23,7 @@ export const selectIsChatWithSelf = (chatId:string) => {
 }
 
 export const selectChat = () => {}
+
+export const selectTabState = () => {}
+
+export const selectIsCurrentUserPremium = () => {}

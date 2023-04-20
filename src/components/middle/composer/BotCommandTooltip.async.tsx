@@ -1,16 +1,20 @@
-import type { FC } from '../react';
-import React, { memo } from '../react';
-import type { OwnProps } from './BotCommandTooltip';
-import { Bundles } from '../../../util/moduleLoader';
+import type { FC } from "react";
+import { memo } from "react";
+import type { OwnProps } from "./BotCommandTooltip";
+import { Bundles } from "../../../util/moduleLoader";
 
-import useModuleLoader from '../../../hooks/useModuleLoader';
+import useModuleLoader from "../../../hooks/useModuleLoader";
 
 const BotCommandTooltipAsync: FC<OwnProps> = (props) => {
   const { isOpen } = props;
-  const BotCommandTooltip = useModuleLoader(Bundles.Extra, 'BotCommandTooltip', !isOpen);
+  const BotCommandTooltip = useModuleLoader(
+    Bundles.Extra,
+    "BotCommandTooltip",
+    !isOpen
+  );
 
   // eslint-disable-next-line react/jsx-props-no-spreading
-  return BotCommandTooltip ? <BotCommandTooltip {...props} /> : undefined;
+  return BotCommandTooltip ? <BotCommandTooltip {...props} /> : null;
 };
 
 export default memo(BotCommandTooltipAsync);

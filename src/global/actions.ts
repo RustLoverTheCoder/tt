@@ -1,3 +1,5 @@
+import { ApiKeyboardButton } from "../api/types";
+
 export const disableHistoryAnimations = () => {};
 
 export const returnToAuthPhoneNumber = () => {};
@@ -58,7 +60,7 @@ export const loadCustomEmojis = (params: any) => {};
 
 export const updateLastRenderedCustomEmojis = (params: any) => {};
 
-export const showNotification = (params: any) => {};
+export const showNotification = ({ message }: { message: string }) => {};
 
 export const callAttachBot = (params: any) => {};
 
@@ -71,3 +73,24 @@ export const addRecentCustomEmoji = (params: any) => {};
 export const addRecentEmoji = (params: any) => {};
 
 export const updateAttachmentSettings = (params: any) => {};
+
+export const loadPremiumSetStickers = () => {};
+
+export const loadFeaturedEmojiStickers = () => {};
+
+export const sendBotCommand = ({ command }: { command: string }) => {};
+
+export const setLocalTextSearchQuery = ({ query }: { query: string }) => {};
+
+export const searchTextMessagesLocal = () => {};
+
+export const clickBotInlineButton = ({
+  messageId,
+  button,
+}: {
+  messageId: number;
+  button: ApiKeyboardButton;
+}) => {};
+
+
+export const deleteDeviceToken = () => {};

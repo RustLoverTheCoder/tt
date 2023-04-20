@@ -1,17 +1,17 @@
-import type { FC } from '../react';
-import React, { memo } from '../react';
-import { getActions, withGlobal } from '../../../global';
 
-import type { ApiMessage } from '../../../api/types';
+import type { FC } from "react";
+import { memo } from "react";
 
-import { IS_TOUCH_ENV } from '../../../util/windowEnvironment';
-import { selectChatMessage, selectCurrentMessageList } from '../../../global/selectors';
-import useMouseInside from '../../../hooks/useMouseInside';
+import { IS_TOUCH_ENV } from "../../../util/windowEnvironment";
+import useMouseInside from "../../../hooks/useMouseInside";
 
-import Menu from '../../ui/Menu';
-import Button from '../../ui/Button';
+import Menu from "../../ui/Menu";
+import Button from "../../ui/Button";
 
-import './BotKeyboardMenu.scss';
+import "./BotKeyboardMenu.scss";
+import { useAtom } from "jotai";
+import { clickBotInlineButton } from "../../../global/actions";
+import { currentMessageAtom } from "../../../global";
 
 export type OwnProps = {
   isOpen: boolean;
@@ -19,20 +19,13 @@ export type OwnProps = {
   onClose: NoneToVoidFunction;
 };
 
-type StateProps = {
-  message?: ApiMessage;
-};
-
-const BotKeyboardMenu: FC<OwnProps & StateProps> = ({
-  isOpen, message, onClose,
-}) => {
-  const { clickBotInlineButton } = getActions();
-
+const BotKeyboardMenu: FC<OwnProps> = ({ isOpen, onClose }) => {
+  const [message] = useAtom(currentMessageAtom);
   const [handleMouseEnter, handleMouseLeave] = useMouseInside(isOpen, onClose);
   const { isKeyboardSingleUse } = message || {};
 
   if (!message || !message.keyboardButtons) {
-    return undefined;
+    return null;
   }
 
   return (
@@ -54,9 +47,11 @@ const BotKeyboardMenu: FC<OwnProps & StateProps> = ({
             {row.map((button) => (
               <Button
                 ripple
-                disabled={button.type === 'unsupported'}
+                disabled={button.type === "unsupported"}
                 // eslint-disable-next-line react/jsx-no-bind
-                onClick={() => clickBotInlineButton({ messageId: message.id, button })}
+                onClick={() =>
+                  clickBotInlineButton({ messageId: message.id, button })
+                }
               >
                 {button.text}
               </Button>
@@ -68,13 +63,4 @@ const BotKeyboardMenu: FC<OwnProps & StateProps> = ({
   );
 };
 
-export default memo(withGlobal<OwnProps>(
-  (global, { messageId }): StateProps => {
-    const { chatId } = selectCurrentMessageList(global) || {};
-    if (!chatId) {
-      return {};
-    }
-
-    return { message: selectChatMessage(global, chatId, messageId) };
-  },
-)(BotKeyboardMenu));
+export default memo(BotKeyboardMenu);

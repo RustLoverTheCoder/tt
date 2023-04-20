@@ -35,3 +35,14 @@ declare module "*.txt" {
 declare module "pako" {
   function inflate(...args: any[]): string;
 }
+
+interface TEncodedImage {
+  result: Uint8ClampedArray;
+  width: number;
+  height: number;
+}
+
+interface IWebpWorker extends Worker {
+  wasmReady?: boolean;
+  requests: Map<string, (value: PromiseLike<TEncodedImage>) => void>;
+}

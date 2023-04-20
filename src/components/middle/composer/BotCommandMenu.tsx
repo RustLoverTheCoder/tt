@@ -1,17 +1,17 @@
-import React, { memo, useCallback } from '../react';
-import { getActions } from '../../../global';
+import { memo, useCallback } from "react";
 
-import type { FC } from '../react';
-import type { ApiBotCommand } from '../../../api/types';
+import type { FC } from "react";
+import type { ApiBotCommand } from "../../../api/types";
 
-import { IS_TOUCH_ENV } from '../../../util/windowEnvironment';
-import useMouseInside from '../../../hooks/useMouseInside';
-import useAppLayout from '../../../hooks/useAppLayout';
+import { IS_TOUCH_ENV } from "../../../util/windowEnvironment";
+import useMouseInside from "../../../hooks/useMouseInside";
+import useAppLayout from "../../../hooks/useAppLayout";
 
-import Menu from '../../ui/Menu';
-import BotCommand from './BotCommand';
+import Menu from "../../ui/Menu";
+import BotCommand from "./BotCommand";
 
-import './BotCommandMenu.scss';
+import "./BotCommandMenu.scss";
+import { sendBotCommand } from "../../../global/actions";
 
 export type OwnProps = {
   isOpen: boolean;
@@ -19,20 +19,25 @@ export type OwnProps = {
   onClose: NoneToVoidFunction;
 };
 
-const BotCommandMenu: FC<OwnProps> = ({
-  isOpen, botCommands, onClose,
-}) => {
-  const { sendBotCommand } = getActions();
+const BotCommandMenu: FC<OwnProps> = ({ isOpen, botCommands, onClose }) => {
   const { isMobile } = useAppLayout();
 
-  const [handleMouseEnter, handleMouseLeave] = useMouseInside(isOpen, onClose, undefined, isMobile);
+  const [handleMouseEnter, handleMouseLeave] = useMouseInside(
+    isOpen,
+    onClose,
+    undefined,
+    isMobile
+  );
 
-  const handleClick = useCallback((botCommand: ApiBotCommand) => {
-    sendBotCommand({
-      command: `/${botCommand.command}`,
-    });
-    onClose();
-  }, [onClose, sendBotCommand]);
+  const handleClick = useCallback(
+    (botCommand: ApiBotCommand) => {
+      sendBotCommand({
+        command: `/${botCommand.command}`,
+      });
+      onClose();
+    },
+    [onClose, sendBotCommand]
+  );
 
   return (
     <Menu

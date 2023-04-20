@@ -17,6 +17,12 @@ import SafeLink from "../SafeLink";
 import Spoiler from "../spoiler/Spoiler";
 import CustomEmoji from "../CustomEmoji";
 import CodeBlock from "../code/CodeBlock";
+import {
+  sendBotCommand,
+  setLocalTextSearchQuery,
+  searchTextMessagesLocal,
+  showNotification,
+} from "../../../global/actions";
 
 interface IOrganizedEntity {
   entity: ApiMessageEntity;
@@ -324,10 +330,12 @@ function organizeEntity(
     )
     .filter(Boolean);
 
-  parsedNestedEntities.forEach((parsedEntity) => {
+  parsedNestedEntities.forEach((parsedEntity: any) => {
+    console.log("parsedEntity", parsedEntity);
     let isChanged = false;
 
-    parsedEntity.organizedIndexes.forEach((organizedIndex) => {
+    parsedEntity.organizedIndexes.forEach((organizedIndex: any) => {
+      console.log("organizedIndex", organizedIndex);
       if (!isChanged && !organizedIndexes.has(organizedIndex)) {
         isChanged = true;
       }
@@ -625,17 +633,17 @@ function getLinkUrl(entityContent: string, entity: ApiMessageEntity) {
 }
 
 function handleBotCommandClick(e: React.MouseEvent<HTMLAnchorElement>) {
-  getActions().sendBotCommand({ command: e.currentTarget.innerText });
+  sendBotCommand({ command: e.currentTarget.innerText });
 }
 
 function handleHashtagClick(e: React.MouseEvent<HTMLAnchorElement>) {
-  getActions().setLocalTextSearchQuery({ query: e.currentTarget.innerText });
-  getActions().searchTextMessagesLocal();
+  setLocalTextSearchQuery({ query: e.currentTarget.innerText });
+  searchTextMessagesLocal();
 }
 
 function handleCodeClick(e: React.MouseEvent<HTMLElement>) {
   copyTextToClipboard(e.currentTarget.innerText);
-  getActions().showNotification({
+  showNotification({
     message: translate("TextCopied"),
   });
 }

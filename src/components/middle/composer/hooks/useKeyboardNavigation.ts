@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from '../react';
+import { useCallback, useEffect, useState } from 'react';
 import captureKeyboardListeners from '../../../../util/captureKeyboardListeners';
 import cycleRestrict from '../../../../util/cycleRestrict';
 

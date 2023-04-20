@@ -106,7 +106,6 @@ export const sendDefaultReaction = ({
 
 export const translateMessages = (params: any) => {};
 
-
 export const openMediaViewer = (params: any) => {};
 
 export const openAudioPlayer = (params: any) => {};
@@ -123,10 +122,25 @@ export const focusMessageInComments = (params: any) => {};
 
 export const openMessageLanguageModal = (params: any) => {};
 
-export const loadWebPagePreview = (params: any) => {}
+export const loadWebPagePreview = (params: any) => {};
 
-export const clearWebPagePreview = () => {}
+export const clearWebPagePreview = () => {};
 
-export const toggleMessageWebPage = (params: any) => {}
+export const toggleMessageWebPage = (params: any) => {};
 
-export const cancelMessageMediaDownload = (params: any) => {}
+export const cancelMessageMediaDownload = (params: any) => {};
+
+export const openPremiumModal = (params: any) => {};
+
+export const setEmojiStatus = (params: any) => {};
+
+export const clearCustomEmojiForEmoji = () => {};
+
+export const loadCustomEmojiForEmoji = (params: any) => {};
+
+export const setStickerSearchQuery = (params: any) => {};
+
+export const setGifSearchQuery = (params: any) => {};
+
+export const sendMessageAction = (params: any) => {};
+

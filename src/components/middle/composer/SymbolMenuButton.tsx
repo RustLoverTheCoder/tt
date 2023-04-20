@@ -1,5 +1,4 @@
 import { memo, useCallback, useRef, useState } from "react";
-import { getActions } from "../../../global";
 
 import type { FC } from "react";
 import type { IAnchorPosition } from "../../../types";
@@ -9,7 +8,7 @@ import {
   EDITABLE_INPUT_CSS_SELECTOR,
   EDITABLE_INPUT_MODAL_CSS_SELECTOR,
 } from "../../../config";
-import buildClassName from "../../../util/buildClassName";
+import clsx from "clsx";
 import useFlag from "../../../hooks/useFlag";
 import useContextMenuPosition from "../../../hooks/useContextMenuPosition";
 
@@ -17,6 +16,7 @@ import Button from "../../ui/Button";
 import Spinner from "../../ui/Spinner";
 import ResponsiveHoverButton from "../../ui/ResponsiveHoverButton";
 import SymbolMenu from "./SymbolMenu.async";
+import { setStickerSearchQuery, setGifSearchQuery, addRecentEmoji, addRecentCustomEmoji } from "../../../global/actions";
 
 const MOBILE_KEYBOARD_HIDE_DELAY_MS = 100;
 
@@ -75,12 +75,6 @@ const SymbolMenuButton: FC<OwnProps> = ({
   isSymbolMenuForced,
   className,
 }) => {
-  const {
-    setStickerSearchQuery,
-    setGifSearchQuery,
-    addRecentEmoji,
-    addRecentCustomEmoji,
-  } = getActions();
 
   // eslint-disable-next-line no-null/no-null
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -90,7 +84,7 @@ const SymbolMenuButton: FC<OwnProps> = ({
     IAnchorPosition | undefined
   >(undefined);
 
-  const symbolMenuButtonClassName = buildClassName(
+  const symbolMenuButtonClassName = clsx(
     "mobile-symbol-menu-button",
     !isReady && "not-ready",
     isSymbolMenuLoaded
@@ -168,6 +162,7 @@ const SymbolMenuButton: FC<OwnProps> = ({
   } = useContextMenuPosition(
     contextMenuPosition,
     getTriggerElement,
+    // @ts-ignore
     getRootElement,
     getMenuElement,
     getLayout
@@ -189,7 +184,7 @@ const SymbolMenuButton: FC<OwnProps> = ({
         </Button>
       ) : (
         <ResponsiveHoverButton
-          className={buildClassName(
+          className={clsx(
             "symbol-menu-button",
             isSymbolMenuOpen && "activated"
           )}
@@ -217,6 +212,7 @@ const SymbolMenuButton: FC<OwnProps> = ({
         onGifSelect={onGifSelect}
         onRemoveSymbol={onRemoveSymbol}
         onSearchOpen={handleSearchOpen}
+        // @ts-ignore
         addRecentEmoji={addRecentEmoji}
         addRecentCustomEmoji={addRecentCustomEmoji}
         isAttachmentModal={isAttachmentModal}

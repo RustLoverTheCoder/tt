@@ -1,17 +1,15 @@
 import type { FC } from 'react';
-import React, { memo, useEffect, useRef } from 'react';
-import { withGlobal } from '../../../global';
+import { memo, useEffect, useRef } from 'react';
 
 import type { ApiSticker } from '../../../api/types';
 
 import { STICKER_SIZE_PICKER } from '../../../config';
-import buildClassName from '../../../util/buildClassName';
+import clsx from 'clsx';
 import captureEscKeyListener from '../../../util/captureEscKeyListener';
 import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
 import useShowTransition from '../../../hooks/useShowTransition';
 import usePrevious from '../../../hooks/usePrevious';
 import useSendMessageAction from '../../../hooks/useSendMessageAction';
-import { selectIsChatWithSelf, selectIsCurrentUserPremium } from '../../../global/selectors';
 
 import Loading from '../../ui/Loading';
 import StickerButton from '../../common/StickerButton';
@@ -34,7 +32,7 @@ type StateProps = {
 
 const INTERSECTION_THROTTLE = 200;
 
-const StickerTooltip: FC<OwnProps & StateProps> = ({
+const StickerTooltip: FC<OwnProps> = ({
   chatId,
   threadId,
   isOpen,
@@ -61,7 +59,7 @@ const StickerTooltip: FC<OwnProps & StateProps> = ({
     sendMessageAction({ type: 'chooseSticker' });
   };
 
-  const className = buildClassName(
+  const className = clsx(
     'StickerTooltip composer-tooltip custom-scroll',
     transitionClassNames,
     !(displayedStickers?.length) && 'hidden',
@@ -94,11 +92,13 @@ const StickerTooltip: FC<OwnProps & StateProps> = ({
   );
 };
 
-export default memo(withGlobal<OwnProps>(
-  (global, { chatId }): StateProps => {
-    const { stickers } = global.stickers.forEmoji;
-    const isSavedMessages = selectIsChatWithSelf(global, chatId);
-    const isCurrentUserPremium = selectIsCurrentUserPremium(global);
-    return { stickers, isSavedMessages, isCurrentUserPremium };
-  },
-)(StickerTooltip));
+// export default memo(withGlobal<OwnProps>(
+//   (global, { chatId }): StateProps => {
+//     const { stickers } = global.stickers.forEmoji;
+//     const isSavedMessages = selectIsChatWithSelf(global, chatId);
+//     const isCurrentUserPremium = selectIsCurrentUserPremium(global);
+//     return { stickers, isSavedMessages, isCurrentUserPremium };
+//   },
+// )(StickerTooltip));
+
+export default memo(StickerTooltip)

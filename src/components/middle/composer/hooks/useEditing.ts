@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from '../react';
+import { useCallback, useEffect, useState } from 'react';
 import { getActions } from '../../../../global';
 
 import type { ApiFormattedText, ApiMessage } from '../../../../api/types';

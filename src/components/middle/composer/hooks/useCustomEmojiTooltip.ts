@@ -1,11 +1,10 @@
 import type { RefObject } from 'react';
-import { useCallback, useEffect } from '../react';
+import { useCallback, useEffect } from 'react';
 import twemojiRegex from '../../../../lib/twemojiRegex';
 
 import type { ApiSticker } from '../../../../api/types';
 import type { Signal } from '../../../../util/signals';
 
-import { getActions } from '../../../../global';
 import { EMOJI_IMG_REGEX } from '../../../../config';
 import { IS_EMOJI_SUPPORTED } from '../../../../util/windowEnvironment';
 import { getHtmlBeforeSelection } from '../../../../util/selection';
@@ -16,6 +15,7 @@ import useDerivedState from '../../../../hooks/useDerivedState';
 import useFlag from '../../../../hooks/useFlag';
 import useDerivedSignal from '../../../../hooks/useDerivedSignal';
 import { useThrottledResolver } from '../../../../hooks/useAsyncResolvers';
+import { loadCustomEmojiForEmoji, clearCustomEmojiForEmoji } from '../../../../global/actions';
 
 const THROTTLE = 300;
 const RE_ENDS_ON_EMOJI = new RegExp(`(${twemojiRegex.source})$`, 'g');
@@ -29,8 +29,6 @@ export default function useCustomEmojiTooltip(
   inputRef: RefObject<HTMLDivElement>,
   customEmojis?: ApiSticker[],
 ) {
-  const { loadCustomEmojiForEmoji, clearCustomEmojiForEmoji } = getActions();
-
   const [isManuallyClosed, markManuallyClosed, unmarkManuallyClosed] = useFlag(false);
 
   const extractLastEmojiThrottled = useThrottledResolver(() => {

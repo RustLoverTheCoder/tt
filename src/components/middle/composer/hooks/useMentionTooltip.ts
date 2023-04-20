@@ -1,7 +1,7 @@
 import type { RefObject } from 'react';
 import {
   useCallback, useEffect, useState,
-} from '../react';
+} from 'react';
 import { getGlobal } from '../../../../global';
 
 import type { ApiChatMember, ApiUser } from '../../../../api/types';

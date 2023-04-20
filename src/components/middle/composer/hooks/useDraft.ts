@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from '../react';
+import { useCallback, useEffect } from 'react';
 import { getActions } from '../../../../global';
 
 import type { ApiDraft } from '../../../../global/types';

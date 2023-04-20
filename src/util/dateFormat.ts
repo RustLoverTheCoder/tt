@@ -402,7 +402,7 @@ export function parseDateString(query = ""): string | undefined {
   const dateParts = query.split(" ");
   const date = matchStringDate ? dateParts[0] : dateParts[1];
   const month = (matchStringDate ? dateParts[1] : dateParts[0]).toLowerCase();
-  const monthIndex = MONTHS_FULL_LOWERCASE.findIndex((item) =>
+  const monthIndex = MONTHS_FULL_LOWERCASE.findIndex((item: any) =>
     item.startsWith(month)
   );
 

@@ -382,7 +382,6 @@ class RLottie {
 
   private initRenderer() {
     this.workerIndex = cycleRestrict(MAX_WORKERS, ++lastWorkerIndex);
-    console.log("workers", workers);
     workers[this.workerIndex].request({
       name: "init",
       args: [
@@ -408,7 +407,6 @@ class RLottie {
     msPerFrame: number,
     framesCount: number
   ) {
-    console.log("reduceFactor", reduceFactor, msPerFrame, framesCount);
     this.isRendererInited = true;
     this.reduceFactor = reduceFactor;
     this.msPerFrame = msPerFrame;

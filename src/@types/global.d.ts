@@ -46,3 +46,18 @@ interface IWebpWorker extends Worker {
   wasmReady?: boolean;
   requests: Map<string, (value: PromiseLike<TEncodedImage>) => void>;
 }
+
+declare module 'opus-recorder' {
+  export interface IOpusRecorder extends Omit<MediaRecorder, 'start' | 'ondataavailable'> {
+    new(options: AnyLiteral): IOpusRecorder;
+
+    start(stream?: MediaStreamAudioSourceNode): void;
+
+    sourceNode: MediaStreamAudioSourceNode;
+
+    ondataavailable: (typedArray: Uint8Array) => void;
+  }
+
+  const recorder: IOpusRecorder;
+  export default recorder;
+}

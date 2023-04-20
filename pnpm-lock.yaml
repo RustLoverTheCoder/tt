@@ -13,6 +13,7 @@ specifiers:
   jotai-optics: ^0.3.0
   lowlight: ^2.8.1
   optics-ts: ^2.4.0
+  opus-recorder: github:Ajaxy/opus-recorder
   pako: ^2.1.0
   postcss: ^8.4.21
   qr-code-styling: github:zubiden/qr-code-styling#dbbfed0
@@ -31,6 +32,7 @@ dependencies:
   jotai-optics: 0.3.0_hkf3l4cm7dla7x4j7docd6dhn4
   lowlight: registry.npmmirror.com/lowlight/2.8.1
   optics-ts: 2.4.0
+  opus-recorder: github.com/Ajaxy/opus-recorder/116830a94120baad5ac60ac060c2ecd032b6107b
   pako: registry.npmmirror.com/pako/2.1.0
   qr-code-styling: github.com/zubiden/qr-code-styling/dbbfed0
   react: 18.2.0
@@ -1157,6 +1159,12 @@ packages:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
     dev: true
+
+  github.com/Ajaxy/opus-recorder/116830a94120baad5ac60ac060c2ecd032b6107b:
+    resolution: {tarball: https://codeload.github.com/Ajaxy/opus-recorder/tar.gz/116830a94120baad5ac60ac060c2ecd032b6107b}
+    name: opus-recorder
+    version: 8.0.3
+    dev: false
 
   github.com/korenskoy/emoji-data-ios/3c401da02c6792cea0b6c758795da406377bf667:
     resolution: {tarball: https://codeload.github.com/korenskoy/emoji-data-ios/tar.gz/3c401da02c6792cea0b6c758795da406377bf667}

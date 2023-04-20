@@ -27,3 +27,5 @@ export const selectChat = () => {}
 export const selectTabState = () => {}
 
 export const selectIsCurrentUserPremium = () => {}
+
+export const selectNoWebPage =() => {}

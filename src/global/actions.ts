@@ -122,3 +122,9 @@ export const openForwardMenu = (params: any) => {};
 export const focusMessageInComments = (params: any) => {};
 
 export const openMessageLanguageModal = (params: any) => {};
+
+export const loadWebPagePreview = (params: any) => {}
+
+export const clearWebPagePreview = () => {}
+
+export const toggleMessageWebPage = (params: any) => {}

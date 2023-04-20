@@ -44,17 +44,24 @@ function handleWorkerMessage(e: MessageEvent) {
 class ServiceWorker {
   worker: any;
   constructor() {
-    try {
-      this.worker = new Worker();
-      this.worker.removeEventListener("message", handleWorkerMessage);
-      this.worker.addEventListener("message", handleWorkerMessage);
-      this.worker.postMessage({
-        type: "clientReady",
-      });
-    } catch (err) {
-      if (DEBUG) {
-        // eslint-disable-next-line no-console
-        console.error("[SW] ServiceWorker registration failed: ", err);
+    if (IS_SERVICE_WORKER_SUPPORTED) {
+      try {
+        this.worker = new Worker();
+        this.worker.removeEventListener("message", handleWorkerMessage);
+        this.worker.addEventListener("message", handleWorkerMessage);
+        this.worker.postMessage({
+          type: "clientReady",
+        });
+      } catch (err) {
+        if (DEBUG) {
+          // eslint-disable-next-line no-console
+          console.error("[SW] ServiceWorker registration failed: ", err);
+        }
+        if (!IS_IOS && !IS_ANDROID && !IS_TEST) {
+          showDialog?.({
+            data: { message: "SERVICE_WORKER_DISABLED", hasErrorKey: true },
+          });
+        }
       }
     }
   }

@@ -47,16 +47,13 @@ async function init(
   onInit: CancellableCallback
 ) {
   if (!rLottieApi) {
-    console.log("1");
     await rLottieApiPromise;
   }
 
   const json = await extractJson(tgsUrl);
-  console.log("json", json);
   const stringOnWasmHeap = Module.allocate(Module.intArrayFromString(json), "i8", 0);
   const handle = rLottieApi.init();
   const framesCount = rLottieApi.loadFromData(handle, stringOnWasmHeap);
-  console.log('framesCount',framesCount)
   rLottieApi.resize(handle, imgSize, imgSize);
 
   const imageData = new ImageData(imgSize, imgSize);

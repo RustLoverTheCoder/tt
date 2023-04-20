@@ -98,7 +98,7 @@ const AuthQrCode = () => {
 
     const container = qrCodeRef.current!;
     const data = `${DATA_PREFIX}${authQrCode.token}`;
-    console.log("data", data);
+    
     qrCode.update({
       data,
     });

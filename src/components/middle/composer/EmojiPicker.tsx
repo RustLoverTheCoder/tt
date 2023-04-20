@@ -1,55 +1,60 @@
 import React, {
-  useState, useEffect, memo, useRef, useMemo, useCallback,
-} from '../react';
-import { withGlobal } from '../../../global';
+  useState,
+  useEffect,
+  memo,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import { animationLevelAtom, withGlobal } from "../../../global";
 
-import type { FC } from '../react';
-import type { GlobalState } from '../../../global/types';
-import type {
-  EmojiModule,
-  EmojiRawData,
-  EmojiData,
-} from '../../../util/emoji';
+import type { FC } from "react";
+import type { GlobalState } from "../../../global/types";
+import type { EmojiModule, EmojiRawData, EmojiData } from "../../../util/emoji";
 
-import { MENU_TRANSITION_DURATION, RECENT_SYMBOL_SET_ID } from '../../../config';
-import { IS_TOUCH_ENV } from '../../../util/windowEnvironment';
-import { MEMO_EMPTY_ARRAY } from '../../../util/memo';
-import { uncompressEmoji } from '../../../util/emoji';
-import fastSmoothScroll from '../../../util/fastSmoothScroll';
-import { pick } from '../../../util/iteratees';
-import buildClassName from '../../../util/buildClassName';
-import fastSmoothScrollHorizontal from '../../../util/fastSmoothScrollHorizontal';
-import useAsyncRendering from '../../right/hooks/useAsyncRendering';
-import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
-import useHorizontalScroll from '../../../hooks/useHorizontalScroll';
-import useLang from '../../../hooks/useLang';
-import useAppLayout from '../../../hooks/useAppLayout';
+import {
+  MENU_TRANSITION_DURATION,
+  RECENT_SYMBOL_SET_ID,
+} from "../../../config";
+import { IS_TOUCH_ENV } from "../../../util/windowEnvironment";
+import { MEMO_EMPTY_ARRAY } from "../../../util/memo";
+import { uncompressEmoji } from "../../../util/emoji";
+import fastSmoothScroll from "../../../util/fastSmoothScroll";
+import { pick } from "../../../util/iteratees";
+import buildClassName from "../../../util/buildClassName";
+import fastSmoothScrollHorizontal from "../../../util/fastSmoothScrollHorizontal";
+import useAsyncRendering from "../../right/hooks/useAsyncRendering";
+import { useIntersectionObserver } from "../../../hooks/useIntersectionObserver";
+import useHorizontalScroll from "../../../hooks/useHorizontalScroll";
+import useLang from "../../../hooks/useLang";
+import useAppLayout from "../../../hooks/useAppLayout";
 
-import Button from '../../ui/Button';
-import Loading from '../../ui/Loading';
-import EmojiCategory from './EmojiCategory';
+import Button from "../../ui/Button";
+import Loading from "../../ui/Loading";
+import EmojiCategory from "./EmojiCategory";
 
-import './EmojiPicker.scss';
+import "./EmojiPicker.scss";
+import { useAtomValue } from "jotai";
 
 type OwnProps = {
   className?: string;
   onEmojiSelect: (emoji: string, name: string) => void;
 };
 
-type StateProps = Pick<GlobalState, 'recentEmojis'>;
+type StateProps = Pick<GlobalState, "recentEmojis">;
 
 type EmojiCategoryData = { id: string; name: string; emojis: string[] };
 
 const ICONS_BY_CATEGORY: Record<string, string> = {
-  recent: 'icon-recent',
-  people: 'icon-smile',
-  nature: 'icon-animals',
-  foods: 'icon-eats',
-  activity: 'icon-sport',
-  places: 'icon-car',
-  objects: 'icon-lamp',
-  symbols: 'icon-language',
-  flags: 'icon-flag',
+  recent: "icon-recent",
+  people: "icon-smile",
+  nature: "icon-animals",
+  foods: "icon-eats",
+  activity: "icon-sport",
+  places: "icon-car",
+  objects: "icon-lamp",
+  symbols: "icon-language",
+  flags: "icon-flag",
 };
 
 const OPEN_ANIMATION_DELAY = 200;
@@ -80,35 +85,42 @@ const EmojiPicker: FC<OwnProps & StateProps> = ({
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
   const { isMobile } = useAppLayout();
 
-  const { observe: observeIntersection } = useIntersectionObserver({
-    rootRef: containerRef,
-    throttleMs: INTERSECTION_THROTTLE,
-  }, (entries) => {
-    entries.forEach((entry) => {
-      const { id } = entry.target as HTMLDivElement;
-      if (!id || !id.startsWith('emoji-category-')) {
+  const { observe: observeIntersection } = useIntersectionObserver(
+    {
+      rootRef: containerRef,
+      throttleMs: INTERSECTION_THROTTLE,
+    },
+    (entries) => {
+      entries.forEach((entry) => {
+        const { id } = entry.target as HTMLDivElement;
+        if (!id || !id.startsWith("emoji-category-")) {
+          return;
+        }
+
+        const index = Number(id.replace("emoji-category-", ""));
+        categoryIntersections[index] = entry.isIntersecting;
+      });
+
+      const intersectingWithIndexes = categoryIntersections
+        .map((isIntersecting, index) => ({ index, isIntersecting }))
+        .filter(({ isIntersecting }) => isIntersecting);
+
+      if (!intersectingWithIndexes.length) {
         return;
       }
 
-      const index = Number(id.replace('emoji-category-', ''));
-      categoryIntersections[index] = entry.isIntersecting;
-    });
-
-    const intersectingWithIndexes = categoryIntersections
-      .map((isIntersecting, index) => ({ index, isIntersecting }))
-      .filter(({ isIntersecting }) => isIntersecting);
-
-    if (!intersectingWithIndexes.length) {
-      return;
+      setActiveCategoryIndex(
+        intersectingWithIndexes[Math.floor(intersectingWithIndexes.length / 2)]
+          .index
+      );
     }
-
-    setActiveCategoryIndex(intersectingWithIndexes[Math.floor(intersectingWithIndexes.length / 2)].index);
-  });
+  );
 
   const canRenderContents = useAsyncRendering([], MENU_TRANSITION_DURATION);
   const shouldRenderContent = emojis && canRenderContents;
 
   useHorizontalScroll(headerRef, !(isMobile && shouldRenderContent));
+  const animationLevel = useAtomValue(animationLevelAtom);
 
   // Scroll header when active set updates
   useEffect(() => {
@@ -121,10 +133,13 @@ const EmojiPicker: FC<OwnProps & StateProps> = ({
       return;
     }
 
-    const newLeft = activeCategoryIndex * HEADER_BUTTON_WIDTH - header.offsetWidth / 2 + HEADER_BUTTON_WIDTH / 2;
+    const newLeft =
+      activeCategoryIndex * HEADER_BUTTON_WIDTH -
+      header.offsetWidth / 2 +
+      HEADER_BUTTON_WIDTH / 2;
 
-    fastSmoothScrollHorizontal(header, newLeft);
-  }, [categories, activeCategoryIndex]);
+    fastSmoothScrollHorizontal(header, newLeft, 300, animationLevel);
+  }, [categories, activeCategoryIndex, animationLevel]);
 
   const lang = useLang();
 
@@ -136,7 +151,7 @@ const EmojiPicker: FC<OwnProps & StateProps> = ({
     if (recentEmojis?.length) {
       themeCategories.unshift({
         id: RECENT_SYMBOL_SET_ID,
-        name: lang('RecentStickers'),
+        name: lang("RecentStickers"),
         emojis: recentEmojis,
       });
     }
@@ -156,42 +171,55 @@ const EmojiPicker: FC<OwnProps & StateProps> = ({
       if (emojiData) {
         exec();
       } else {
-        ensureEmojiData()
-          .then(exec);
+        ensureEmojiData().then(exec);
       }
     }, OPEN_ANIMATION_DELAY);
   }, []);
 
   const selectCategory = useCallback((index: number) => {
     setActiveCategoryIndex(index);
-    const categoryEl = containerRef.current!.closest<HTMLElement>('.SymbolMenu-main')!
+    const categoryEl = containerRef
+      .current!.closest<HTMLElement>(".SymbolMenu-main")!
       .querySelector(`#emoji-category-${index}`)! as HTMLElement;
-    fastSmoothScroll(containerRef.current!, categoryEl, 'start', FOCUS_MARGIN, SMOOTH_SCROLL_DISTANCE);
+    fastSmoothScroll(
+      containerRef.current!,
+      categoryEl,
+      "start",
+      FOCUS_MARGIN,
+      SMOOTH_SCROLL_DISTANCE
+    );
   }, []);
 
-  const handleEmojiSelect = useCallback((emoji: string, name: string) => {
-    onEmojiSelect(emoji, name);
-  }, [onEmojiSelect]);
+  const handleEmojiSelect = useCallback(
+    (emoji: string, name: string) => {
+      onEmojiSelect(emoji, name);
+    },
+    [onEmojiSelect]
+  );
 
   function renderCategoryButton(category: EmojiCategoryData, index: number) {
     const icon = ICONS_BY_CATEGORY[category.id];
 
-    return icon && (
-      <Button
-        className={`symbol-set-button ${index === activeCategoryIndex ? 'activated' : ''}`}
-        round
-        faded
-        color="translucent"
-        // eslint-disable-next-line react/jsx-no-bind
-        onClick={() => selectCategory(index)}
-        ariaLabel={category.name}
-      >
-        <i className={icon} />
-      </Button>
+    return (
+      icon && (
+        <Button
+          className={`symbol-set-button ${
+            index === activeCategoryIndex ? "activated" : ""
+          }`}
+          round
+          faded
+          color="translucent"
+          // eslint-disable-next-line react/jsx-no-bind
+          onClick={() => selectCategory(index)}
+          ariaLabel={category.name}
+        >
+          <i className={icon} />
+        </Button>
+      )
     );
   }
 
-  const containerClassName = buildClassName('EmojiPicker', className);
+  const containerClassName = buildClassName("EmojiPicker", className);
 
   if (!shouldRenderContent) {
     return (
@@ -203,12 +231,19 @@ const EmojiPicker: FC<OwnProps & StateProps> = ({
 
   return (
     <div className={containerClassName}>
-      <div ref={headerRef} className="EmojiPicker-header" dir={lang.isRtl ? 'rtl' : ''}>
+      <div
+        ref={headerRef}
+        className="EmojiPicker-header"
+        dir={lang.isRtl ? "rtl" : ""}
+      >
         {allCategories.map(renderCategoryButton)}
       </div>
       <div
         ref={containerRef}
-        className={buildClassName('EmojiPicker-main no-selection', IS_TOUCH_ENV ? 'no-scrollbar' : 'custom-scroll')}
+        className={buildClassName(
+          "EmojiPicker-main no-selection",
+          IS_TOUCH_ENV ? "no-scrollbar" : "custom-scroll"
+        )}
       >
         {allCategories.map((category, i) => (
           <EmojiCategory
@@ -216,7 +251,9 @@ const EmojiPicker: FC<OwnProps & StateProps> = ({
             index={i}
             allEmojis={emojis}
             observeIntersection={observeIntersection}
-            shouldRender={activeCategoryIndex >= i - 1 && activeCategoryIndex <= i + 1}
+            shouldRender={
+              activeCategoryIndex >= i - 1 && activeCategoryIndex <= i + 1
+            }
             onEmojiSelect={handleEmojiSelect}
           />
         ))}
@@ -227,7 +264,7 @@ const EmojiPicker: FC<OwnProps & StateProps> = ({
 
 async function ensureEmojiData() {
   if (!emojiDataPromise) {
-    emojiDataPromise = import('emoji-data-ios/emoji-data.json');
+    emojiDataPromise = import("emoji-data-ios/emoji-data.json");
     emojiRawData = (await emojiDataPromise).default;
 
     emojiData = uncompressEmoji(emojiRawData);
@@ -236,6 +273,8 @@ async function ensureEmojiData() {
   return emojiDataPromise;
 }
 
-export default memo(withGlobal<OwnProps>(
-  (global): StateProps => pick(global, ['recentEmojis']),
-)(EmojiPicker));
+export default memo(
+  withGlobal<OwnProps>((global): StateProps => pick(global, ["recentEmojis"]))(
+    EmojiPicker
+  )
+);

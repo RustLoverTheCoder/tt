@@ -1,43 +1,54 @@
 import React, {
-  useState, useEffect, memo, useRef, useMemo, useCallback,
-} from '../react';
-import { getActions, withGlobal } from '../../../global';
+  useState,
+  useEffect,
+  memo,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import { animationLevelAtom, getActions, withGlobal } from "../../../global";
 
-import type { ApiStickerSet, ApiSticker, ApiChat } from '../../../api/types';
-import type { StickerSetOrRecent } from '../../../types';
-import type { FC } from '../react';
+import type { ApiStickerSet, ApiSticker, ApiChat } from "../../../api/types";
+import type { StickerSetOrRecent } from "../../../types";
+import type { FC } from "react";
 
 import {
   CHAT_STICKER_SET_ID,
   FAVORITE_SYMBOL_SET_ID,
   PREMIUM_STICKER_SET_ID,
   RECENT_SYMBOL_SET_ID,
-  SLIDE_TRANSITION_DURATION, STICKER_PICKER_MAX_SHARED_COVERS,
+  SLIDE_TRANSITION_DURATION,
+  STICKER_PICKER_MAX_SHARED_COVERS,
   STICKER_SIZE_PICKER_HEADER,
-} from '../../../config';
-import { IS_TOUCH_ENV } from '../../../util/windowEnvironment';
-import { MEMO_EMPTY_ARRAY } from '../../../util/memo';
-import fastSmoothScroll from '../../../util/fastSmoothScroll';
-import buildClassName from '../../../util/buildClassName';
-import fastSmoothScrollHorizontal from '../../../util/fastSmoothScrollHorizontal';
-import { pickTruthy, uniqueByField } from '../../../util/iteratees';
-import { selectChat, selectIsChatWithSelf, selectIsCurrentUserPremium } from '../../../global/selectors';
+} from "../../../config";
+import { IS_TOUCH_ENV } from "../../../util/windowEnvironment";
+import { MEMO_EMPTY_ARRAY } from "../../../util/memo";
+import fastSmoothScroll from "../../../util/fastSmoothScroll";
+import buildClassName from "../../../util/buildClassName";
+import fastSmoothScrollHorizontal from "../../../util/fastSmoothScrollHorizontal";
+import { pickTruthy, uniqueByField } from "../../../util/iteratees";
+import {
+  selectChat,
+  selectIsChatWithSelf,
+  selectIsCurrentUserPremium,
+} from "../../../global/selectors";
 
-import useAsyncRendering from '../../right/hooks/useAsyncRendering';
-import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
-import useHorizontalScroll from '../../../hooks/useHorizontalScroll';
-import useLang from '../../../hooks/useLang';
-import useSendMessageAction from '../../../hooks/useSendMessageAction';
+import useAsyncRendering from "../../right/hooks/useAsyncRendering";
+import { useIntersectionObserver } from "../../../hooks/useIntersectionObserver";
+import useHorizontalScroll from "../../../hooks/useHorizontalScroll";
+import useLang from "../../../hooks/useLang";
+import useSendMessageAction from "../../../hooks/useSendMessageAction";
 
-import Avatar from '../../common/Avatar';
-import Loading from '../../ui/Loading';
-import Button from '../../ui/Button';
-import StickerButton from '../../common/StickerButton';
-import StickerSet from './StickerSet';
-import StickerSetCover from './StickerSetCover';
-import PremiumIcon from '../../common/PremiumIcon';
+import Avatar from "../../common/Avatar";
+import Loading from "../../ui/Loading";
+import Button from "../../ui/Button";
+import StickerButton from "../../common/StickerButton";
+import StickerSet from "./StickerSet";
+import StickerSetCover from "./StickerSetCover";
+import PremiumIcon from "../../common/PremiumIcon";
 
-import './StickerPicker.scss';
+import "./StickerPicker.scss";
+import { useAtomValue } from "jotai";
 
 type OwnProps = {
   chatId: string;
@@ -46,7 +57,10 @@ type OwnProps = {
   loadAndPlay: boolean;
   canSendStickers?: boolean;
   onStickerSelect: (
-    sticker: ApiSticker, isSilent?: boolean, shouldSchedule?: boolean, shouldUpdateStickerSetsOrder?: boolean,
+    sticker: ApiSticker,
+    isSilent?: boolean,
+    shouldSchedule?: boolean,
+    shouldUpdateStickerSetsOrder?: boolean
   ) => void;
 };
 
@@ -103,31 +117,39 @@ const StickerPicker: FC<OwnProps & StateProps> = ({
 
   const sendMessageAction = useSendMessageAction(chat!.id, threadId);
 
-  const { observe: observeIntersection } = useIntersectionObserver({
-    rootRef: containerRef,
-    throttleMs: STICKER_INTERSECTION_THROTTLE,
-  }, (entries) => {
-    entries.forEach((entry) => {
-      const { id } = entry.target as HTMLDivElement;
-      if (!id || !id.startsWith('sticker-set-')) {
+  const { observe: observeIntersection } = useIntersectionObserver(
+    {
+      rootRef: containerRef,
+      throttleMs: STICKER_INTERSECTION_THROTTLE,
+    },
+    (entries) => {
+      entries.forEach((entry) => {
+        const { id } = entry.target as HTMLDivElement;
+        if (!id || !id.startsWith("sticker-set-")) {
+          return;
+        }
+
+        const index = Number(id.replace("sticker-set-", ""));
+        stickerSetIntersections[index] = entry.isIntersecting;
+      });
+
+      const intersectingWithIndexes = stickerSetIntersections
+        .map((isIntersecting, index) => ({ index, isIntersecting }))
+        .filter(({ isIntersecting }) => isIntersecting);
+
+      if (!intersectingWithIndexes.length) {
         return;
       }
 
-      const index = Number(id.replace('sticker-set-', ''));
-      stickerSetIntersections[index] = entry.isIntersecting;
-    });
-
-    const intersectingWithIndexes = stickerSetIntersections
-      .map((isIntersecting, index) => ({ index, isIntersecting }))
-      .filter(({ isIntersecting }) => isIntersecting);
-
-    if (!intersectingWithIndexes.length) {
-      return;
+      setActiveSetIndex(
+        intersectingWithIndexes[Math.floor(intersectingWithIndexes.length / 2)]
+          .index
+      );
     }
-
-    setActiveSetIndex(intersectingWithIndexes[Math.floor(intersectingWithIndexes.length / 2)].index);
+  );
+  const { observe: observeIntersectionForCovers } = useIntersectionObserver({
+    rootRef: headerRef,
   });
-  const { observe: observeIntersectionForCovers } = useIntersectionObserver({ rootRef: headerRef });
 
   const lang = useLang();
 
@@ -140,13 +162,15 @@ const StickerPicker: FC<OwnProps & StateProps> = ({
 
     const defaultSets = [];
 
-    const existingAddedSetIds = Object.values(pickTruthy(stickerSetsById, addedSetIds));
+    const existingAddedSetIds = Object.values(
+      pickTruthy(stickerSetsById, addedSetIds)
+    );
 
     if (favoriteStickers.length) {
       defaultSets.push({
         id: FAVORITE_SYMBOL_SET_ID,
-        accessHash: '0',
-        title: lang('FavoriteStickers'),
+        accessHash: "0",
+        title: lang("FavoriteStickers"),
         stickers: favoriteStickers,
         count: favoriteStickers.length,
       });
@@ -155,8 +179,8 @@ const StickerPicker: FC<OwnProps & StateProps> = ({
     if (recentStickers.length) {
       defaultSets.push({
         id: RECENT_SYMBOL_SET_ID,
-        accessHash: '0',
-        title: lang('RecentStickers'),
+        accessHash: "0",
+        title: lang("RecentStickers"),
         stickers: recentStickers,
         count: recentStickers.length,
       });
@@ -168,13 +192,16 @@ const StickerPicker: FC<OwnProps & StateProps> = ({
         .flat()
         .filter(Boolean);
 
-      const totalPremiumStickers = uniqueByField([...addedPremiumStickers, ...premiumStickers], 'id');
+      const totalPremiumStickers = uniqueByField(
+        [...addedPremiumStickers, ...premiumStickers],
+        "id"
+      );
 
       if (totalPremiumStickers.length) {
         defaultSets.push({
           id: PREMIUM_STICKER_SET_ID,
-          accessHash: '0',
-          title: lang('PremiumStickers'),
+          accessHash: "0",
+          title: lang("PremiumStickers"),
           stickers: totalPremiumStickers,
           count: totalPremiumStickers.length,
         });
@@ -187,38 +214,45 @@ const StickerPicker: FC<OwnProps & StateProps> = ({
         defaultSets.push({
           id: CHAT_STICKER_SET_ID,
           accessHash: fullSet.accessHash,
-          title: lang('GroupStickers'),
+          title: lang("GroupStickers"),
           stickers: fullSet.stickers,
           count: fullSet.stickers!.length,
         });
       }
     }
 
-    return [
-      ...defaultSets,
-      ...existingAddedSetIds,
-    ];
+    return [...defaultSets, ...existingAddedSetIds];
   }, [
-    addedSetIds, stickerSetsById, favoriteStickers, recentStickers, isCurrentUserPremium, chat, lang, premiumStickers,
+    addedSetIds,
+    stickerSetsById,
+    favoriteStickers,
+    recentStickers,
+    isCurrentUserPremium,
+    chat,
+    lang,
+    premiumStickers,
   ]);
 
-  const noPopulatedSets = useMemo(() => (
-    areAddedLoaded
-    && allSets.filter((set) => set.stickers?.length).length === 0
-  ), [allSets, areAddedLoaded]);
+  const noPopulatedSets = useMemo(
+    () =>
+      areAddedLoaded &&
+      allSets.filter((set) => set.stickers?.length).length === 0,
+    [allSets, areAddedLoaded]
+  );
 
   useEffect(() => {
     if (!loadAndPlay) return;
     loadRecentStickers();
     if (!canSendStickers) return;
-    sendMessageAction({ type: 'chooseSticker' });
+    sendMessageAction({ type: "chooseSticker" });
   }, [canSendStickers, loadAndPlay, loadRecentStickers, sendMessageAction]);
 
   const canRenderContents = useAsyncRendering([], SLIDE_TRANSITION_DURATION);
-  const shouldRenderContents = areAddedLoaded && canRenderContents && !noPopulatedSets && canSendStickers;
+  const shouldRenderContents =
+    areAddedLoaded && canRenderContents && !noPopulatedSets && canSendStickers;
 
   useHorizontalScroll(headerRef, !shouldRenderContents);
-
+  const animationLevel = useAtomValue(animationLevelAtom);
   // Scroll container and header when active set changes
   useEffect(() => {
     if (!areAddedLoaded) {
@@ -230,54 +264,75 @@ const StickerPicker: FC<OwnProps & StateProps> = ({
       return;
     }
 
-    const newLeft = activeSetIndex * HEADER_BUTTON_WIDTH - (header.offsetWidth / 2 - HEADER_BUTTON_WIDTH / 2);
+    const newLeft =
+      activeSetIndex * HEADER_BUTTON_WIDTH -
+      (header.offsetWidth / 2 - HEADER_BUTTON_WIDTH / 2);
 
-    fastSmoothScrollHorizontal(header, newLeft);
-  }, [areAddedLoaded, activeSetIndex]);
+    fastSmoothScrollHorizontal(header, newLeft, 300, animationLevel);
+  }, [areAddedLoaded, activeSetIndex, animationLevel]);
 
   const selectStickerSet = useCallback((index: number) => {
     setActiveSetIndex(index);
     const stickerSetEl = document.getElementById(`sticker-set-${index}`)!;
-    fastSmoothScroll(containerRef.current!, stickerSetEl, 'start', undefined, SMOOTH_SCROLL_DISTANCE);
+    fastSmoothScroll(
+      containerRef.current!,
+      stickerSetEl,
+      "start",
+      undefined,
+      SMOOTH_SCROLL_DISTANCE
+    );
   }, []);
 
-  const handleStickerSelect = useCallback((sticker: ApiSticker, isSilent?: boolean, shouldSchedule?: boolean) => {
-    onStickerSelect(sticker, isSilent, shouldSchedule, true);
-    addRecentSticker({ sticker });
-  }, [addRecentSticker, onStickerSelect]);
+  const handleStickerSelect = useCallback(
+    (sticker: ApiSticker, isSilent?: boolean, shouldSchedule?: boolean) => {
+      onStickerSelect(sticker, isSilent, shouldSchedule, true);
+      addRecentSticker({ sticker });
+    },
+    [addRecentSticker, onStickerSelect]
+  );
 
-  const handleStickerUnfave = useCallback((sticker: ApiSticker) => {
-    unfaveSticker({ sticker });
-  }, [unfaveSticker]);
+  const handleStickerUnfave = useCallback(
+    (sticker: ApiSticker) => {
+      unfaveSticker({ sticker });
+    },
+    [unfaveSticker]
+  );
 
-  const handleStickerFave = useCallback((sticker: ApiSticker) => {
-    faveSticker({ sticker });
-  }, [faveSticker]);
+  const handleStickerFave = useCallback(
+    (sticker: ApiSticker) => {
+      faveSticker({ sticker });
+    },
+    [faveSticker]
+  );
 
   const handleMouseMove = useCallback(() => {
     if (!canSendStickers) return;
-    sendMessageAction({ type: 'chooseSticker' });
+    sendMessageAction({ type: "chooseSticker" });
   }, [canSendStickers, sendMessageAction]);
 
-  const handleRemoveRecentSticker = useCallback((sticker: ApiSticker) => {
-    removeRecentSticker({ sticker });
-  }, [removeRecentSticker]);
+  const handleRemoveRecentSticker = useCallback(
+    (sticker: ApiSticker) => {
+      removeRecentSticker({ sticker });
+    },
+    [removeRecentSticker]
+  );
 
   function renderCover(stickerSet: StickerSetOrRecent, index: number) {
     const firstSticker = stickerSet.stickers?.[0];
     const buttonClassName = buildClassName(
-      'symbol-set-button sticker-set-button',
-      index === activeSetIndex && 'activated',
+      "symbol-set-button sticker-set-button",
+      index === activeSetIndex && "activated"
     );
 
     const withSharedCanvas = index < STICKER_PICKER_MAX_SHARED_COVERS;
 
-    if (stickerSet.id === RECENT_SYMBOL_SET_ID
-      || stickerSet.id === FAVORITE_SYMBOL_SET_ID
-      || stickerSet.id === CHAT_STICKER_SET_ID
-      || stickerSet.id === PREMIUM_STICKER_SET_ID
-      || stickerSet.hasThumbnail
-      || !firstSticker
+    if (
+      stickerSet.id === RECENT_SYMBOL_SET_ID ||
+      stickerSet.id === FAVORITE_SYMBOL_SET_ID ||
+      stickerSet.id === CHAT_STICKER_SET_ID ||
+      stickerSet.id === PREMIUM_STICKER_SET_ID ||
+      stickerSet.hasThumbnail ||
+      !firstSticker
     ) {
       return (
         <Button
@@ -285,7 +340,10 @@ const StickerPicker: FC<OwnProps & StateProps> = ({
           className={buttonClassName}
           ariaLabel={stickerSet.title}
           round
-          faded={stickerSet.id === RECENT_SYMBOL_SET_ID || stickerSet.id === FAVORITE_SYMBOL_SET_ID}
+          faded={
+            stickerSet.id === RECENT_SYMBOL_SET_ID ||
+            stickerSet.id === FAVORITE_SYMBOL_SET_ID
+          }
           color="translucent"
           // eslint-disable-next-line react/jsx-no-bind
           onClick={() => selectStickerSet(index)}
@@ -328,15 +386,17 @@ const StickerPicker: FC<OwnProps & StateProps> = ({
     }
   }
 
-  const fullClassName = buildClassName('StickerPicker', className);
+  const fullClassName = buildClassName("StickerPicker", className);
 
   if (!shouldRenderContents) {
     return (
       <div className={fullClassName}>
         {!canSendStickers ? (
-          <div className="picker-disabled">{lang('ErrorSendRestrictedStickersAll')}</div>
+          <div className="picker-disabled">
+            {lang("ErrorSendRestrictedStickersAll")}
+          </div>
         ) : noPopulatedSets ? (
-          <div className="picker-disabled">{lang('NoStickers')}</div>
+          <div className="picker-disabled">{lang("NoStickers")}</div>
         ) : (
           <Loading />
         )}
@@ -358,7 +418,10 @@ const StickerPicker: FC<OwnProps & StateProps> = ({
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
-        className={buildClassName('StickerPicker-main no-selection', IS_TOUCH_ENV ? 'no-scrollbar' : 'custom-scroll')}
+        className={buildClassName(
+          "StickerPicker-main no-selection",
+          IS_TOUCH_ENV ? "no-scrollbar" : "custom-scroll"
+        )}
       >
         {allSets.map((stickerSet, i) => (
           <StickerSet
@@ -382,15 +445,9 @@ const StickerPicker: FC<OwnProps & StateProps> = ({
   );
 };
 
-export default memo(withGlobal<OwnProps>(
-  (global, { chatId }): StateProps => {
-    const {
-      setsById,
-      added,
-      recent,
-      favorite,
-      premiumSet,
-    } = global.stickers;
+export default memo(
+  withGlobal<OwnProps>((global, { chatId }): StateProps => {
+    const { setsById, added, recent, favorite, premiumSet } = global.stickers;
 
     const isSavedMessages = selectIsChatWithSelf(global, chatId);
     const chat = selectChat(global, chatId);
@@ -406,5 +463,5 @@ export default memo(withGlobal<OwnProps>(
       isSavedMessages,
       isCurrentUserPremium: selectIsCurrentUserPremium(global),
     };
-  },
-)(StickerPicker));
+  })(StickerPicker)
+);

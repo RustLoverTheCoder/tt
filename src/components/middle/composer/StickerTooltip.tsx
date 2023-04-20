@@ -1,5 +1,5 @@
-import type { FC } from '../react';
-import React, { memo, useEffect, useRef } from '../react';
+import type { FC } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import { withGlobal } from '../../../global';
 
 import type { ApiSticker } from '../../../api/types';

@@ -1,21 +1,22 @@
-import React, {
-  memo, useCallback, useRef, useState,
-} from '../react';
-import { getActions } from '../../../global';
+import { memo, useCallback, useRef, useState } from "react";
+import { getActions } from "../../../global";
 
-import type { FC } from '../react';
-import type { IAnchorPosition } from '../../../types';
-import type { ApiVideo, ApiSticker } from '../../../api/types';
+import type { FC } from "react";
+import type { IAnchorPosition } from "../../../types";
+import type { ApiVideo, ApiSticker } from "../../../api/types";
 
-import { EDITABLE_INPUT_CSS_SELECTOR, EDITABLE_INPUT_MODAL_CSS_SELECTOR } from '../../../config';
-import buildClassName from '../../../util/buildClassName';
-import useFlag from '../../../hooks/useFlag';
-import useContextMenuPosition from '../../../hooks/useContextMenuPosition';
+import {
+  EDITABLE_INPUT_CSS_SELECTOR,
+  EDITABLE_INPUT_MODAL_CSS_SELECTOR,
+} from "../../../config";
+import buildClassName from "../../../util/buildClassName";
+import useFlag from "../../../hooks/useFlag";
+import useContextMenuPosition from "../../../hooks/useContextMenuPosition";
 
-import Button from '../../ui/Button';
-import Spinner from '../../ui/Spinner';
-import ResponsiveHoverButton from '../../ui/ResponsiveHoverButton';
-import SymbolMenu from './SymbolMenu.async';
+import Button from "../../ui/Button";
+import Spinner from "../../ui/Spinner";
+import ResponsiveHoverButton from "../../ui/ResponsiveHoverButton";
+import SymbolMenu from "./SymbolMenu.async";
 
 const MOBILE_KEYBOARD_HIDE_DELAY_MS = 100;
 
@@ -37,7 +38,11 @@ type OwnProps = {
     shouldPreserveInput?: boolean,
     shouldUpdateStickerSetsOrder?: boolean
   ) => void;
-  onGifSelect?: (gif: ApiVideo, isSilent?: boolean, shouldSchedule?: boolean) => void;
+  onGifSelect?: (
+    gif: ApiVideo,
+    isSilent?: boolean,
+    shouldSchedule?: boolean
+  ) => void;
   onRemoveSymbol: VoidFunction;
   onEmojiSelect: (emoji: string) => void;
   closeBotCommandMenu?: VoidFunction;
@@ -81,14 +86,16 @@ const SymbolMenuButton: FC<OwnProps> = ({
   const triggerRef = useRef<HTMLDivElement>(null);
 
   const [isSymbolMenuLoaded, onSymbolMenuLoadingComplete] = useFlag();
-  const [contextMenuPosition, setContextMenuPosition] = useState<IAnchorPosition | undefined>(undefined);
+  const [contextMenuPosition, setContextMenuPosition] = useState<
+    IAnchorPosition | undefined
+  >(undefined);
 
   const symbolMenuButtonClassName = buildClassName(
-    'mobile-symbol-menu-button',
-    !isReady && 'not-ready',
+    "mobile-symbol-menu-button",
+    !isReady && "not-ready",
     isSymbolMenuLoaded
-      ? (isSymbolMenuOpen && 'menu-opened')
-      : (isSymbolMenuOpen && 'is-loading'),
+      ? isSymbolMenuOpen && "menu-opened"
+      : isSymbolMenuOpen && "is-loading"
   );
 
   const handleActivateSymbolMenu = useCallback(() => {
@@ -101,19 +108,24 @@ const SymbolMenuButton: FC<OwnProps> = ({
     setContextMenuPosition({ x, y });
   }, [closeBotCommandMenu, closeSendAsMenu, openSymbolMenu]);
 
-  const handleSearchOpen = useCallback((type: 'stickers' | 'gifs') => {
-    if (type === 'stickers') {
-      setStickerSearchQuery({ query: '' });
-      setGifSearchQuery({ query: undefined });
-    } else {
-      setGifSearchQuery({ query: '' });
-      setStickerSearchQuery({ query: undefined });
-    }
-  }, [setStickerSearchQuery, setGifSearchQuery]);
+  const handleSearchOpen = useCallback(
+    (type: "stickers" | "gifs") => {
+      if (type === "stickers") {
+        setStickerSearchQuery({ query: "" });
+        setGifSearchQuery({ query: undefined });
+      } else {
+        setGifSearchQuery({ query: "" });
+        setStickerSearchQuery({ query: undefined });
+      }
+    },
+    [setStickerSearchQuery, setGifSearchQuery]
+  );
 
   const handleSymbolMenuOpen = useCallback(() => {
     const messageInput = document.querySelector<HTMLDivElement>(
-      isAttachmentModal ? EDITABLE_INPUT_MODAL_CSS_SELECTOR : EDITABLE_INPUT_CSS_SELECTOR,
+      isAttachmentModal
+        ? EDITABLE_INPUT_MODAL_CSS_SELECTOR
+        : EDITABLE_INPUT_CSS_SELECTOR
     );
 
     if (!isMobile || messageInput !== document.activeElement) {
@@ -131,27 +143,34 @@ const SymbolMenuButton: FC<OwnProps> = ({
   const getTriggerElement = useCallback(() => triggerRef.current, []);
 
   const getRootElement = useCallback(
-    () => triggerRef.current?.closest('.custom-scroll, .no-scrollbar'),
-    [],
+    () => triggerRef.current?.closest(".custom-scroll, .no-scrollbar"),
+    []
   );
 
   const getMenuElement = useCallback(
-    () => document.querySelector('#portals .SymbolMenu .bubble'),
-    [],
+    () => document.querySelector("#portals .SymbolMenu .bubble"),
+    []
   );
 
-  const getLayout = useCallback(() => ({
-    withPortal: true,
-  }), []);
+  const getLayout = useCallback(
+    () => ({
+      withPortal: true,
+    }),
+    []
+  );
 
   const {
-    positionX, positionY, transformOriginX, transformOriginY, style: menuStyle,
+    positionX,
+    positionY,
+    transformOriginX,
+    transformOriginY,
+    style: menuStyle,
   } = useContextMenuPosition(
     contextMenuPosition,
     getTriggerElement,
     getRootElement,
     getMenuElement,
-    getLayout,
+    getLayout
   );
 
   return (
@@ -170,7 +189,10 @@ const SymbolMenuButton: FC<OwnProps> = ({
         </Button>
       ) : (
         <ResponsiveHoverButton
-          className={buildClassName('symbol-menu-button', isSymbolMenuOpen && 'activated')}
+          className={buildClassName(
+            "symbol-menu-button",
+            isSymbolMenuOpen && "activated"
+          )}
           round
           color="translucent"
           onActivate={handleActivateSymbolMenu}

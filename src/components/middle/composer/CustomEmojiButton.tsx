@@ -1,11 +1,10 @@
-import React, { memo, useCallback } from '../react';
+import React, { memo, useCallback } from 'react';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 import type { ApiSticker } from '../../../api/types';
 import type { ObserveFn } from '../../../hooks/useIntersectionObserver';
 
-import buildClassName from '../../../util/buildClassName';
-
+import clsx from 'clsx';
 import CustomEmoji from '../../common/CustomEmoji';
 
 import './EmojiButton.scss';
@@ -29,7 +28,7 @@ const CustomEmojiButton: FC<OwnProps> = ({
     onClick?.(emoji);
   }, [emoji, onClick]);
 
-  const className = buildClassName(
+  const className = clsx(
     'EmojiButton',
     focus && 'focus',
   );

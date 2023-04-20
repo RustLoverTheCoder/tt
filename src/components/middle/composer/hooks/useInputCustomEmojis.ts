@@ -1,6 +1,6 @@
 import {
   useCallback, useEffect, useRef,
-} from '../../react';
+} from '../react';
 import RLottie from '../../../../lib/rlottie/RLottie';
 
 import type { ApiSticker } from '../../../../api/types';

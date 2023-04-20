@@ -1,6 +1,6 @@
-import React, { memo, useCallback } from '../react';
+import React, { memo, useCallback } from 'react';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 
 import { IS_EMOJI_SUPPORTED } from '../../../util/windowEnvironment';
 import { handleEmojiLoad, LOADED_EMOJIS } from '../../../util/emoji';

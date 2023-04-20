@@ -1,9 +1,8 @@
 import React, {
   memo, useCallback, useEffect, useMemo, useRef,
-} from '../react';
-import { getActions, withGlobal } from '../../../global';
+} from 'react';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 import type { ApiChat, ApiMessage, ApiUser } from '../../../api/types';
 
 import {
@@ -22,7 +21,7 @@ import {
   selectTabState,
 } from '../../../global/selectors';
 import captureEscKeyListener from '../../../util/captureEscKeyListener';
-import buildClassName from '../../../util/buildClassName';
+import clsx from 'clsx';
 import { isUserId, stripCustomEmoji } from '../../../global/helpers';
 
 import useAsyncRendering from '../../right/hooks/useAsyncRendering';
@@ -148,7 +147,7 @@ const ComposerEmbeddedMessage: FC<OwnProps & StateProps> = ({
     getMenuElement,
   );
 
-  const className = buildClassName('ComposerEmbeddedMessage', transitionClassNames);
+  const className = clsx('ComposerEmbeddedMessage', transitionClassNames);
 
   const leftIcon = useMemo(() => {
     if (replyingToId && !shouldForceShowEditing) {

@@ -1,6 +1,6 @@
-import React, { memo, useRef } from '../react';
+import React, { memo, useRef } from 'react';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 import type { ObserveFn } from '../../../hooks/useIntersectionObserver';
 
 import { RECENT_SYMBOL_SET_ID } from '../../../config';

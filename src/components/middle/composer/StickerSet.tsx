@@ -1,9 +1,9 @@
 import React, {
   memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState,
-} from '../react';
+} from 'react';
 import { getActions, getGlobal } from '../../../global';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 import type { ApiSticker } from '../../../api/types';
 import type { StickerSetOrRecent } from '../../../types';
 import type { ObserveFn } from '../../../hooks/useIntersectionObserver';

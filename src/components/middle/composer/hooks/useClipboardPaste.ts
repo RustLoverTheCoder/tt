@@ -1,5 +1,5 @@
-import type { StateHookSetter } from '../../react';
-import { useEffect } from '../../react';
+import type { StateHookSetter } from '../react';
+import { useEffect } from '../react';
 
 import type { ApiAttachment, ApiFormattedText, ApiMessage } from '../../../../api/types';
 import { ApiMessageEntityTypes } from '../../../../api/types';

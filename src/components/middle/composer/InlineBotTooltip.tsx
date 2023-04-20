@@ -1,7 +1,7 @@
-import type { FC } from '../react';
+import type { FC } from 'react';
 import React, {
   memo, useCallback, useEffect, useRef,
-} from '../react';
+} from 'react';
 import { getActions } from '../../../global';
 
 import type { ApiBotInlineMediaResult, ApiBotInlineResult, ApiBotInlineSwitchPm } from '../../../api/types';

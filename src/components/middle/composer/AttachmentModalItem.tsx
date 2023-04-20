@@ -98,7 +98,7 @@ const AttachmentModalItem: FC<OwnProps> = ({
     && attachment.shouldSendAsSpoiler);
   const shouldRenderOverlay = displayType !== 'file';
 
-  const rootClassName = buildClassName(
+  const rootClassName = clsx(
     className, styles.root, isSingle && styles.single, shouldSkipGrouping && styles.noGrouping,
   );
 

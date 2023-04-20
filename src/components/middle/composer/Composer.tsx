@@ -1,7 +1,7 @@
-import type { FC } from '../react';
+import type { FC } from 'react';
 import React, {
   memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState,
-} from '../react';
+} from 'react';
 import { getActions, withGlobal } from '../../../global';
 
 import type {
@@ -74,7 +74,7 @@ import buildAttachment, { prepareAttachmentsToSend } from './helpers/buildAttach
 import renderText from '../../common/helpers/renderText';
 import { insertHtmlInSelection } from '../../../util/selection';
 import deleteLastCharacterOutsideSelection from '../../../util/deleteLastCharacterOutsideSelection';
-import buildClassName from '../../../util/buildClassName';
+import clsx from 'clsx'
 import windowSize from '../../../util/windowSize';
 import { isSelectionInsideInput } from './helpers/selection';
 import applyIosAutoCapitalizationFix from './helpers/applyIosAutoCapitalizationFix';
@@ -1188,7 +1188,7 @@ const Composer: FC<OwnProps & StateProps> = ({
         : 'AccDescrVoiceMessage';
   }
 
-  const className = buildClassName(
+  const className = clsx(
     'Composer',
     !isSelectModeActive && 'shown',
     isHoverDisabled && 'hover-disabled',
@@ -1334,7 +1334,7 @@ const Composer: FC<OwnProps & StateProps> = ({
           )}
           {withBotCommands && (
             <ResponsiveHoverButton
-              className={buildClassName('bot-commands', isBotCommandMenuOpen && 'activated')}
+              className={clsx('bot-commands', isBotCommandMenuOpen && 'activated')}
               round
               disabled={botCommands === undefined}
               color="translucent"
@@ -1350,7 +1350,7 @@ const Composer: FC<OwnProps & StateProps> = ({
               color="translucent"
               onClick={isSendAsMenuOpen ? closeSendAsMenu : handleSendAsMenuOpen}
               ariaLabel={lang('SendMessageAsTitle')}
-              className={buildClassName('send-as-button', shouldAnimateSendAsButtonRef.current && 'appear-animation')}
+              className={clsx('send-as-button', shouldAnimateSendAsButtonRef.current && 'appear-animation')}
             >
               <Avatar
                 user={sendAsUser}
@@ -1509,7 +1509,7 @@ const Composer: FC<OwnProps & StateProps> = ({
         ref={mainButtonRef}
         round
         color="secondary"
-        className={buildClassName(mainButtonState, !isReady && 'not-ready', activeVoiceRecording && 'recording')}
+        className={clsx(mainButtonState, !isReady && 'not-ready', activeVoiceRecording && 'recording')}
         disabled={areVoiceMessagesNotAllowed}
         allowDisabledClick
         ariaLabel={lang(sendButtonAriaLabel)}

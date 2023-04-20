@@ -1,9 +1,8 @@
-import type { FC } from '../react';
-import React, { memo, useEffect, useRef } from '../react';
+import type { FC } from "react";
+import { memo, useEffect, useRef } from "react";
 
-import buildClassName from '../../../util/buildClassName';
-
-import Button from '../../ui/Button';
+import clsx from "clsx";
+import Button from "../../ui/Button";
 
 type OwnProps = {
   isOpen?: boolean;
@@ -12,12 +11,7 @@ type OwnProps = {
   isDisabled?: boolean;
 };
 
-const BotMenuButton: FC<OwnProps> = ({
-  isOpen,
-  onClick,
-  text,
-  isDisabled,
-}) => {
+const BotMenuButton: FC<OwnProps> = ({ isOpen, onClick, text, isDisabled }) => {
   // eslint-disable-next-line no-null/no-null
   const textRef = useRef<HTMLSpanElement>(null);
 
@@ -27,32 +21,40 @@ const BotMenuButton: FC<OwnProps> = ({
 
     const width = textEl.scrollWidth + 1; // Make width slightly bigger prevent ellipsis in some cases
 
-    const composerEl = textEl.closest('.Composer') as HTMLElement;
-    composerEl.style.setProperty('--bot-menu-text-width', `${width}px`);
+    const composerEl = textEl.closest(".Composer") as HTMLElement;
+    composerEl.style.setProperty("--bot-menu-text-width", `${width}px`);
   }, [isOpen, text]);
 
   useEffect(() => {
     const textEl = textRef.current;
     if (!textEl) return undefined;
 
-    const composerEl = textEl.closest('.Composer') as HTMLElement;
+    const composerEl = textEl.closest(".Composer") as HTMLElement;
 
     return () => {
-      composerEl.style.removeProperty('--bot-menu-text-width');
+      composerEl.style.removeProperty("--bot-menu-text-width");
     };
   }, []);
 
   return (
     <Button
-      className={buildClassName('bot-menu', isOpen && 'open')}
+      className={clsx("bot-menu", isOpen && "open")}
       round
       color="translucent"
       disabled={isDisabled}
       onClick={onClick}
       ariaLabel="Open bot command keyboard"
     >
-      <i className={buildClassName('bot-menu-icon', 'icon-webapp', isOpen && 'open')} />
-      <span ref={textRef} className="bot-menu-text">{text}</span>
+      <i
+        className={clsx(
+          "bot-menu-icon",
+          "icon-webapp",
+          isOpen && "open"
+        )}
+      />
+      <span ref={textRef} className="bot-menu-text">
+        {text}
+      </span>
     </Button>
   );
 };

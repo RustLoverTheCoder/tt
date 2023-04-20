@@ -1,5 +1,5 @@
-import type { FC } from '../../react';
-import React, { memo, useCallback } from '../../react';
+import type { FC } from '../react';
+import React, { memo, useCallback } from '../react';
 
 import type {
   ApiBotInlineMediaResult, ApiBotInlineResult, ApiPhoto, ApiThumbnail, ApiWebDocument,

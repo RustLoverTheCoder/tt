@@ -1,32 +1,36 @@
-import React, {
-  memo, useCallback, useEffect, useRef,
-} from '../react';
+import React, { memo, useCallback, useEffect, useRef } from "react";
 
-import type { ApiSticker } from '../../../api/types';
-import type { FC } from '../react';
+import type { ApiSticker } from "../../../api/types";
+import type { FC } from "react";
 
-import buildClassName from '../../../util/buildClassName';
-import findInViewport from '../../../util/findInViewport';
-import isFullyVisible from '../../../util/isFullyVisible';
-import fastSmoothScrollHorizontal from '../../../util/fastSmoothScrollHorizontal';
+import buildClassName from "../../../util/buildClassName";
+import findInViewport from "../../../util/findInViewport";
+import isFullyVisible from "../../../util/isFullyVisible";
+import fastSmoothScrollHorizontal from "../../../util/fastSmoothScrollHorizontal";
 
-import useShowTransition from '../../../hooks/useShowTransition';
-import usePrevDuringAnimation from '../../../hooks/usePrevDuringAnimation';
-import { useKeyboardNavigation } from './hooks/useKeyboardNavigation';
-import useHorizontalScroll from '../../../hooks/useHorizontalScroll';
-import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
+import useShowTransition from "../../../hooks/useShowTransition";
+import usePrevDuringAnimation from "../../../hooks/usePrevDuringAnimation";
+import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation";
+import useHorizontalScroll from "../../../hooks/useHorizontalScroll";
+import { useIntersectionObserver } from "../../../hooks/useIntersectionObserver";
 
-import Loading from '../../ui/Loading';
-import EmojiButton from './EmojiButton';
-import CustomEmojiButton from './CustomEmojiButton';
+import Loading from "../../ui/Loading";
+import EmojiButton from "./EmojiButton";
+import CustomEmojiButton from "./CustomEmojiButton";
 
-import './EmojiTooltip.scss';
+import "./EmojiTooltip.scss";
+import { useAtomValue } from "jotai";
+import { animationLevelAtom } from "../../../global";
 
 const VIEWPORT_MARGIN = 8;
 const EMOJI_BUTTON_WIDTH = 44;
 const CLOSE_DURATION = 350;
 
-function setItemVisible(index: number, containerRef: Record<string, any>) {
+function setItemVisible(
+  index: number,
+  containerRef: Record<string, any>,
+  animationLevel: number
+) {
   const container = containerRef.current!;
   if (!container) {
     return;
@@ -34,23 +38,26 @@ function setItemVisible(index: number, containerRef: Record<string, any>) {
 
   const { visibleIndexes, allElements } = findInViewport(
     container,
-    '.EmojiButton',
+    ".EmojiButton",
     VIEWPORT_MARGIN,
     true,
     true,
-    true,
+    true
   );
 
   if (!allElements.length || !allElements[index]) {
     return;
   }
   const first = visibleIndexes[0];
-  if (!visibleIndexes.includes(index)
-    || (index === first && !isFullyVisible(container, allElements[first], true))) {
-    const position = index > visibleIndexes[visibleIndexes.length - 1] ? 'start' : 'end';
-    const newLeft = position === 'start' ? index * EMOJI_BUTTON_WIDTH : 0;
+  if (
+    !visibleIndexes.includes(index) ||
+    (index === first && !isFullyVisible(container, allElements[first], true))
+  ) {
+    const position =
+      index > visibleIndexes[visibleIndexes.length - 1] ? "start" : "end";
+    const newLeft = position === "start" ? index * EMOJI_BUTTON_WIDTH : 0;
 
-    fastSmoothScrollHorizontal(container, newLeft);
+    fastSmoothScrollHorizontal(container, newLeft, 300, animationLevel);
   }
 }
 
@@ -79,44 +86,68 @@ const EmojiTooltip: FC<OwnProps> = ({
 }) => {
   // eslint-disable-next-line no-null/no-null
   const containerRef = useRef<HTMLDivElement>(null);
-  const { shouldRender, transitionClassNames } = useShowTransition(isOpen, undefined, undefined, false);
-  const listEmojis: (Emoji | ApiSticker)[] = usePrevDuringAnimation(
-    emojis.length ? [...customEmojis, ...emojis] : undefined, CLOSE_DURATION,
-  ) || [];
+  const { shouldRender, transitionClassNames } = useShowTransition(
+    isOpen,
+    undefined,
+    undefined,
+    false
+  );
+  const listEmojis: (Emoji | ApiSticker)[] =
+    usePrevDuringAnimation(
+      emojis.length ? [...customEmojis, ...emojis] : undefined,
+      CLOSE_DURATION
+    ) || [];
 
   useHorizontalScroll(containerRef);
 
-  const {
-    observe: observeIntersection,
-  } = useIntersectionObserver({ rootRef: containerRef, throttleMs: INTERSECTION_THROTTLE, isDisabled: !isOpen });
+  const { observe: observeIntersection } = useIntersectionObserver({
+    rootRef: containerRef,
+    throttleMs: INTERSECTION_THROTTLE,
+    isDisabled: !isOpen,
+  });
 
-  const handleSelectEmoji = useCallback((emoji: Emoji) => {
-    onEmojiSelect(emoji.native);
-    addRecentEmoji({ emoji: emoji.id });
-  }, [addRecentEmoji, onEmojiSelect]);
+  const handleSelectEmoji = useCallback(
+    (emoji: Emoji) => {
+      onEmojiSelect(emoji.native);
+      addRecentEmoji({ emoji: emoji.id });
+    },
+    [addRecentEmoji, onEmojiSelect]
+  );
 
-  const handleCustomEmojiSelect = useCallback((emoji: ApiSticker) => {
-    onCustomEmojiSelect(emoji);
-    addRecentCustomEmoji({ documentId: emoji.id });
-  }, [addRecentCustomEmoji, onCustomEmojiSelect]);
+  const handleCustomEmojiSelect = useCallback(
+    (emoji: ApiSticker) => {
+      onCustomEmojiSelect(emoji);
+      addRecentCustomEmoji({ documentId: emoji.id });
+    },
+    [addRecentCustomEmoji, onCustomEmojiSelect]
+  );
 
-  const handleSelect = useCallback((emoji: Emoji | ApiSticker) => {
-    if ('native' in emoji) {
-      handleSelectEmoji(emoji);
-    } else {
-      handleCustomEmojiSelect(emoji);
-    }
-  }, [handleCustomEmojiSelect, handleSelectEmoji]);
+  const handleSelect = useCallback(
+    (emoji: Emoji | ApiSticker) => {
+      if ("native" in emoji) {
+        handleSelectEmoji(emoji);
+      } else {
+        handleCustomEmojiSelect(emoji);
+      }
+    },
+    [handleCustomEmojiSelect, handleSelectEmoji]
+  );
 
-  const handleClick = useCallback((native: string, id: string) => {
-    onEmojiSelect(native);
-    addRecentEmoji({ emoji: id });
-  }, [addRecentEmoji, onEmojiSelect]);
+  const handleClick = useCallback(
+    (native: string, id: string) => {
+      onEmojiSelect(native);
+      addRecentEmoji({ emoji: id });
+    },
+    [addRecentEmoji, onEmojiSelect]
+  );
 
-  const handleCustomEmojiClick = useCallback((emoji: ApiSticker) => {
-    onCustomEmojiSelect(emoji);
-    addRecentCustomEmoji({ documentId: emoji.id });
-  }, [addRecentCustomEmoji, onCustomEmojiSelect]);
+  const handleCustomEmojiClick = useCallback(
+    (emoji: ApiSticker) => {
+      onCustomEmojiSelect(emoji);
+      addRecentCustomEmoji({ documentId: emoji.id });
+    },
+    [addRecentCustomEmoji, onCustomEmojiSelect]
+  );
 
   const selectedIndex = useKeyboardNavigation({
     isActive: isOpen,
@@ -126,23 +157,22 @@ const EmojiTooltip: FC<OwnProps> = ({
     onClose,
   });
 
+  const animationLevel = useAtomValue(animationLevelAtom);
+
   useEffect(() => {
-    setItemVisible(selectedIndex, containerRef);
-  }, [selectedIndex]);
+    setItemVisible(selectedIndex, containerRef, animationLevel);
+  }, [selectedIndex, animationLevel]);
 
   const className = buildClassName(
-    'EmojiTooltip composer-tooltip custom-scroll-x',
-    transitionClassNames,
+    "EmojiTooltip composer-tooltip custom-scroll-x",
+    transitionClassNames
   );
 
   return (
-    <div
-      ref={containerRef}
-      className={className}
-    >
+    <div ref={containerRef} className={className}>
       {shouldRender && listEmojis ? (
-        listEmojis.map((emoji, index) => (
-          'native' in emoji ? (
+        listEmojis.map((emoji, index) =>
+          "native" in emoji ? (
             <EmojiButton
               key={emoji.id}
               emoji={emoji}
@@ -158,7 +188,7 @@ const EmojiTooltip: FC<OwnProps> = ({
               observeIntersection={observeIntersection}
             />
           )
-        ))
+        )
       ) : shouldRender ? (
         <Loading />
       ) : undefined}

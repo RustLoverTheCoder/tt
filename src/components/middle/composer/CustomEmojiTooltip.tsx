@@ -1,9 +1,9 @@
 import React, {
   memo, useCallback, useEffect, useRef,
-} from '../react';
+} from 'react';
 import { getActions, withGlobal } from '../../../global';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 import type { ApiSticker } from '../../../api/types';
 import type { GlobalActions } from '../../../global';
 

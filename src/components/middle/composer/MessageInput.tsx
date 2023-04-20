@@ -1,8 +1,8 @@
 import type { RefObject, ChangeEvent } from 'react';
-import type { FC } from '../react';
+import type { FC } from 'react';
 import React, {
   useEffect, useRef, memo, useState, useCallback, useLayoutEffect,
-} from '../react';
+} from 'react';
 import { getActions, withGlobal } from '../../../global';
 
 import type { IAnchorPosition, ISettings } from '../../../types';
@@ -15,7 +15,7 @@ import {
 import { selectIsInSelectMode, selectReplyingToId } from '../../../global/selectors';
 import { debounce } from '../../../util/schedulers';
 import focusEditableElement from '../../../util/focusEditableElement';
-import buildClassName from '../../../util/buildClassName';
+import clsx from 'clsx';
 import captureKeyboardListeners from '../../../util/captureKeyboardListeners';
 import { getIsDirectTextInputDisabled } from '../../../util/directInputManager';
 import parseEmojiOnlyString from '../../../util/parseEmojiOnlyString';
@@ -506,7 +506,7 @@ const MessageInput: FC<OwnProps & StateProps> = ({
 
   const isTouched = useDerivedState(() => Boolean(isActive && getHtml()), [isActive, getHtml]);
 
-  const className = buildClassName(
+  const className = clsx(
     'form-control',
     isTouched && 'touched',
     shouldSuppressFocus && 'focus-disabled',
@@ -515,7 +515,7 @@ const MessageInput: FC<OwnProps & StateProps> = ({
   return (
     <div id={id} onClick={shouldSuppressFocus ? onSuppressedFocus : undefined} dir={lang.isRtl ? 'rtl' : undefined}>
       <div
-        className={buildClassName('custom-scroll', SCROLLER_CLASS)}
+        className={clsx('custom-scroll', SCROLLER_CLASS)}
         onScroll={onScroll}
         onClick={!isAttachmentModalInput && !canSendPlainText ? handleClick : undefined}
       >
@@ -538,7 +538,7 @@ const MessageInput: FC<OwnProps & StateProps> = ({
           />
           {!forcedPlaceholder && (
             <span
-              className={buildClassName(
+              className={clsx(
                 'placeholder-text',
                 !isAttachmentModalInput && !canSendPlainText && 'with-icon',
               )}
@@ -553,9 +553,9 @@ const MessageInput: FC<OwnProps & StateProps> = ({
           <div ref={absoluteContainerRef} className="absolute-video-container" />
         </div>
       </div>
-      <div ref={scrollerCloneRef} className={buildClassName('custom-scroll', SCROLLER_CLASS, 'clone')}>
+      <div ref={scrollerCloneRef} className={clsx('custom-scroll', SCROLLER_CLASS, 'clone')}>
         <div className="input-scroller-content">
-          <div ref={cloneRef} className={buildClassName(className, 'clone')} dir="auto" />
+          <div ref={cloneRef} className={clsx(className, 'clone')} dir="auto" />
         </div>
       </div>
       {captionLimit !== undefined && (

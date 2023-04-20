@@ -1,5 +1,5 @@
-import type { FC } from '../react';
-import React, { memo } from '../react';
+import type { FC } from 'react';
+import React, { memo } from 'react';
 import type { OwnProps } from './CustomEmojiTooltip';
 import { Bundles } from '../../../util/moduleLoader';
 

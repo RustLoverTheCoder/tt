@@ -1,8 +1,8 @@
 import React, {
   useCallback, useEffect, useRef, memo,
-} from '../react';
+} from 'react';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 import type { ApiSendAsPeerId } from '../../../api/types';
 
 import setTooltipItemVisible from '../../../util/setTooltipItemVisible';

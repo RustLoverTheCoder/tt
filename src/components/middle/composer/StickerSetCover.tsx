@@ -1,7 +1,7 @@
-import React, { memo, useEffect, useRef } from '../react';
+import React, { memo, useEffect, useRef } from 'react';
 import { getActions, getGlobal } from '../../../global';
 
-import type { FC } from '../react';
+import type { FC } from 'react';
 import type { ApiStickerSet } from '../../../api/types';
 import type { ObserveFn } from '../../../hooks/useIntersectionObserver';
 

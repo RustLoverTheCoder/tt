@@ -24,7 +24,13 @@ import WebPage from "../message/WebPage";
 import Button from "../../ui/Button";
 
 import "./WebPagePreview.scss";
-import { loadWebPagePreview, clearWebPagePreview, toggleMessageWebPage } from "../../../global/actions";
+import {
+  loadWebPagePreview,
+  clearWebPagePreview,
+  toggleMessageWebPage,
+} from "../../../global/actions";
+import { useAtomValue } from "jotai";
+import { noWebPageAtom, themeAtom, webPagePreviewAtom } from "../../../global";
 
 type OwnProps = {
   chatId: string;
@@ -42,15 +48,15 @@ type StateProps = {
 const DEBOUNCE_MS = 300;
 const RE_LINK = new RegExp(RE_LINK_TEMPLATE, "i");
 
-const WebPagePreview: FC<OwnProps & StateProps> = ({
+const WebPagePreview: FC<OwnProps> = ({
   chatId,
   threadId,
   getHtml,
   isDisabled,
-  webPagePreview,
-  noWebPage,
-  theme,
 }) => {
+  const theme = useAtomValue(themeAtom);
+  const webPagePreview = useAtomValue(webPagePreviewAtom)
+  const noWebPage = useAtomValue(noWebPageAtom)
   const detectLinkDebounced = useDebouncedResolver(
     () => {
       const { text, entities } = parseMessageInput(getHtml());
@@ -107,7 +113,7 @@ const WebPagePreview: FC<OwnProps & StateProps> = ({
   }, [chatId, threadId, toggleMessageWebPage]);
 
   if (!shouldRender || !renderingWebPage) {
-    return undefined;
+    return null;
   }
 
   // TODO Refactor so `WebPage` can be used without message
@@ -140,16 +146,4 @@ const WebPagePreview: FC<OwnProps & StateProps> = ({
   );
 };
 
-// export default memo(
-//   withGlobal<OwnProps>((global, { chatId, threadId }): StateProps => {
-//     const noWebPage = selectNoWebPage(global, chatId, threadId);
-//     return {
-//       theme: selectTheme(global),
-//       webPagePreview: selectTabState(global).webPagePreview,
-//       noWebPage,
-//     };
-//   })(WebPagePreview)
-// );
-
-
-export default memo(WebPagePreview)
+export default memo(WebPagePreview);

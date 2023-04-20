@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
-import type { TabState, GlobalState } from "./types";
+import type { TabState, GlobalState, Thread } from "./types";
 import {
   AnimationLevel,
   ApiPrivacyKey,
@@ -40,6 +40,7 @@ import {
   ApiMessage,
   ApiSticker,
   ApiTranscription,
+  ApiWebPage,
 } from "../api/types/messages";
 import { ApiGroupCall, ApiPhoneCall } from "../api/types/calls";
 import { focusAtom } from 'jotai-optics'
@@ -237,6 +238,7 @@ export const settingsAtom = atom<ISettings>({
 });
 
 export const notificationSoundVolumeAtom = focusAtom(settingsAtom, (optic) => optic.prop('notificationSoundVolume'))
+export const themeAtom = focusAtom(settingsAtom, (optic) => optic.prop('theme'))
 
 export const languageAtom = atom(
   (get) => get(settingsAtom).language,
@@ -302,3 +304,11 @@ export const currentMessageAtom = atom<ApiMessage | null>(null);
 
 // 当前聊天 或者是当前消息的聊天列表
 export const currentChatAtom = atom<ApiChat | null>(null);
+
+export const webPagePreviewAtom = atom<ApiWebPage | null>(null);
+
+export const ThreadAtom = atom<Thread>({
+  noWebPage: true,
+});
+
+export const noWebPageAtom = focusAtom(ThreadAtom, (optic) => optic.prop('noWebPage'))

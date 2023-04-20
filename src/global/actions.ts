@@ -128,3 +128,5 @@ export const loadWebPagePreview = (params: any) => {}
 export const clearWebPagePreview = () => {}
 
 export const toggleMessageWebPage = (params: any) => {}
+
+export const cancelMessageMediaDownload = (params: any) => {}

@@ -35,7 +35,7 @@ import {
   ApiUpdateAuthorizationStateType,
 } from "../api/types/updates";
 import { ApiAttachBot, ApiUser } from "../api/types/users";
-import { ApiChat, ApiChatFolder } from "../api/types/chats";
+import { ApiChat, ApiChatFolder, ApiChatMember } from "../api/types/chats";
 import {
   ApiMessage,
   ApiSticker,
@@ -43,7 +43,7 @@ import {
   ApiWebPage,
 } from "../api/types/messages";
 import { ApiGroupCall, ApiPhoneCall } from "../api/types/calls";
-import { focusAtom } from 'jotai-optics'
+import { focusAtom } from "jotai-optics";
 
 export const configAtom = atom<ApiConfig | null>(null);
 export const appConfigAtom = atom<ApiAppConfig | null>(null);
@@ -237,8 +237,15 @@ export const settingsAtom = atom<ISettings>({
   canDisplayChatInTitle: true,
 });
 
-export const notificationSoundVolumeAtom = focusAtom(settingsAtom, (optic) => optic.prop('notificationSoundVolume'))
-export const themeAtom = focusAtom(settingsAtom, (optic) => optic.prop('theme'))
+export const notificationSoundVolumeAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop("notificationSoundVolume")
+);
+export const themeAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop("theme")
+);
+export const shouldSuggestCustomEmojiAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop("shouldSuggestCustomEmoji")
+);
 
 export const languageAtom = atom(
   (get) => get(settingsAtom).language,
@@ -292,10 +299,10 @@ export const transcriptionsAtom = atom<Record<string, ApiTranscription>>({});
 
 export const currentUserIdAtom = atom<string>("");
 
-export const isLeftColumnShownAtom = atom<boolean>(true)
+export const isLeftColumnShownAtom = atom<boolean>(true);
 
 // todo
-export const isCurrentUserPremiumAtom = atom<boolean>(false)
+export const isCurrentUserPremiumAtom = atom<boolean>(false);
 
 export const usersByIdAtom = atom<Record<string, ApiUser>>({});
 
@@ -311,4 +318,34 @@ export const ThreadAtom = atom<Thread>({
   noWebPage: true,
 });
 
-export const noWebPageAtom = focusAtom(ThreadAtom, (optic) => optic.prop('noWebPage'))
+export const noWebPageAtom = focusAtom(ThreadAtom, (optic) =>
+  optic.prop("noWebPage")
+);
+
+export const groupChatMembersAtom = atom<ApiChatMember[]>([]);
+
+export const baseEmojiKeywordsAtom = atom<Record<string, string[]>>({});
+
+export const emojiKeywordsAtom = atom<Record<string, string[]>>({});
+
+export const customEmojiForEmojiAtom = atom<ApiSticker[]>([]);
+
+export const captionLimitAtom = atom<number>(0);
+
+export const replyingToIdAtom = atom<number | null>(null);
+
+export const editingIdAtom = atom<number | null>(null);
+
+export const messageAtom = atom<ApiMessage | null>(null);
+
+export const senderAtom = atom<ApiUser | ApiChat | null>(null);
+
+export const shouldAnimateAtom = atom<boolean>(true)
+
+export const forwardedMessagesCountAtom = atom<number>(0)
+
+export const noAuthorsAtom = atom<boolean>(false)
+
+export const noCaptionsAtom = atom<boolean>(false)
+
+export const forwardsHaveCaptionsAtom = atom<boolean>(false)

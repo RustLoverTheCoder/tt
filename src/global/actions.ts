@@ -60,7 +60,13 @@ export const loadCustomEmojis = (params: any) => {};
 
 export const updateLastRenderedCustomEmojis = (params: any) => {};
 
-export const showNotification = ({ message }: { message: string }) => {};
+export const showNotification = ({
+  message,
+}: {
+  message: string;
+  action?: any;
+  actionText?: string;
+}) => {};
 
 export const callAttachBot = (params: any) => {};
 
@@ -94,7 +100,11 @@ export const clickBotInlineButton = ({
 
 export const deleteDeviceToken = () => {};
 
-export const setReplyingToId = ({ messageId }: { messageId: number }) => {};
+export const setReplyingToId = ({
+  messageId,
+}: {
+  messageId: number | undefined;
+}) => {};
 
 export const sendDefaultReaction = ({
   chatId,
@@ -144,3 +154,80 @@ export const setGifSearchQuery = (params: any) => {};
 
 export const sendMessageAction = (params: any) => {};
 
+export const deleteMessages = (params: any) => {};
+
+export const deleteScheduledMessages = (params: any) => {};
+
+export const sendMessage = (params: any) => {};
+
+export const clearDraft = (params: any) => {};
+
+export const forwardMessages = (params: any) => {};
+
+export const openPollModal = (params: any) => {};
+
+export const closePollModal = (params: any) => {};
+
+export const closePoll = (params: any) => {};
+
+export const loadScheduledHistory = () => {};
+
+export const sendInlineBotResult = (params: any) => {};
+
+export const loadSendAs = (params: any) => {};
+
+export const resetOpenChatWithDraft = () => {};
+
+export const showAllowedMessageTypesNotification = (params: any) => {};
+
+export const setEditingId = (params: any) => {};
+
+export const changeForwardRecipient = () => {};
+
+export const setForwardNoAuthors = (params: any) => {};
+
+export const setForwardNoCaptions = (params: any) => {};
+
+export const exitForwardMode = () => {};
+
+export const copySelectedMessages = () => {};
+
+export const loadMessage = (params: any) => {};
+
+export const pinMessage = (params: any) => {};
+
+export const faveSticker = (params: any) => {};
+
+export const unfaveSticker = (params: any) => {};
+
+export const toggleMessageSelection = (params: any) => {};
+
+export const sendScheduledMessages = (params: any) => {};
+
+export const rescheduleMessage = (params: any) => {};
+
+export const downloadMessageMedia = () => {};
+
+export const loadSeenBy = (params: any) => {};
+
+export const openSeenByModal = (params: any) => {};
+
+export const openReactorListModal = (params: any) => {};
+
+export const loadFullChat = (params: any) => {};
+
+export const loadReactors = (params: any) => {};
+
+export const copyMessagesByIds = (params: any) => {};
+
+export const saveGif = () => {};
+
+export const loadStickers = (params: any) => {};
+
+export const cancelPollVote = (params: any) => {};
+
+export const toggleReaction = () => {};
+
+export const requestMessageTranslation = () => {};
+
+export const showOriginalMessage = () => {};

@@ -18,14 +18,16 @@ export const selectNotifySettings = () => {};
 
 export const selectUser = () => {};
 
-export const selectIsChatWithSelf = (chatId:string) => {
-  return true
-}
+export const selectIsChatWithSelf = (chatId: string) => {
+  return true;
+};
 
-export const selectChat = () => {}
+export const selectChat = () => {};
 
-export const selectTabState = () => {}
+export const selectTabState = () => {};
 
-export const selectIsCurrentUserPremium = () => {}
+export const selectIsCurrentUserPremium = () => {};
 
-export const selectNoWebPage =() => {}
+export const selectNoWebPage = () => {};
+
+export const selectAllowedMessageActions = () => {};

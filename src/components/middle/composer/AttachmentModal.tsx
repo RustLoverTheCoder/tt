@@ -54,8 +54,8 @@ import SymbolMenuButton from './SymbolMenuButton';
 
 import styles from './AttachmentModal.module.scss';
 import { updateAttachmentSettings, addRecentEmoji, addRecentCustomEmoji } from '../../../global/actions';
-import { useAtom } from 'jotai';
-import { currentUserIdAtom } from '../../../global';
+import { useAtom, useAtomValue } from 'jotai';
+import { attachmentSettingsAtom, baseEmojiKeywordsAtom, captionLimitAtom, currentUserIdAtom, customEmojiForEmojiAtom, emojiKeywordsAtom, groupChatMembersAtom, recentEmojisAtom, shouldSuggestCustomEmojiAtom } from '../../../global';
 
 export type OwnProps = {
   chatId: string;
@@ -80,19 +80,6 @@ export type OwnProps = {
   onRemoveSymbol: VoidFunction;
   onEmojiSelect: (emoji: string) => void;
 };
-
-// type StateProps = {
-//   isChatWithSelf?: boolean;
-//   currentUserId?: string;
-//   groupChatMembers?: ApiChatMember[];
-//   recentEmojis: string[];
-//   baseEmojiKeywords?: Record<string, string[]>;
-//   emojiKeywords?: Record<string, string[]>;
-//   shouldSuggestCustomEmoji?: boolean;
-//   customEmojiForEmoji?: ApiSticker[];
-//   captionLimit: number;
-//   attachmentSettings: GlobalState['attachmentSettings'];
-// };
 
 const ATTACHMENT_MODAL_INPUT_ID = 'caption-input-text';
 const DROP_LEAVE_TIMEOUT_MS = 150;
@@ -126,6 +113,14 @@ const AttachmentModal: FC<OwnProps> = ({
 
   const isChatWithSelf = selectIsChatWithSelf(chatId)
   const [currentUserId] = useAtom(currentUserIdAtom)
+  const groupChatMembers = useAtomValue(groupChatMembersAtom)
+  const recentEmojis = useAtomValue(recentEmojisAtom)
+  const baseEmojiKeywords = useAtomValue(baseEmojiKeywordsAtom)
+  const emojiKeywords = useAtomValue(emojiKeywordsAtom)
+  const shouldSuggestCustomEmoji = useAtomValue(shouldSuggestCustomEmojiAtom)
+  const customEmojiForEmoji = useAtomValue(customEmojiForEmojiAtom)
+  const captionLimit = useAtomValue(captionLimitAtom)
+  const attachmentSettings = useAtomValue(attachmentSettingsAtom)
 
   // eslint-disable-next-line no-null/no-null
   const mainButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -399,7 +394,7 @@ const AttachmentModal: FC<OwnProps> = ({
   }, [renderingAttachments]);
 
   if (!renderingAttachments) {
-    return undefined;
+    return null;
   }
 
   const isMultiple = renderingAttachments.length > 1;

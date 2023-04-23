@@ -19,8 +19,8 @@
 // export { default as StatusPickerMenu } from '../components/left/main/StatusPickerMenu';
 
 // export { default as AboutAdsModal } from '../components/common/AboutAdsModal';
-// export { default as CalendarModal } from '../components/common/CalendarModal';
-// export { default as DeleteMessageModal } from '../components/common/DeleteMessageModal';
+export { default as CalendarModal } from '../components/common/CalendarModal';
+export { default as DeleteMessageModal } from '../components/common/DeleteMessageModal';
 // export { default as PinMessageModal } from '../components/common/PinMessageModal';
 // export { default as UnpinAllMessagesModal } from '../components/common/UnpinAllMessagesModal';
 // export { default as MessageSelectToolbar } from '../components/middle/MessageSelectToolbar';

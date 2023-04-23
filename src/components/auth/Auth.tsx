@@ -8,7 +8,7 @@ import { PLATFORM_ENV } from "../../util/windowEnvironment";
 import Transition from "../ui/Transition";
 
 import "./Auth.css";
-import AuthCode from "./AuthCode";
+import AuthCode from './AuthCode.async';
 import AuthPassword from "./AuthPassword";
 import AuthPhoneNumber from "./AuthPhoneNumber";
 import AuthQrCode from "./AuthQrCode";

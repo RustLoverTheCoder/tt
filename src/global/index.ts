@@ -120,7 +120,9 @@ export const passcodeAtom = atom<{
   isLoading: false,
 });
 
-export const authStateAtom = atom<ApiUpdateAuthorizationStateType | null>(null);
+export const authStateAtom = atom<ApiUpdateAuthorizationStateType | null>(
+  "authorizationStateWaitQrCode"
+);
 export const authPhoneNumberAtom = atom<string | null>(null);
 export const authIsLoadingAtom = atom<boolean>(false);
 export const authIsLoadingQrCodeAtom = atom<boolean>(false);
@@ -349,3 +351,5 @@ export const noAuthorsAtom = atom<boolean>(false)
 export const noCaptionsAtom = atom<boolean>(false)
 
 export const forwardsHaveCaptionsAtom = atom<boolean>(false)
+
+export const phoneCodeListAtom = atom<ApiCountryCode[]>([]);

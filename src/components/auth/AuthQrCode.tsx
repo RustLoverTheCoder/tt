@@ -44,7 +44,7 @@ function ensureQrCodeStyling() {
 
 const AuthQrCode = () => {
   const [connectionState] = useAtom(connectionStateAtom);
-  const [authState] = useAtom(authStateAtom);
+  const [authState, setAuthState] = useAtom(authStateAtom);
   const [authQrCode] = useAtom(authQrCodeAtom);
   const [language] = useAtom(languageAtom);
 
@@ -132,8 +132,8 @@ const AuthQrCode = () => {
   }, [markIsLoading, setSettingOption, suggestedLanguage, unmarkIsLoading]);
 
   const habdleReturnToAuthPhoneNumber = useCallback(() => {
-    returnToAuthPhoneNumber();
-  }, [returnToAuthPhoneNumber]);
+    setAuthState('authorizationStateWaitPhoneNumber')
+  }, [setAuthState]);
 
   const isAuthReady = authState === "authorizationStateWaitQrCode";
 

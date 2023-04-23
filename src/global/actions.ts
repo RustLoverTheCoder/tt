@@ -2,7 +2,9 @@ import { ApiKeyboardButton } from "../api/types";
 
 export const disableHistoryAnimations = () => {};
 
-export const returnToAuthPhoneNumber = () => {};
+export const returnToAuthPhoneNumber = () => {
+  
+};
 
 export const goToAuthQrCode = () => {};
 

@@ -185,13 +185,4 @@ function getFilteredList(
   );
 }
 
-// export default memo(withGlobal<OwnProps>(
-//   (global): StateProps => {
-//     const { countryList: { phoneCodes: phoneCodeList } } = global;
-//     return {
-//       phoneCodeList,
-//     };
-//   },
-// )(CountryCodeInput));
-
 export default memo(CountryCodeInput);

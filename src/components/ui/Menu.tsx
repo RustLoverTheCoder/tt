@@ -22,7 +22,7 @@ import Portal from "./Portal";
 import "./Menu.scss";
 
 type OwnProps = {
-  ref?: RefObject<HTMLDivElement>;
+  menuRef?: RefObject<HTMLDivElement>;
   containerRef?: RefObject<HTMLElement>;
   isOpen: boolean;
   id?: string;
@@ -55,7 +55,7 @@ type OwnProps = {
 const ANIMATION_DURATION = 200;
 
 const Menu: FC<OwnProps> = ({
-  ref,
+  menuRef,
   containerRef,
   isOpen,
   id,
@@ -82,10 +82,10 @@ const Menu: FC<OwnProps> = ({
   onMouseEnterBackdrop,
 }) => {
   // eslint-disable-next-line no-null/no-null
-  let menuRef = useRef<HTMLDivElement>(null);
-  if (ref) {
-    menuRef = ref;
-  }
+  // let menuRef = useRef<HTMLDivElement>(null);
+  // if (ref) {
+    // menuRef = ref;
+  // }
   const backdropContainerRef = containerRef || menuRef;
 
   const { transitionClassNames } = useShowTransition(
@@ -107,14 +107,14 @@ const Menu: FC<OwnProps> = ({
     shouldBeReplaced: true,
   });
 
-  useEffectWithPrevDeps(
-    ([prevIsOpen]) => {
-      if (isOpen || (!isOpen && prevIsOpen === true)) {
-        dispatchHeavyAnimationEvent(ANIMATION_DURATION);
-      }
-    },
-    [isOpen]
-  );
+  // useEffectWithPrevDeps(
+  //   ([prevIsOpen]) => {
+  //     if (isOpen || (!isOpen && prevIsOpen === true)) {
+  //       dispatchHeavyAnimationEvent(ANIMATION_DURATION);
+  //     }
+  //   },
+  //   [isOpen]
+  // );
 
   const handleKeyDown = useKeyboardListNavigation(
     menuRef,

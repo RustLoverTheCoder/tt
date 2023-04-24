@@ -101,7 +101,7 @@ const DropdownMenu: FC<OwnProps> = ({
       {triggerComponent({ onTrigger: toggleIsOpen, isOpen })}
 
       <Menu
-        ref={menuRef}
+        menuRef={menuRef}
         containerRef={dropdownRef}
         isOpen={isOpen || Boolean(forceOpen)}
         className={className || ""}

@@ -259,7 +259,7 @@ const AuthPhoneNumber: FC = () => {
             onChange={handleCountryChange}
           />
           <InputText
-            ref={inputRef}
+            inputRef={inputRef}
             id="sign-in-phone-number"
             label={lang("Login.PhonePlaceholder")}
             value={fullNumber}

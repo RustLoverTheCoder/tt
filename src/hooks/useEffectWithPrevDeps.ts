@@ -6,6 +6,7 @@ const useEffectWithPrevDeps = <T extends readonly any[]>(
   dependencies: T,
   debugKey?: string,
 ) => {
+  console.log('dependencies',dependencies)
   const prevDeps = usePrevious(dependencies);
   useEffect(() => {
     // @ts-ignore

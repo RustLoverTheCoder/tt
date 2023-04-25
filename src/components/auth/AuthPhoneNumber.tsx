@@ -34,7 +34,7 @@ import Checkbox from "../ui/Checkbox";
 import InputText from "../ui/InputText";
 import Loading from "../ui/Loading";
 import CountryCodeInput from "./CountryCodeInput";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import {
   authErrorAtom,
   authIsLoadingAtom,
@@ -54,7 +54,7 @@ let isPreloadInitiated = false;
 
 const AuthPhoneNumber: FC = () => {
   const connectionState = useAtomValue(connectionStateAtom);
-  const authState = useAtomValue(authStateAtom);
+  const [authState, setAuthState] = useAtom(authStateAtom);
   const authPhoneNumber = useAtomValue(authPhoneNumberAtom);
   const authIsLoading = useAtomValue(authIsLoadingAtom);
   const authIsLoadingQrCode = useAtomValue(authIsLoadingQrCodeAtom);
@@ -69,7 +69,9 @@ const AuthPhoneNumber: FC = () => {
   const loadNearestCountry = () => {};
   const loadCountryList = ({ langCode }: { langCode: LangCode }) => {};
   const clearAuthError = () => {};
-  const goToAuthQrCode = () => {};
+  const goToAuthQrCode = () => {
+    setAuthState("authorizationStateWaitQrCode");
+  };
   const setSettingOption = () => {};
 
   const lang = useLang();

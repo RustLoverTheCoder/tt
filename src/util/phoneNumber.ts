@@ -9,6 +9,7 @@ export function getCountryCodesByIso(phoneCodeList: ApiCountryCode[], iso: strin
 
 export function getCountryFromPhoneNumber(phoneCodeList: ApiCountryCode[], input = '') {
   let phoneNumber = input.replace(/[^\d+]+/g, '');
+  console.log('phoneNumber',phoneNumber)
   if (phoneNumber.startsWith('+')) {
     phoneNumber = phoneNumber.substr(1);
   }

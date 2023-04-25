@@ -342,14 +342,44 @@ export const messageAtom = atom<ApiMessage | null>(null);
 
 export const senderAtom = atom<ApiUser | ApiChat | null>(null);
 
-export const shouldAnimateAtom = atom<boolean>(true)
+export const shouldAnimateAtom = atom<boolean>(true);
 
-export const forwardedMessagesCountAtom = atom<number>(0)
+export const forwardedMessagesCountAtom = atom<number>(0);
 
-export const noAuthorsAtom = atom<boolean>(false)
+export const noAuthorsAtom = atom<boolean>(false);
 
-export const noCaptionsAtom = atom<boolean>(false)
+export const noCaptionsAtom = atom<boolean>(false);
 
-export const forwardsHaveCaptionsAtom = atom<boolean>(false)
+export const forwardsHaveCaptionsAtom = atom<boolean>(false);
 
-export const phoneCodeListAtom = atom<ApiCountryCode[]>([]);
+export const phoneCodeListAtom = atom<ApiCountryCode[]>([
+  {
+    isHidden: false,
+    iso2: "US",
+    defaultName: "United States",
+    name: "United States",
+    countryCode: "1",
+    prefixes: [""],
+    patterns: [
+      "^(\\d{10}|\\d{3}-\\d{3}-\\d{4}|\\(\\d{3}\\)\\s*\\d{3}-\\d{4}|\\(\\d{3}\\)\\d{3}-\\d{4}|\\d{3}\\s*\\d{3}\\s*\\d{4})$",
+    ],
+  },
+  {
+    isHidden: false,
+    iso2: "CN",
+    defaultName: "China",
+    name: "China",
+    countryCode: "86",
+    prefixes: ["13", "15", "18"],
+    patterns: ["^1(3|5|8)\\d{9}$"],
+  },
+  {
+    isHidden: false,
+    iso2: 'HK',
+    defaultName: 'Hong Kong',
+    name: 'Hong Kong',
+    countryCode: '852',
+    prefixes: ['5', '6', '9'],
+    patterns: ['^([569]\\d{3}\\s?\\d{4})|(6\\d{3}\\s?\\d{3})$'],
+  }
+]);

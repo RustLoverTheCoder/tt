@@ -60,13 +60,17 @@ const AuthPhoneNumber: FC = () => {
   const authIsLoadingQrCode = useAtomValue(authIsLoadingQrCodeAtom);
   const authError = useAtomValue(authErrorAtom);
   const authRememberMe = useAtomValue(authRememberMeAtom);
-  const authNearestCountry = useAtomValue(authNearestCountryAtom);
+  const [authNearestCountry, setAuthNearestCountry] = useAtom(
+    authNearestCountryAtom
+  );
   const phoneCodeList = useAtomValue(phoneCodeListAtom);
   const language = useAtomValue(languageAtom);
 
   const setAuthPhoneNumber = (phoneNumber: string) => {};
   const setAuthRememberMe = () => {};
-  const loadNearestCountry = () => {};
+  const loadNearestCountry = () => {
+    setAuthNearestCountry("CN");
+  };
   const loadCountryList = ({ langCode }: { langCode: LangCode }) => {};
   const clearAuthError = () => {};
   const goToAuthQrCode = () => {
@@ -85,6 +89,7 @@ const AuthPhoneNumber: FC = () => {
     true
   );
   const [country, setCountry] = useState<ApiCountryCode | undefined>();
+  console.log("country", country);
   const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
   const [isTouched, setIsTouched] = useState(false);
   const [lastSelection, setLastSelection] = useState<
@@ -131,6 +136,12 @@ const AuthPhoneNumber: FC = () => {
       const suggestedCountry =
         phoneCodeList &&
         getCountryFromPhoneNumber(phoneCodeList, newFullNumber);
+      console.log(
+        "suggestedCountry",
+        suggestedCountry,
+        phoneCodeList,
+        newFullNumber
+      );
 
       // Any phone numbers should be allowed, in some cases ignoring formatting
       const selectedCountry =
@@ -139,6 +150,7 @@ const AuthPhoneNumber: FC = () => {
         (!suggestedCountry && newFullNumber.length)
           ? suggestedCountry
           : country;
+      console.log(selectedCountry);
 
       if (
         !country ||

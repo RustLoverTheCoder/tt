@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { atomFamily } from "jotai/utils";
+import { atomFamily, atomWithStorage } from "jotai/utils";
 import type { TabState, GlobalState, Thread } from "./types";
 import {
   AnimationLevel,
@@ -127,7 +127,7 @@ export const authPhoneNumberAtom = atom<string | null>(null);
 export const authIsLoadingAtom = atom<boolean>(false);
 export const authIsLoadingQrCodeAtom = atom<boolean>(false);
 export const authErrorAtom = atom<string | null>(null);
-export const authRememberMeAtom = atom<boolean>(false);
+export const authRememberMeAtom = atomWithStorage<boolean>('authRememberMe',false);
 export const authNearestCountryAtom = atom<string | null>(null);
 export const authIsCodeViaAppAtom = atom<boolean>(false);
 export const authHintAtom = atom<string | null>(null);

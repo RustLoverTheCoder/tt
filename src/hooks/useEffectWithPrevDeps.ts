@@ -1,17 +1,20 @@
-import { useEffect } from 'react';
-import usePrevious from './usePrevious';
+import { useEffect, useRef } from "react";
 
-const useEffectWithPrevDeps = <T extends readonly any[]>(
-  cb: (prevDeps: T, currentDeps: T) => void,
-  dependencies: T,
-  debugKey?: string,
-) => {
-  console.log('dependencies',dependencies)
-  const prevDeps = usePrevious(dependencies);
+type Callback<T extends any[]> = (prevDeps: T, changedDeps: T) => void;
+
+function useEffectWithPrevDeps<T extends any[]>(callback: Callback<T>, dependencies: T) {
+  const prevDependenciesRef = useRef<T>(dependencies);
+
   useEffect(() => {
-    // @ts-ignore
-    cb(prevDeps, dependencies);
-  }, [debugKey, ...dependencies]);
-};
+    const prevDependencies = prevDependenciesRef.current;
+    const changedDependencies = dependencies.filter(
+      (dep, index) => dep !== prevDependencies[index]
+    ) as T;
+    if (changedDependencies.length > 0) {
+      callback(prevDependencies, changedDependencies);
+    }
+    prevDependenciesRef.current = dependencies;
+  });
+}
 
 export default useEffectWithPrevDeps;

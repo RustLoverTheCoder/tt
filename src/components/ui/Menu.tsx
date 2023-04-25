@@ -107,14 +107,14 @@ const Menu: FC<OwnProps> = ({
     shouldBeReplaced: true,
   });
 
-  // useEffectWithPrevDeps(
-  //   ([prevIsOpen]) => {
-  //     if (isOpen || (!isOpen && prevIsOpen === true)) {
-  //       dispatchHeavyAnimationEvent(ANIMATION_DURATION);
-  //     }
-  //   },
-  //   [isOpen]
-  // );
+  useEffectWithPrevDeps(
+    ([prevIsOpen]) => {
+      if (isOpen || (!isOpen && prevIsOpen === true)) {
+        dispatchHeavyAnimationEvent(ANIMATION_DURATION);
+      }
+    },
+    [isOpen]
+  );
 
   const handleKeyDown = useKeyboardListNavigation(
     menuRef,

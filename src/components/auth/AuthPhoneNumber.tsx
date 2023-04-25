@@ -64,7 +64,7 @@ const AuthPhoneNumber: FC = () => {
   const phoneCodeList = useAtomValue(phoneCodeListAtom);
   const language = useAtomValue(languageAtom);
 
-  const setAuthPhoneNumber = () => {};
+  const setAuthPhoneNumber = (phoneNumber: string) => {};
   const setAuthRememberMe = () => {};
   const loadNearestCountry = () => {};
   const loadCountryList = ({ langCode }: { langCode: LangCode }) => {};

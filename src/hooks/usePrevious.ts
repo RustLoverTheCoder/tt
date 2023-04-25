@@ -1,16 +1,14 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 function usePrevious<T extends any>(next: T): T | undefined;
 function usePrevious<T extends any>(next: T, shouldSkipUndefined: true): Exclude<T, undefined> | undefined;
 function usePrevious<T extends any>(next: T, shouldSkipUndefined?: boolean): Exclude<T, undefined> | undefined;
-function usePrevious<T extends any>(next: T, shouldSkipUndefined?: boolean) {
+function usePrevious<T extends any>(next: T) {
   const ref = useRef<T>();
-  const { current } = ref;
-  if (!shouldSkipUndefined || next !== undefined) {
+  useEffect(() => {
     ref.current = next;
-  }
-
-  return current;
+  }, [next]);
+  return ref.current;
 }
 
 export default usePrevious;

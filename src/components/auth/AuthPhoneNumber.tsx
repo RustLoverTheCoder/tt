@@ -59,7 +59,7 @@ const AuthPhoneNumber: FC = () => {
   const authIsLoading = useAtomValue(authIsLoadingAtom);
   const authIsLoadingQrCode = useAtomValue(authIsLoadingQrCodeAtom);
   const authError = useAtomValue(authErrorAtom);
-  const authRememberMe = useAtomValue(authRememberMeAtom);
+  const [authRememberMe, setAuthRememberMe] = useAtom(authRememberMeAtom);
   const [authNearestCountry, setAuthNearestCountry] = useAtom(
     authNearestCountryAtom
   );
@@ -67,7 +67,6 @@ const AuthPhoneNumber: FC = () => {
   const language = useAtomValue(languageAtom);
 
   const setAuthPhoneNumber = (phoneNumber: string) => {};
-  const setAuthRememberMe = () => {};
   const loadNearestCountry = () => {
     setAuthNearestCountry("CN");
   };

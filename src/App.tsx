@@ -5,7 +5,7 @@ import Transition from "./components/ui/Transition";
 import clsx from "clsx";
 import useFlag from "./hooks/useFlag";
 import { PLATFORM_ENV } from "./util/windowEnvironment";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import {
   authStateAtom,
   hasWebAuthTokenFailedAtom,
@@ -60,14 +60,12 @@ function App() {
 
   let activeKey: number;
   let page: UiLoaderPage = "main";
-  const [authState] = useAtom(authStateAtom);
-  const [hasWebAuthTokenFailedState] = useAtom(hasWebAuthTokenFailedAtom);
-  const [hasWebAuthTokenPasswordRequired] = useAtom(
-    hasWebAuthTokenPasswordRequiredAtom
-  );
+  const authState = useAtomValue(authStateAtom);
+  const hasWebAuthTokenFailedState = useAtomValue(hasWebAuthTokenFailedAtom);
+  const hasWebAuthTokenPasswordRequired = useAtomValue(hasWebAuthTokenPasswordRequiredAtom);
   const hasWebAuthTokenFailed =
     hasWebAuthTokenFailedState || hasWebAuthTokenPasswordRequired;
-  const [passcode] = useAtom(passcodeAtom);
+  const passcode = useAtomValue(passcodeAtom);
   const isScreenLocked = passcode?.isScreenLocked;
   const hasPasscode = passcode?.hasPasscode;
 

@@ -55,7 +55,7 @@ let isPreloadInitiated = false;
 const AuthPhoneNumber: FC = () => {
   const connectionState = useAtomValue(connectionStateAtom);
   const [authState, setAuthState] = useAtom(authStateAtom);
-  const authPhoneNumber = useAtomValue(authPhoneNumberAtom);
+  const [authPhoneNumber,setAuthPhoneNumber] = useAtom(authPhoneNumberAtom);
   const authIsLoading = useAtomValue(authIsLoadingAtom);
   const authIsLoadingQrCode = useAtomValue(authIsLoadingQrCodeAtom);
   const authError = useAtomValue(authErrorAtom);
@@ -65,8 +65,6 @@ const AuthPhoneNumber: FC = () => {
   );
   const phoneCodeList = useAtomValue(phoneCodeListAtom);
   const language = useAtomValue(languageAtom);
-
-  const setAuthPhoneNumber = (phoneNumber: string) => {};
   const loadNearestCountry = () => {
     setAuthNearestCountry("CN");
   };
@@ -248,7 +246,8 @@ const AuthPhoneNumber: FC = () => {
     }
 
     if (canSubmit) {
-      setAuthPhoneNumber({ phoneNumber: fullNumber });
+      setAuthPhoneNumber(fullNumber);
+      setAuthState('authorizationStateReady')
     }
   }
 

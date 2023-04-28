@@ -16,7 +16,7 @@ import { hasStoredSession } from "./util/sessions";
 import { parseInitialLocationHash } from "./util/routing";
 import usePrevious from "./hooks/usePrevious";
 import Auth from "./components/auth/Auth";
-import Main from "./components/main/Main";
+import Main from "./components/main/Main.async";
 import LockScreen from "./components/main/LockScreen";
 import AppInactive from "./components/main/AppInactive";
 

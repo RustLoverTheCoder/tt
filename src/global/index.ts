@@ -127,7 +127,10 @@ export const authPhoneNumberAtom = atom<string | null>(null);
 export const authIsLoadingAtom = atom<boolean>(false);
 export const authIsLoadingQrCodeAtom = atom<boolean>(false);
 export const authErrorAtom = atom<string | undefined>(undefined);
-export const authRememberMeAtom = atomWithStorage<boolean>('authRememberMe',false);
+export const authRememberMeAtom = atomWithStorage<boolean>(
+  "authRememberMe",
+  false
+);
 export const authNearestCountryAtom = atom<string | null>(null);
 export const authIsCodeViaAppAtom = atom<boolean>(false);
 export const authHintAtom = atom<string | null>(null);
@@ -375,11 +378,91 @@ export const phoneCodeListAtom = atom<ApiCountryCode[]>([
   },
   {
     isHidden: false,
-    iso2: 'HK',
-    defaultName: 'Hong Kong',
-    name: 'Hong Kong',
-    countryCode: '852',
-    prefixes: ['5', '6', '9'],
-    patterns: ['^([569]\\d{3}\\s?\\d{4})|(6\\d{3}\\s?\\d{3})$'],
-  }
+    iso2: "HK",
+    defaultName: "Hong Kong",
+    name: "Hong Kong",
+    countryCode: "852",
+    prefixes: ["5", "6", "9"],
+    patterns: ["^([569]\\d{3}\\s?\\d{4})|(6\\d{3}\\s?\\d{3})$"],
+  },
 ]);
+
+export const chatIdAtom = atom<number | null>(null);
+
+export const tabStateAtom = atom<TabState>({
+  id: 0,
+  isMasterTab: false,
+  isLeftColumnShown: true,
+  isChatInfoShown: false,
+  newChatMembersProgress: NewChatMembersProgress.Closed,
+  uiReadyState: 0,
+  shouldInit: true,
+
+  gifSearch: {},
+  stickerSearch: {},
+
+  messageLists: [],
+  activeChatFolder: 0,
+  tabThreads: {},
+
+  inlineBots: {
+    isLoading: false,
+    byUsername: {},
+  },
+
+  globalSearch: {},
+
+  userSearch: {},
+
+  localTextSearch: {
+    byChatThreadKey: {},
+  },
+
+  localMediaSearch: {
+    byChatThreadKey: {},
+  },
+
+  management: {
+    byChatId: {},
+  },
+
+  mediaViewer: {
+    volume: DEFAULT_VOLUME,
+    playbackRate: DEFAULT_PLAYBACK_RATE,
+    isMuted: false,
+  },
+
+  audioPlayer: {
+    volume: DEFAULT_VOLUME,
+    playbackRate: DEFAULT_PLAYBACK_RATE,
+    isMuted: false,
+  },
+
+  forwardMessages: {},
+
+  pollResults: {},
+
+  payment: {},
+
+  notifications: [],
+
+  dialogs: [],
+
+  activeReactions: {},
+
+  activeDownloads: {
+    byChatId: {},
+  },
+
+  statistics: {
+    byChatId: {},
+  },
+
+  pollModal: {
+    isOpen: false,
+  },
+
+  requestedTranslations: {
+    byChatId: {},
+  },
+});

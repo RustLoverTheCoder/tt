@@ -80,6 +80,15 @@ import ReactionPicker from "../middle/message/ReactionPicker.async";
 import ChatlistModal from "../modals/chatlist/ChatlistModal.async";
 
 import "./Main.scss";
+import { useAtom } from "jotai";
+import {
+  chatIdAtom,
+  isCurrentUserPremiumAtom,
+  isLeftColumnShownAtom,
+  languageAtom,
+  lastSyncTimeAtom,
+  tabStateAtom,
+} from "../../global";
 
 export interface OwnProps {
   isMobile?: boolean;
@@ -141,47 +150,57 @@ const REACTION_PICKER_LOADING_DELAY_MS = 7000; // 7 sec
 // eslint-disable-next-line @typescript-eslint/naming-convention
 let DEBUG_isLogged = false;
 
-const Main: FC<OwnProps> = ({
-  isMobile,
-}) => {
-  // const {
-  //   initMain,
-  //   loadAnimatedEmojis,
-  //   loadNotificationSettings,
-  //   loadNotificationExceptions,
-  //   updateIsOnline,
-  //   onTabFocusChange,
-  //   loadTopInlineBots,
-  //   loadEmojiKeywords,
-  //   loadCountryList,
-  //   loadAvailableReactions,
-  //   loadStickerSets,
-  //   loadPremiumGifts,
-  //   loadDefaultTopicIcons,
-  //   loadAddedStickers,
-  //   loadFavoriteStickers,
-  //   loadDefaultStatusIcons,
-  //   ensureTimeFormat,
-  //   closeStickerSetModal,
-  //   closeCustomEmojiSets,
-  //   checkVersionNotification,
-  //   loadConfig,
-  //   loadAppConfig,
-  //   loadAttachBots,
-  //   loadContactList,
-  //   loadCustomEmojis,
-  //   loadGenericEmojiEffects,
-  //   closePaymentModal,
-  //   clearReceipt,
-  //   checkAppVersion,
-  //   openChat,
-  //   toggleLeftColumn,
-  //   loadRecentEmojiStatuses,
-  //   updatePageTitle,
-  //   loadTopReactions,
-  //   loadRecentReactions,
-  //   loadFeaturedEmojiStickers,
-  // } = getActions();
+const Main: FC<OwnProps> = ({ isMobile }) => {
+  const [isLeftColumnOpen] = useAtom(isLeftColumnShownAtom);
+
+  const [chatId] = useAtom(chatIdAtom);
+  const isMiddleColumnOpen = Boolean(chatId);
+
+  const [tabState] = useAtom(tabStateAtom);
+  const isMasterTab = !!tabState.isMasterTab;
+
+  const [lastSyncTime] = useAtom(lastSyncTimeAtom);
+
+  const [isCurrentUserPremium] = useAtom(isCurrentUserPremiumAtom);
+
+  const [language] = useAtom(languageAtom);
+
+  const initMain = () => {};
+  const loadAnimatedEmojis = () => {};
+  const loadNotificationSettings = () => {};
+  const loadNotificationExceptions = () => {};
+  const updateIsOnline = (params: boolean) => {};
+  const onTabFocusChange = () => {};
+  const loadTopInlineBots = () => {};
+  const loadEmojiKeywords = (params: { language: string }) => {};
+  const loadCountryList = (params: { langCode: string }) => {};
+  const loadAvailableReactions = () => {};
+  const loadStickerSets = () => {};
+  const loadPremiumGifts = () => {};
+  const loadDefaultTopicIcons = () => {};
+  const loadAddedStickers = () => {};
+  const loadFavoriteStickers = () => {};
+  const loadDefaultStatusIcons = () => {};
+  const ensureTimeFormat = () => {};
+  const closeStickerSetModal = () => {};
+  const closeCustomEmojiSets = () => {};
+  const checkVersionNotification = () => {};
+  const loadConfig = () => {};
+  const loadAppConfig = () => {};
+  const loadAttachBots = () => {};
+  const loadContactList = () => {};
+  const loadCustomEmojis = (params: any) => {};
+  const loadGenericEmojiEffects = () => {};
+  const closePaymentModal = () => {};
+  const clearReceipt = () => {};
+  const checkAppVersion = () => {};
+  const openChat = () => {};
+  const toggleLeftColumn = () => {};
+  const loadRecentEmojiStatuses = () => {};
+  const updatePageTitle = () => {};
+  const loadTopReactions = () => {};
+  const loadRecentReactions = () => {};
+  const loadFeaturedEmojiStickers = () => {};
 
   if (DEBUG && !DEBUG_isLogged) {
     DEBUG_isLogged = true;

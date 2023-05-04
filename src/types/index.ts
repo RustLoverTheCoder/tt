@@ -32,6 +32,15 @@ export interface IAlbum {
 
 export type ThemeKey = "light" | "dark";
 export type AnimationLevel = 0 | 1 | 2;
+export type PerformanceTypeKey = (
+  'pageTransitions' | 'messageSendingAnimations' | 'mediaViewerAnimations'
+  | 'messageComposerAnimations' | 'contextMenuAnimations' | 'contextMenuBlur' | 'rightColumnAnimations'
+  | 'animatedEmoji' | 'loopAnimatedStickers' | 'reactionEffects' | 'stickerEffects' | 'autoplayGifs' | 'autoplayVideos'
+);
+export type PerformanceType = {
+  [key in PerformanceTypeKey]: boolean;
+};
+
 
 export interface IThemeSettings {
   background?: string;

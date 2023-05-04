@@ -18,7 +18,6 @@ import type {
 } from "../../api/types";
 import type { ApiLimitTypeWithModal, TabState } from "../../global/types";
 
-import "../../global/actions/all";
 import { BASE_EMOJI_KEYWORD_LANG, DEBUG, INACTIVE_MARKER } from "../../config";
 import { IS_ANDROID } from "../../util/windowEnvironment";
 import clsx from "clsx";
@@ -467,7 +466,7 @@ const Main: FC<OwnProps> = ({
     [isRightColumnOpen, noRightColumnAnimation, forceUpdate]
   );
 
-  const className = buildClassName(
+  const className = clsx(
     leftColumnTransition.hasShownClass && "left-column-shown",
     leftColumnTransition.hasOpenClass && "left-column-open",
     willAnimateLeftColumnRef.current && "left-column-animating",
@@ -569,116 +568,5 @@ const Main: FC<OwnProps> = ({
     </div>
   );
 };
-
-// export default memo(
-//   withGlobal<OwnProps>((global, { isMobile }): StateProps => {
-//     const {
-//       settings: {
-//         byKey: { language, wasTimeFormatSetManually },
-//       },
-//       lastSyncTime,
-//     } = global;
-
-//     const {
-//       botTrustRequest,
-//       requestedAttachBotInstall,
-//       requestedAttachBotInChat,
-//       requestedDraft,
-//       urlAuth,
-//       webApp,
-//       safeLinkModalUrl,
-//       openedStickerSetShortName,
-//       openedCustomEmojiSetIds,
-//       shouldSkipHistoryAnimations,
-//       openedGame,
-//       audioPlayer,
-//       isLeftColumnShown,
-//       historyCalendarSelectedAt,
-//       notifications,
-//       dialogs,
-//       newContact,
-//       ratingPhoneCall,
-//       premiumModal,
-//       isMasterTab,
-//       payment,
-//       limitReachedModal,
-//       deleteFolderDialogModal,
-//       chatlistModal,
-//     } = selectTabState(global);
-
-//     const { chatId: audioChatId, messageId: audioMessageId } = audioPlayer;
-//     const audioMessage =
-//       audioChatId && audioMessageId
-//         ? selectChatMessage(global, audioChatId, audioMessageId)
-//         : undefined;
-//     const gameMessage =
-//       openedGame &&
-//       selectChatMessage(global, openedGame.chatId, openedGame.messageId);
-//     const gameTitle = gameMessage?.content.game?.title;
-//     const currentUser = global.currentUserId
-//       ? selectUser(global, global.currentUserId)
-//       : undefined;
-//     const { chatId } = selectCurrentMessageList(global) || {};
-//     const noRightColumnAnimation =
-//       !selectPerformanceSettingsValue(global, "rightColumnAnimations") ||
-//       !selectCanAnimateInterface(global);
-
-//     const deleteFolderDialog = deleteFolderDialogModal
-//       ? selectChatFolder(global, deleteFolderDialogModal)
-//       : undefined;
-
-//     return {
-//       lastSyncTime,
-//       isLeftColumnOpen: isLeftColumnShown,
-//       isMiddleColumnOpen: Boolean(chatId),
-//       isRightColumnOpen: selectIsRightColumnShown(global, isMobile),
-//       isMediaViewerOpen: selectIsMediaViewerOpen(global),
-//       isForwardModalOpen: selectIsForwardModalOpen(global),
-//       isReactionPickerOpen: selectIsReactionPickerOpen(global),
-//       hasNotifications: Boolean(notifications.length),
-//       hasDialogs: Boolean(dialogs.length),
-//       audioMessage,
-//       safeLinkModalUrl,
-//       isHistoryCalendarOpen: Boolean(historyCalendarSelectedAt),
-//       shouldSkipHistoryAnimations,
-//       openedStickerSetShortName,
-//       openedCustomEmojiSetIds,
-//       isServiceChatReady: selectIsServiceChatReady(global),
-//       activeGroupCallId: isMasterTab
-//         ? global.groupCalls.activeGroupCallId
-//         : undefined,
-//       withInterfaceAnimations: selectCanAnimateInterface(global),
-//       language,
-//       wasTimeFormatSetManually,
-//       isPhoneCallActive: isMasterTab ? Boolean(global.phoneCall) : undefined,
-//       addedSetIds: global.stickers.added.setIds,
-//       addedCustomEmojiIds: global.customEmojis.added.setIds,
-//       newContactUserId: newContact?.userId,
-//       newContactByPhoneNumber: newContact?.isByPhoneNumber,
-//       openedGame,
-//       gameTitle,
-//       isRatePhoneCallModalOpen: Boolean(ratingPhoneCall),
-//       botTrustRequest,
-//       botTrustRequestBot:
-//         botTrustRequest && selectUser(global, botTrustRequest.botId),
-//       attachBotToInstall: requestedAttachBotInstall?.bot,
-//       requestedAttachBotInChat,
-//       webApp,
-//       currentUser,
-//       urlAuth,
-//       isCurrentUserPremium: selectIsCurrentUserPremium(global),
-//       isPremiumModalOpen: premiumModal?.isOpen,
-//       limitReached: limitReachedModal?.limit,
-//       isPaymentModalOpen: payment.isPaymentModalOpen,
-//       isReceiptModalOpen: Boolean(payment.receipt),
-//       deleteFolderDialog,
-//       isMasterTab,
-//       requestedDraft,
-//       chatlistModal,
-//       noRightColumnAnimation,
-//     };
-//   })(Main)
-// );
-
 
 export default memo(Main);
